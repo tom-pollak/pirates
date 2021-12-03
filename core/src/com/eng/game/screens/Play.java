@@ -40,9 +40,7 @@ public class Play implements Screen {
     @Override
     public void show() {
         map = new TmxMapLoader().load("maps/world.tmx");
-
         renderer = new OrthogonalTiledMapRenderer(map);
-
         camera = new OrthographicCamera();
     }
 
