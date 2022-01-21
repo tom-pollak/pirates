@@ -3,11 +3,11 @@ package com.eng.game.entities;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.graphics.g2d.Sprite;
-import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
+import com.badlogic.gdx.maps.MapLayers;
 
 public class Player extends Ship implements InputProcessor {
-    public Player(Sprite sprite, TiledMapTileLayer collisionLayer) {
-        super(sprite, collisionLayer);
+    public Player(Sprite sprite, MapLayers layers) {
+        super(sprite, layers);
     }
 
     @Override

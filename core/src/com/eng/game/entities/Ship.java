@@ -3,20 +3,23 @@ package com.eng.game.entities;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.maps.MapLayers;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.math.Vector2;
 
 public class Ship extends Sprite {
 
+    private final MapLayers layers;
+    private final TiledMapTileLayer indexLayer;
     public Vector2 velocity = new Vector2();
-    public float speed = 100;
+    public float speed = 175;
     private float increment;
-    private TiledMapTileLayer collisionLayer;
 
-    public Ship(Sprite sprite, TiledMapTileLayer collisionLayer) {
+    public Ship(Sprite sprite, MapLayers layers) {
         super(sprite);
-        this.collisionLayer = collisionLayer;
-        setSize((float) (getWidth() * 0.5), (float) (getHeight() * 0.5));
+        this.layers = layers;
+        indexLayer = (TiledMapTileLayer) layers.get(0);
+//        setSize((float) (getWidth() * 0.5), (float) (getHeight() * 0.5));
     }
 
     @Override
@@ -33,7 +36,7 @@ public class Ship extends Sprite {
         setX(getX() + velocity.x * delta);
 
         // calculate the increment for collidesLeft and collidesRight
-        increment = collisionLayer.getTileWidth();
+        increment = indexLayer.getTileWidth();
         increment = getWidth() < increment ? getWidth() / 2 : increment / 2;
 
         if (velocity.x < 0) // going left
@@ -51,7 +54,7 @@ public class Ship extends Sprite {
         setY(getY() + velocity.y * delta);
 
         // calculate the increment for collidesBottom and collidesTop
-        increment = collisionLayer.getTileHeight();
+        increment = indexLayer.getTileHeight();
         increment = getHeight() < increment ? getHeight() / 2 : increment / 2;
 
         if (velocity.y < 0) // going down
@@ -67,8 +70,14 @@ public class Ship extends Sprite {
     }
 
     private boolean isCellBlocked(float x, float y) {
-        TiledMapTileLayer.Cell cell = collisionLayer.getCell((int) (x / collisionLayer.getTileWidth()), (int) (y / collisionLayer.getTileHeight()));
-        return cell != null && cell.getTile() != null && cell.getTile().getProperties().containsKey("blocked");
+        for (int i = 0; i < layers.getCount(); i++) {
+            TiledMapTileLayer collisionLayer = (TiledMapTileLayer) layers.get(i);
+            TiledMapTileLayer.Cell cell = collisionLayer.getCell((int) (x / collisionLayer.getTileWidth()), (int) (y / collisionLayer.getTileHeight()));
+
+            if (cell != null && cell.getTile() != null && cell.getTile().getProperties().containsKey("blocked"))
+                return true;
+        }
+        return false;
     }
 
     public boolean collidesRight() {
@@ -116,11 +125,7 @@ public class Ship extends Sprite {
         this.velocity = velocity;
     }
 
-    public TiledMapTileLayer getCollisionLayer() {
-        return collisionLayer;
-    }
-
-    public void setCollisionLayer(TiledMapTileLayer collisionLayer) {
-        this.collisionLayer = collisionLayer;
+    public TiledMapTileLayer getIndexLayer() {
+        return indexLayer;
     }
 }

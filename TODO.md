@@ -1,6 +1,8 @@
 # TODO
 
 - [ ] Finish map
+    - [ ] Add islands and colleges
+    - [ ] Adjust hitboxes for terrain
 - [ ] Create enemy ships
     - [ ] Spawn periodically at enemy colleges
     - [ ] Pathfind towards player and other enemies

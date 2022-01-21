@@ -6,8 +6,8 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.maps.MapLayers;
 import com.badlogic.gdx.maps.tiled.TiledMap;
-import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.eng.game.entities.Player;
@@ -37,12 +37,12 @@ public class Play implements Screen {
 
     @Override
     public void show() {
-        map = new TmxMapLoader().load("maps/world.tmx");
+        map = new TmxMapLoader().load("maps/overworld.tmx");
         renderer = new OrthogonalTiledMapRenderer(map);
         camera = new OrthographicCamera();
 
-        player = new Player(new Sprite(new Texture("img/player.png")), (TiledMapTileLayer) map.getLayers().get(0));
-        player.setPosition(5 * player.getCollisionLayer().getTileWidth(), 20 * player.getCollisionLayer().getTileHeight());
+        player = new Player(new Sprite(new Texture("img/player.png")), map.getLayers());
+        player.setPosition(9 * player.getIndexLayer().getTileWidth(), 84 * player.getIndexLayer().getTileHeight());
 
         Gdx.input.setInputProcessor(player); // Set input to the player
     }
@@ -56,8 +56,8 @@ public class Play implements Screen {
 
     @Override
     public void resize(int width, int height) {
-        camera.viewportWidth = width / 5f;
-        camera.viewportHeight = height / 5f;
+        camera.viewportWidth = width / 2.5f;
+        camera.viewportHeight = height / 2.5f;
     }
 
     @Override
