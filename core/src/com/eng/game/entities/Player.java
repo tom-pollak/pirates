@@ -7,7 +7,7 @@ import com.badlogic.gdx.maps.MapLayers;
 
 public class Player extends Ship implements InputProcessor {
     public Player(Sprite sprite, MapLayers layers) {
-        super(sprite, layers);
+        super(sprite, layers, 100, 3);
     }
 
     @Override

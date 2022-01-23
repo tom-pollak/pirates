@@ -1,5 +1,7 @@
-## Java
+## raw assets
+kenney_piratepack/
 
+## Java
 *.class
 *.war
 *.ear

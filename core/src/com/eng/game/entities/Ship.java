@@ -6,8 +6,9 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.maps.MapLayers;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.math.Vector2;
+import com.eng.game.items.Cannon;
 
-public class Ship extends Sprite {
+public class Ship extends Entity {
 
     private final MapLayers layers;
     private final TiledMapTileLayer indexLayer;
@@ -15,8 +16,9 @@ public class Ship extends Sprite {
     public float speed = 175;
     private float increment;
 
-    public Ship(Sprite sprite, MapLayers layers) {
-        super(sprite);
+    public Ship(Sprite sprite, MapLayers layers, int health, int holdingCapacity) {
+        super(health, holdingCapacity, sprite);
+        pickup(new Cannon(10, 6, 2));
         this.layers = layers;
         indexLayer = (TiledMapTileLayer) layers.get(0);
 //        setSize((float) (getWidth() * 0.5), (float) (getHeight() * 0.5));
@@ -82,47 +84,27 @@ public class Ship extends Sprite {
 
     public boolean collidesRight() {
         for (float i = 0; i <= getHeight(); i += increment)
-            if (isCellBlocked(getX() + getWidth(), getY() + i))
-                return true;
+            if (isCellBlocked(getX() + getWidth(), getY() + i)) return true;
         return false;
     }
 
     public boolean collidesLeft() {
         for (float i = 0; i <= getHeight(); i += increment)
-            if (isCellBlocked(getX(), getY() + i))
-                return true;
+            if (isCellBlocked(getX(), getY() + i)) return true;
         return false;
     }
 
     public boolean collidesTop() {
         for (float i = 0; i <= getWidth(); i += increment)
-            if (isCellBlocked(getX() + i, getY() + getHeight()))
-                return true;
+            if (isCellBlocked(getX() + i, getY() + getHeight())) return true;
         return false;
 
     }
 
     public boolean collidesBottom() {
         for (float i = 0; i <= getWidth(); i += increment)
-            if (isCellBlocked(getX() + i, getY()))
-                return true;
+            if (isCellBlocked(getX() + i, getY())) return true;
         return false;
-    }
-
-    public float getSpeed() {
-        return speed;
-    }
-
-    public void setSpeed(float speed) {
-        this.speed = speed;
-    }
-
-    public Vector2 getVelocity() {
-        return velocity;
-    }
-
-    public void setVelocity(Vector2 velocity) {
-        this.velocity = velocity;
     }
 
     public TiledMapTileLayer getIndexLayer() {

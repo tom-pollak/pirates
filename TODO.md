@@ -11,6 +11,8 @@
     - [ ] Have a health bar
     - [ ] Can be captured when base is destroyed
     - [ ] Have cannons that have health and shoot at players
+    - [ ] Assign ships to a college
+    - [ ] Have coin amount
 - [ ] Create coin/point system
     - [ ] Holding base over time
     - [ ] Finding random treasure chests in the ocean
