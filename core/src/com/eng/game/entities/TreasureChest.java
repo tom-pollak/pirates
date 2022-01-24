@@ -2,6 +2,7 @@ package com.eng.game.entities;
 
 import com.badlogic.gdx.graphics.Texture;
 import com.eng.game.items.Key;
+import com.eng.game.logic.Alliance;
 
 public class TreasureChest extends Entity {
     private final Alliance keyAlliance;

@@ -1,22 +1,22 @@
 # TODO
 
 - [ ] Finish map
-    - [ ] Add islands and colleges
-    - [ ] Adjust hitboxes for terrain
-- [ ] Create enemy ships
+    - [ ] Add colleges
+    - [ ] Get consistent sprites
+    - [ ] Sprite similar to alliance
+- [ ] Enemy Ships
     - [ ] Spawn periodically at enemy colleges
-    - [ ] Pathfind towards player and other enemies
+    - [ ] Implement movement
+    - [ ] Pathfinding towards player and other enemies
     - [ ] Defend college from enemies
-- [ ] Create colleges
-    - [ ] Have a health bar
-    - [ ] Can be captured when base is destroyed
-    - [ ] Have cannons that have health and shoot at players
-    - [ ] Assign ships to a college
-    - [ ] Have coin amount
 - [ ] Create coin/point system
     - [ ] Holding base over time
     - [ ] Finding random treasure chests in the ocean
 - [ ] Objectives
     - [ ] Rescue princess
-    - [ ] Defeat main college
-    - [ ] Find the treasure chests
+    - [ ] Find & open treasure chests
+- [ ] Upgrades?
+- [ ] Game over
+    - [ ] When player dies
+    - [ ] When all treasure chests are found
+    - [ ] When princess is returned to the main college

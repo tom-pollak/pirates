@@ -4,6 +4,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.eng.game.items.Item;
 import com.eng.game.items.Key;
+import com.eng.game.logic.Alliance;
 
 import java.util.ArrayList;
 

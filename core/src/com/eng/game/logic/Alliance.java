@@ -1,5 +1,6 @@
-package com.eng.game.entities;
+package com.eng.game.logic;
 
+import com.eng.game.entities.Entity;
 import com.eng.game.items.Item;
 
 import java.util.ArrayList;
