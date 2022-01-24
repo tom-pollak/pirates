@@ -1,44 +1,45 @@
 package com.eng.game.entities;
 
-import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
-import com.badlogic.gdx.graphics.g2d.Sprite;
-import com.badlogic.gdx.maps.MapLayers;
-import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.math.Vector2;
 import com.eng.game.items.Cannon;
+import com.eng.game.map.BackgroundTiledMap;
 
 public class Ship extends Entity {
 
-    private final MapLayers layers;
-    private final TiledMapTileLayer indexLayer;
+    private final Texture texture;
+    private final BackgroundTiledMap backgroundTiledMap;
     public Vector2 velocity = new Vector2();
     public float speed = 175;
     private float increment;
 
-    public Ship(Sprite sprite, MapLayers layers, int health, int holdingCapacity) {
-        super(health, holdingCapacity, sprite);
-        pickup(new Cannon(10, 6, 2));
-        this.layers = layers;
-        indexLayer = (TiledMapTileLayer) layers.get(0);
-//        setSize((float) (getWidth() * 0.5), (float) (getHeight() * 0.5));
+    public Ship(Texture texture, int health, int holdingCapacity, BackgroundTiledMap backgroundTiledMap) {
+        super(texture, health, holdingCapacity);
+        this.texture = texture;
+        this.backgroundTiledMap = backgroundTiledMap;
+        addItem(new Cannon(10, 6, 2));
+        //        setSize((float) (getWidth() * 0.5), (float) (getHeight() * 0.5));
+    }
+
+
+    @Override
+    public void draw(Batch batch, float parentAlpha) {
+//        update(parentAlpha);
+        batch.draw(texture, getX(), getY());
+        super.draw(batch, parentAlpha);
     }
 
     @Override
-    public void draw(Batch batch) {
-        update(Gdx.graphics.getDeltaTime());
-        super.draw(batch);
-    }
-
-    public void update(float delta) {
-
+    public void act(float delta) {
+        super.act(delta);
         float oldX = getX(), oldY = getY();
         boolean collisionX = false, collisionY = false;
 
         setX(getX() + velocity.x * delta);
 
         // calculate the increment for collidesLeft and collidesRight
-        increment = indexLayer.getTileWidth();
+        increment = backgroundTiledMap.getTileWidth();
         increment = getWidth() < increment ? getWidth() / 2 : increment / 2;
 
         if (velocity.x < 0) // going left
@@ -55,9 +56,11 @@ public class Ship extends Entity {
         // move on y
         setY(getY() + velocity.y * delta);
 
+
         // calculate the increment for collidesBottom and collidesTop
-        increment = indexLayer.getTileHeight();
+        increment = backgroundTiledMap.getTileHeight();
         increment = getHeight() < increment ? getHeight() / 2 : increment / 2;
+
 
         if (velocity.y < 0) // going down
             collisionY = collidesBottom();
@@ -69,45 +72,35 @@ public class Ship extends Entity {
             setY(oldY);
             velocity.y = 0;
         }
+
     }
 
-    private boolean isCellBlocked(float x, float y) {
-        for (int i = 0; i < layers.getCount(); i++) {
-            TiledMapTileLayer collisionLayer = (TiledMapTileLayer) layers.get(i);
-            TiledMapTileLayer.Cell cell = collisionLayer.getCell((int) (x / collisionLayer.getTileWidth()), (int) (y / collisionLayer.getTileHeight()));
-
-            if (cell != null && cell.getTile() != null && cell.getTile().getProperties().containsKey("blocked"))
-                return true;
-        }
-        return false;
-    }
 
     public boolean collidesRight() {
         for (float i = 0; i <= getHeight(); i += increment)
-            if (isCellBlocked(getX() + getWidth(), getY() + i)) return true;
+            if (backgroundTiledMap.isCellBlocked(getX() + getWidth(), getY() + i)) return true;
         return false;
     }
 
     public boolean collidesLeft() {
         for (float i = 0; i <= getHeight(); i += increment)
-            if (isCellBlocked(getX(), getY() + i)) return true;
+            if (backgroundTiledMap.isCellBlocked(getX(), getY() + i)) return true;
         return false;
     }
 
     public boolean collidesTop() {
         for (float i = 0; i <= getWidth(); i += increment)
-            if (isCellBlocked(getX() + i, getY() + getHeight())) return true;
+            if (backgroundTiledMap.isCellBlocked(getX() + i, getY() + getHeight())) return true;
         return false;
-
     }
 
     public boolean collidesBottom() {
         for (float i = 0; i <= getWidth(); i += increment)
-            if (isCellBlocked(getX() + i, getY())) return true;
+            if (backgroundTiledMap.isCellBlocked(getX() + i, getY())) return true;
         return false;
     }
 
-    public TiledMapTileLayer getIndexLayer() {
-        return indexLayer;
+    public String toString() {
+        return "Ship";
     }
 }

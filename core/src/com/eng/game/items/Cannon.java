@@ -12,4 +12,13 @@ public class Cannon extends Item {
         this.range = range;
         this.fireRate = fireRate;
     }
+
+    @Override
+    public void use() {
+        fire();
+    }
+
+    public void fire() {
+        System.out.println("Firing cannon");
+    }
 }

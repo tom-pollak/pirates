@@ -1,33 +1,44 @@
 package com.eng.game.entities;
 
-import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.eng.game.items.Item;
+import com.eng.game.items.Key;
 
 import java.util.ArrayList;
 
-public abstract class Entity extends Sprite {
+public abstract class Entity extends Actor {
     private final ArrayList<Item> holding;
     private final int holdingCapacity;
+    private final Texture texture;
     public int maxHealth;
     public int health;
     public Alliance alliance = Alliance.NEUTRAL;
-    public boolean isDead;
+    public boolean isDead = false;
     public int coins = 0;
+    protected int tileWidth;
+    protected int tileHeight;
+    private int itemIndex = 0;
 
-    Entity(int maxHealth, int holdingCapacity, Sprite spriteImgPath) {
-        super(spriteImgPath);
-        this.holding = new ArrayList<>(holdingCapacity);
-        this.holdingCapacity = holdingCapacity;
+
+    Entity(Texture texture, int maxHealth, int holdingCapacity) {
+        this.texture = texture;
         this.maxHealth = maxHealth;
         this.health = maxHealth;
+        if (holdingCapacity > 9) holdingCapacity = 9;
+        this.holding = new ArrayList<>(holdingCapacity);
+        this.holdingCapacity = holdingCapacity;
     }
 
-    Entity(int maxHealth, int holdingCapacity) {
-        super();
-        this.holding = new ArrayList<>(holdingCapacity);
-        this.holdingCapacity = holdingCapacity;
-        this.maxHealth = maxHealth;
-        this.health = maxHealth;
+    @Override
+    public void act(float delta) {
+        super.act(delta);
+    }
+
+    public abstract String toString();
+
+    public Texture getTexture() {
+        return texture;
     }
 
     public ArrayList<Item> getHolding() {
@@ -39,23 +50,44 @@ public abstract class Entity extends Sprite {
             return false;
         }
         holding.add(item);
+        // Use return value to check if item was added
         return true;
     }
 
-    public boolean pickup(Item item) {
-        // Check item is on same square
-        return addItem(item);
+    public boolean pickup() {
+        // TODO: Check item is on same square
+        // Get Item on same sqare
+//        return addItem(item);
+        // onPickup()
+        return false;
     }
 
-    public boolean drop(Item item) {
-        if (!holding.contains(item)) return false;
-        holding.remove(item);
-        return true;
+    public void drop() {
+        try {
+            Item droppedItem = holding.remove(itemIndex);
+            droppedItem.setPosition(getX(), getY());
+            droppedItem.onDrop();
+        } catch (IndexOutOfBoundsException e) {
+            System.out.println("No item to drop");
+        }
+    }
+
+    public void dropAll() {
+        for (int i = 0; i < holding.size(); i++) {
+            switchItem(i);
+            drop();
+        }
+    }
+
+    public void switchItem(int index) {
+        itemIndex = index;
     }
 
     public void damage(int damage) {
         health -= damage;
-        if (health <= 0) onDeath();
+        if (health <= 0) {
+            die();
+        }
     }
 
     public void heal(int heal) {
@@ -63,9 +95,13 @@ public abstract class Entity extends Sprite {
         if (health > maxHealth) health = maxHealth;
     }
 
-    public boolean onDeath() {
+    public void die() {
+        dropAll();
         isDead = true;
-        // Trigger some winning animation if you win
+    }
+
+    public boolean open(Key key) {
+        System.out.println("Cannot be opened");
         return false;
     }
 }

@@ -3,60 +3,65 @@ package com.eng.game.screens;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
-import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.Sprite;
-import com.badlogic.gdx.maps.tiled.TiledMap;
-import com.badlogic.gdx.maps.tiled.TmxMapLoader;
-import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
+import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.eng.game.entities.EnemyShip;
 import com.eng.game.entities.Player;
+import com.eng.game.map.BackgroundTiledMap;
+
 
 public class Play implements Screen {
 
-    private TiledMap map;
-    private OrthogonalTiledMapRenderer renderer;
-    private OrthographicCamera camera;
+    private final Stage stage = new Stage();
+    public BackgroundTiledMap backgroundTiledMap;
     private Player player;
+    private EnemyShip enemyShip;
+
+
+    @Override
+    public void show() {
+        backgroundTiledMap = new BackgroundTiledMap(stage);
+        stage.addActor(backgroundTiledMap);
+
+        Gdx.input.setInputProcessor(stage);
+        player = new Player(backgroundTiledMap);
+        player.setPosition(4 * backgroundTiledMap.getTileWidth(), 13 * backgroundTiledMap.getTileHeight());
+//        player.setSize(0.2f * stage.getWidth(), 0.2f * stage.getWidth() * player.getHeight() / player.getWidth());
+        player.setSize(5, 10);
+
+        stage.setKeyboardFocus(player);
+        player.addListener(player.input);
+        stage.addActor(player);
+    }
 
     @Override
     public void render(float delta) {
         Gdx.gl.glClearColor(0, 0, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
-        camera.position.set(player.getX() + player.getWidth() / 2, player.getY() + player.getHeight() / 2, 0);
-        camera.update();
+        stage.act();
+        stage.draw();
 
-        renderer.setView(camera);
-        renderer.render();
-
-        renderer.getBatch().begin();
-        player.draw(renderer.getBatch());
-        renderer.getBatch().end();
+        stage.getCamera().position.set(player.getX() + player.getWidth() / 2, player.getY() + player.getHeight() / 2, 0);
+        stage.getCamera().update();
     }
 
-    @Override
-    public void show() {
-        map = new TmxMapLoader().load("maps/world.tmx");
-        renderer = new OrthogonalTiledMapRenderer(map);
-        camera = new OrthographicCamera();
-
-        player = new Player(new Sprite(new Texture("img/player.png")), map.getLayers());
-        player.setPosition(9 * player.getIndexLayer().getTileWidth(), 84 * player.getIndexLayer().getTileHeight());
-
-        Gdx.input.setInputProcessor(player); // Set input to the player
-    }
 
     @Override
     public void dispose() {
-        map.dispose();
-        renderer.dispose();
+        backgroundTiledMap.dispose();
         player.getTexture().dispose();
     }
 
     @Override
     public void resize(int width, int height) {
-        camera.viewportWidth = width / 2.5f;
-        camera.viewportHeight = height / 2.5f;
+//        camera.viewportWidth = width / 2.5f;
+//        camera.viewportHeight = height / 2.5f;
+
+        stage.getViewport().update(width, height);
+        stage.getCamera().viewportWidth = width / 2.5f;
+        stage.getCamera().viewportHeight = height / 2.5f;
+        stage.getCamera().position.set(stage.getCamera().viewportWidth / 2, stage.getCamera().viewportHeight / 2, 0);
+        stage.getCamera().update();
     }
 
     @Override
