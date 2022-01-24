@@ -7,6 +7,7 @@ public class Princess extends Item {
 
     @Override
     public void onPickup() {
+        // TODO: If home base picks up princess, you win
         System.out.println("You picked up the princess");
     }
 }

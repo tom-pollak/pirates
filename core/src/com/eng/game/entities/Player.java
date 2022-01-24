@@ -47,11 +47,13 @@ public class Player extends Ship {
         public boolean keyTyped(InputEvent event, char character) {
             switch (character) {
                 case 'e':
+                    // Not implemented yet
                     pickup();
                     break;
                 case 'f':
                     drop();
                     break;
+
             }
             if (Character.isDigit(character) && (int) character >= 1 && (int) character <= 9) {
                 switchItem((int) character - 1);

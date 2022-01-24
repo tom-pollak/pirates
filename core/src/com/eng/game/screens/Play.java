@@ -25,7 +25,8 @@ public class Play implements Screen {
         Gdx.input.setInputProcessor(stage);
         player = new Player(backgroundTiledMap);
         player.setPosition(4 * backgroundTiledMap.getTileWidth(), 13 * backgroundTiledMap.getTileHeight());
-//        player.setSize(0.2f * stage.getWidth(), 0.2f * stage.getWidth() * player.getHeight() / player.getWidth());
+        // TODO: work out how to make the player's size proportional to the screen size
+        // player.setSize(0.2f * stage.getWidth(), 0.2f * stage.getWidth() * player.getHeight() / player.getWidth());
         player.setSize(5, 10);
 
         stage.setKeyboardFocus(player);
@@ -54,6 +55,7 @@ public class Play implements Screen {
 
     @Override
     public void resize(int width, int height) {
+        // TODO: get the right camera zoom
 //        camera.viewportWidth = width / 2.5f;
 //        camera.viewportHeight = height / 2.5f;
 

@@ -57,9 +57,8 @@ public abstract class Entity extends Actor {
 
     public boolean pickup() {
         // TODO: Check item is on same square
-        // Get Item on same sqare
-//        return addItem(item);
-        // onPickup()
+        // onPickup(): Princess game wins
+        System.out.println("Not implemented yet");
         return false;
     }
 

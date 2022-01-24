@@ -6,6 +6,7 @@ import com.eng.game.map.BackgroundTiledMap;
 
 public class EnemyShip extends Ship {
     public EnemyShip(BackgroundTiledMap backgroundTiledMap) {
+        // TODO: add enemy ship texture based on alliance
         super(new Texture("img/ship.png"), 100, 3, backgroundTiledMap);
         addItem(new Cannon(10, 6, 2));
     }
@@ -15,6 +16,6 @@ public class EnemyShip extends Ship {
         return "Enemy ship";
     }
 
-    // Movement
+    // TODO: Add movement and pathfinding (AI)
 
 }

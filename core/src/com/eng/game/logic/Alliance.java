@@ -17,6 +17,7 @@ public class Alliance {
 
     @Override
     public String toString() {
+        // TODO: Not sure about this string?
         return "Alliance{" +
                 "name='" + name + '\'' +
                 '}';

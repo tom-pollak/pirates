@@ -19,19 +19,18 @@ public class Ship extends Entity {
         this.texture = texture;
         this.backgroundTiledMap = backgroundTiledMap;
         addItem(new Cannon(10, 6, 2));
-        //        setSize((float) (getWidth() * 0.5), (float) (getHeight() * 0.5));
     }
 
 
     @Override
     public void draw(Batch batch, float parentAlpha) {
-//        update(parentAlpha);
         batch.draw(texture, getX(), getY());
         super.draw(batch, parentAlpha);
     }
 
     @Override
     public void act(float delta) {
+        // TODO: implement player box bounding box, it is moving now from the top left of the ship
         super.act(delta);
         float oldX = getX(), oldY = getY();
         boolean collisionX = false, collisionY = false;
