@@ -5,10 +5,14 @@ import com.eng.game.logic.Alliance;
 
 public class College extends Entity {
     private final Alliance alliance;
+    private final Integer range;
 
-    public College(String name, int health, int holdingCapacity) {
+    public College(String name, int health, int holdingCapacity, Integer range) {
         super(new Texture("img/ship.png"), health, holdingCapacity);
-        this.alliance = new Alliance(name);
+        this.alliance = new Alliance(name, this);
+        this.alliance.addAlly(this);
+        this.alliance.setLeader(this);
+        this.range = range;
     }
 
     public void update(float delta) {
@@ -21,6 +25,11 @@ public class College extends Entity {
             coins += (delta * coinMultiplier);
 
         }
+    }
+
+
+    public Integer getRange() {
+        return range;
     }
 
     @Override

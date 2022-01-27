@@ -7,6 +7,7 @@ import com.eng.game.items.Key;
 import com.eng.game.logic.Alliance;
 
 import java.util.ArrayList;
+import java.util.Objects;
 
 public abstract class Entity extends Actor {
     private final ArrayList<Item> holding;
@@ -19,11 +20,16 @@ public abstract class Entity extends Actor {
     public int coins = 0;
     protected int tileWidth;
     protected int tileHeight;
+    Integer range = null;
     private int itemIndex = 0;
 
 
     Entity(Texture texture, int maxHealth, int holdingCapacity) {
         this.texture = texture;
+        this.setWidth(texture.getWidth());
+        this.setHeight(texture.getHeight());
+        this.setBounds(0, 0, texture.getWidth(), texture.getHeight());
+        this.setOrigin(getWidth() / 2, getHeight() / 2);
         this.maxHealth = maxHealth;
         this.health = maxHealth;
         if (holdingCapacity > 9) holdingCapacity = 9;
@@ -34,6 +40,11 @@ public abstract class Entity extends Actor {
     @Override
     public void act(float delta) {
         super.act(delta);
+    }
+
+
+    public String getName() {
+        return this.toString();
     }
 
     public abstract String toString();
@@ -57,6 +68,7 @@ public abstract class Entity extends Actor {
 
     public boolean pickup() {
         // TODO: Check item is on same square
+        // Pickup item in holding place
         // onPickup(): Princess game wins
         System.out.println("Not implemented yet");
         return false;
@@ -103,5 +115,23 @@ public abstract class Entity extends Actor {
     public boolean open(Key key) {
         System.out.println("Cannot be opened");
         return false;
+    }
+
+    public Integer getRange() {
+        return range;
+    }
+
+    public boolean isOutOfRange(float x, float y) {
+        if (Objects.equals(range, getRange())) {
+            return false;
+        }
+        float xDiff = Math.abs(getX() - x);
+        float yDiff = Math.abs(getY() - y);
+        return Math.sqrt(xDiff * xDiff + yDiff * yDiff) > getRange();
+    }
+
+
+    public Alliance getAlliance() {
+        return alliance;
     }
 }

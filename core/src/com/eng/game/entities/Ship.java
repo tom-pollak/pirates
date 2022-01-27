@@ -8,10 +8,10 @@ import com.eng.game.map.BackgroundTiledMap;
 
 public class Ship extends Entity {
 
+    public final float speed = 175;
     private final Texture texture;
     private final BackgroundTiledMap backgroundTiledMap;
     public Vector2 velocity = new Vector2();
-    public float speed = 175;
     private float increment;
 
     public Ship(Texture texture, int health, int holdingCapacity, BackgroundTiledMap backgroundTiledMap) {

@@ -11,7 +11,7 @@ public class TreasureChest extends Entity {
     public TreasureChest(Alliance keyAlliance, String description) {
         super(new Texture("img/ship.png"), 100, 3);
         this.description = description;
-        this.keyAlliance = new Alliance(toString());
+        this.keyAlliance = new Alliance(toString(), this);
     }
 
     public boolean open(Key key) {

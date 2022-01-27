@@ -7,11 +7,12 @@
 - [ ] Enemy Ships
     - [ ] Spawn periodically at enemy colleges
     - [ ] Implement movement
-    - [ ] Pathfinding towards player and other enemies
-    - [ ] Defend college from enemies
+    - [ ] Roam randomly around base region
+    - [ ] Pathfinding towards player and other enemies when player is in range
 - [ ] Create coin/point system
     - [ ] Holding base over time
     - [ ] Finding random treasure chests in the ocean
+    - [ ] Add timer for speedruns
 - [ ] Objectives
     - [ ] Rescue princess
     - [ ] Find & open treasure chests

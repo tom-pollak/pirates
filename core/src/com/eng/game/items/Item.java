@@ -1,10 +1,12 @@
 package com.eng.game.items;
 
 import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.eng.game.logic.Alliance;
 
 public class Item extends Actor {
     private final String name;
     private final String description;
+    public Alliance alliance = Alliance.NEUTRAL;
 
     public Item(String name, String description) {
         super();

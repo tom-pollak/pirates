@@ -8,6 +8,6 @@ public class Key extends Item {
     @Override
     public void use() {
         super.use();
-        // Use on entitiy on current tile
+        // TODO: implement use
     }
 }

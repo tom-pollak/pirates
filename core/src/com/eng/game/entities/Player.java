@@ -47,7 +47,6 @@ public class Player extends Ship {
         public boolean keyTyped(InputEvent event, char character) {
             switch (character) {
                 case 'e':
-                    // Not implemented yet
                     pickup();
                     break;
                 case 'f':
