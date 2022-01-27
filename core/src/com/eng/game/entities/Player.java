@@ -36,10 +36,16 @@ public class Player extends Ship {
                     if (!Gdx.input.isKeyPressed(Input.Keys.D)) {
                         velocity.x = 0;
                         break;
+                    } else {
+                        velocity.x = speed;
+                        break;
                     }
                 case Input.Keys.D:
                     if (!Gdx.input.isKeyPressed(Input.Keys.A)) {
                         velocity.x = 0;
+                        break;
+                    } else {
+                        velocity.x = -speed;
                         break;
                     }
                 case Input.Keys.W:
@@ -47,10 +53,16 @@ public class Player extends Ship {
                     if (!Gdx.input.isKeyPressed(Input.Keys.S)) {
                         velocity.y = 0;
                         break;
+                    } else {
+                        velocity.y = -speed;
+                        break;
                     }
                 case Input.Keys.S:
                     if (!Gdx.input.isKeyPressed(Input.Keys.W)) {
                         velocity.y = 0;
+                        break;
+                    } else {
+                        velocity.y = speed;
                         break;
                     }
                 default:
