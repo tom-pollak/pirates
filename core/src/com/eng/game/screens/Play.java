@@ -69,10 +69,6 @@ public class Play implements Screen {
 
     @Override
     public void resize(int width, int height) {
-        // TODO: get the right camera zoom
-        // camera.viewportWidth = width / 2.5f;
-        // camera.viewportHeight = height / 2.5f;
-
         stage.getViewport().update(width, height);
         stage.getCamera().viewportWidth = width / 2.5f;
         stage.getCamera().viewportHeight = height / 2.5f;

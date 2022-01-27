@@ -31,7 +31,6 @@ public class Ship extends Entity {
 
     @Override
     public void act(float delta) {
-        // TODO: implement player box bounding box, it is moving now from the top left of the ship
         super.act(delta);
         float oldX = getX(), oldY = getY();
         boolean collisionX = false, collisionY = false;

@@ -35,39 +35,34 @@ public class Player extends Ship {
                 case Input.Keys.A:
                     if (!Gdx.input.isKeyPressed(Input.Keys.D)) {
                         velocity.x = 0;
-                        break;
                     } else {
                         velocity.x = speed;
-                        break;
                     }
+                    break;
                 case Input.Keys.D:
                     if (!Gdx.input.isKeyPressed(Input.Keys.A)) {
                         velocity.x = 0;
-                        break;
                     } else {
                         velocity.x = -speed;
-                        break;
                     }
+                    break;
                 case Input.Keys.W:
                     System.out.println(!Gdx.input.isKeyPressed(Input.Keys.S));
                     if (!Gdx.input.isKeyPressed(Input.Keys.S)) {
                         velocity.y = 0;
-                        break;
                     } else {
                         velocity.y = -speed;
-                        break;
                     }
+                    break;
                 case Input.Keys.S:
                     if (!Gdx.input.isKeyPressed(Input.Keys.W)) {
                         velocity.y = 0;
-                        break;
                     } else {
                         velocity.y = speed;
-                        break;
                     }
+                    break;
                 default:
                     break;
-
             }
             return true;
         }

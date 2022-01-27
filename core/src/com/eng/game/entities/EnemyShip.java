@@ -45,8 +45,6 @@ public class EnemyShip extends Ship {
         return newVelocity;
     }
 
-    // TODO: Add movement and pathfinding (AI)
-
     @Override
     public String toString() {
         return "Enemy ship";

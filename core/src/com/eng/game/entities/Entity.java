@@ -45,7 +45,6 @@ public abstract class Entity extends Actor {
         super.act(delta);
     }
 
-
     public String getName() {
         return this.toString();
     }
@@ -72,7 +71,8 @@ public abstract class Entity extends Actor {
     public boolean pickup() {
         // TODO: Check item is on same square
         // Pickup item in holding place
-        // onPickup(): Princess game wins
+        // onPickup(): Princess game wins, sprite disappears
+        Integer[] coords = getTileCoordinates();
         System.out.println("Not implemented yet");
         return false;
     }
