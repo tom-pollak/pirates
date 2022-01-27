@@ -1,9 +1,11 @@
 package com.eng.game.entities;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
+import com.eng.game.logic.ShipTable;
 import com.eng.game.map.BackgroundTiledMap;
 
 public class Player extends Ship {
@@ -31,14 +33,29 @@ public class Player extends Ship {
         public boolean keyUp(InputEvent event, int keycode) {
             switch (keycode) {
                 case Input.Keys.A:
+                    if (!Gdx.input.isKeyPressed(Input.Keys.D)) {
+                        velocity.x = 0;
+                        break;
+                    }
                 case Input.Keys.D:
-                    velocity.x = 0;
+                    if (!Gdx.input.isKeyPressed(Input.Keys.A)) {
+                        velocity.x = 0;
+                        break;
+                    }
+                case Input.Keys.W:
+                    System.out.println(!Gdx.input.isKeyPressed(Input.Keys.S));
+                    if (!Gdx.input.isKeyPressed(Input.Keys.S)) {
+                        velocity.y = 0;
+                        break;
+                    }
+                case Input.Keys.S:
+                    if (!Gdx.input.isKeyPressed(Input.Keys.W)) {
+                        velocity.y = 0;
+                        break;
+                    }
+                default:
                     break;
 
-                case Input.Keys.W:
-                case Input.Keys.S:
-                    velocity.y = 0;
-                    break;
             }
             return true;
         }
@@ -61,8 +78,9 @@ public class Player extends Ship {
         }
     };
 
-    public Player(BackgroundTiledMap backgroundTiledMap) {
-        super(new Texture("img/player.png"), 100, 3, backgroundTiledMap);
+    public Player(BackgroundTiledMap backgroundTiledMap, ShipTable shipTable) {
+        super(backgroundTiledMap, new Texture("img/player.png"), 100, 3, 100, backgroundTiledMap);
+        shipTable.addShip(this);
 
     }
 

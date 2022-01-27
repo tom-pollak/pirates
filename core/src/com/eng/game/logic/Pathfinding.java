@@ -19,8 +19,6 @@ public class Pathfinding {
         GridFinderOptions options = new GridFinderOptions();
         options.allowDiagonal = true;
         finder = new ThetaStarGridFinder<>(GridCell.class, options);
-        System.out.println("finder" + finder.findPath(1, 1, 88, 48, navLayer));
-
     }
 
     public List<GridCell> findPath(int startX, int startY, int endX, int endY) {

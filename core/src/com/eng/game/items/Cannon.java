@@ -21,4 +21,16 @@ public class Cannon extends Item {
     public void fire() {
         System.out.println("Firing cannon");
     }
+
+    public float getDamage() {
+        return damage;
+    }
+
+    public int getRange() {
+        return range;
+    }
+
+    public float getFireRate() {
+        return fireRate;
+    }
 }

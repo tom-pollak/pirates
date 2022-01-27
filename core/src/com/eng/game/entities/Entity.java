@@ -2,12 +2,13 @@ package com.eng.game.entities;
 
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.eng.game.items.Cannon;
 import com.eng.game.items.Item;
 import com.eng.game.items.Key;
 import com.eng.game.logic.Alliance;
+import com.eng.game.map.BackgroundTiledMap;
 
 import java.util.ArrayList;
-import java.util.Objects;
 
 public abstract class Entity extends Actor {
     private final ArrayList<Item> holding;
@@ -20,11 +21,11 @@ public abstract class Entity extends Actor {
     public int coins = 0;
     protected int tileWidth;
     protected int tileHeight;
-    Integer range = null;
+    Integer movementRange = null;
     private int itemIndex = 0;
 
 
-    Entity(Texture texture, int maxHealth, int holdingCapacity) {
+    Entity(BackgroundTiledMap tiledMap, Texture texture, int maxHealth, int holdingCapacity) {
         this.texture = texture;
         this.setWidth(texture.getWidth());
         this.setHeight(texture.getHeight());
@@ -35,6 +36,8 @@ public abstract class Entity extends Actor {
         if (holdingCapacity > 9) holdingCapacity = 9;
         this.holding = new ArrayList<>(holdingCapacity);
         this.holdingCapacity = holdingCapacity;
+        this.tileWidth = tiledMap.getTileWidth();
+        this.tileHeight = tiledMap.getTileHeight();
     }
 
     @Override
@@ -117,21 +120,30 @@ public abstract class Entity extends Actor {
         return false;
     }
 
-    public Integer getRange() {
-        return range;
+    public Integer getMovementRange() {
+        return movementRange;
+    }
+
+    public Integer getFiringRange() {
+        for (Item item : holding) {
+            if (item instanceof Cannon) {
+                return ((Cannon) item).getRange();
+            }
+        }
+        return 0;
     }
 
     public boolean isOutOfRange(float x, float y) {
-        if (Objects.equals(range, getRange())) {
-            return false;
-        }
         float xDiff = Math.abs(getX() - x);
         float yDiff = Math.abs(getY() - y);
-        return Math.sqrt(xDiff * xDiff + yDiff * yDiff) > getRange();
+        return Math.sqrt(xDiff * xDiff + yDiff * yDiff) > getMovementRange();
     }
-
 
     public Alliance getAlliance() {
         return alliance;
+    }
+
+    public Integer[] getTileCoordinates() {
+        return new Integer[]{(int) getX() / tileWidth, (int) getY() / tileHeight};
     }
 }

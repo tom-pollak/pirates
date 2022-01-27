@@ -14,10 +14,11 @@ public class Ship extends Entity {
     public Vector2 velocity = new Vector2();
     private float increment;
 
-    public Ship(Texture texture, int health, int holdingCapacity, BackgroundTiledMap backgroundTiledMap) {
-        super(texture, health, holdingCapacity);
+    public Ship(BackgroundTiledMap tiledMap, Texture texture, int health, int holdingCapacity, Integer movementRange, BackgroundTiledMap backgroundTiledMap) {
+        super(tiledMap, texture, health, holdingCapacity);
         this.texture = texture;
         this.backgroundTiledMap = backgroundTiledMap;
+        this.movementRange = movementRange;
         addItem(new Cannon(10, 6, 2));
     }
 
@@ -73,7 +74,6 @@ public class Ship extends Entity {
         }
 
     }
-
 
     public boolean collidesRight() {
         for (float i = 0; i <= getHeight(); i += increment)

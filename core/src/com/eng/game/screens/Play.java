@@ -8,6 +8,7 @@ import com.eng.game.entities.College;
 import com.eng.game.entities.EnemyShip;
 import com.eng.game.entities.Player;
 import com.eng.game.logic.Pathfinding;
+import com.eng.game.logic.ShipTable;
 import com.eng.game.map.BackgroundTiledMap;
 
 
@@ -21,27 +22,25 @@ public class Play implements Screen {
     @Override
     public void show() {
         Pathfinding pathfinding = new Pathfinding();
+        ShipTable shipTable = new ShipTable();
         backgroundTiledMap = new BackgroundTiledMap(stage);
         stage.addActor(backgroundTiledMap);
 
-        College college = new College("James", 100, 3, 1000);
+        College college = new College(backgroundTiledMap, "James", 100, 3, 1000);
+
         stage.addActor(college);
         college.setPosition(5 * backgroundTiledMap.getTileWidth(), 13 * backgroundTiledMap.getTileHeight());
         System.out.println(college + " " + college.getAlliance());
 
         Gdx.input.setInputProcessor(stage);
-        player = new Player(backgroundTiledMap);
+        player = new Player(backgroundTiledMap, shipTable);
         player.setPosition(4 * backgroundTiledMap.getTileWidth(), 13 * backgroundTiledMap.getTileHeight());
-        // TODO: work out how to make the player's size proportional to the screen size
-        // player.setSize(0.2f * stage.getWidth(), 0.2f * stage.getWidth() * player.getHeight() / player.getWidth());
-//        player.setSize(player.getWidth(), player.getHeight());
-//        player.setSize(5, 10);
 
         stage.setKeyboardFocus(player);
         player.addListener(player.input);
         stage.addActor(player);
 
-        enemyShip = new EnemyShip(backgroundTiledMap);
+        enemyShip = new EnemyShip(backgroundTiledMap, shipTable, pathfinding);
         enemyShip.setPosition(5 * backgroundTiledMap.getTileWidth(), 13 * backgroundTiledMap.getTileHeight());
         enemyShip.setSize(5, 10);
         college.getAlliance().addAlly(enemyShip);
