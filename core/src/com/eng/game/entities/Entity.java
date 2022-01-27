@@ -10,6 +10,9 @@ import com.eng.game.map.BackgroundTiledMap;
 
 import java.util.ArrayList;
 
+/**
+ * Main actor class for all non-inanimate objects in the game.
+ */
 public abstract class Entity extends Actor {
     private final ArrayList<Item> holding;
     private final int holdingCapacity;
@@ -33,7 +36,7 @@ public abstract class Entity extends Actor {
         this.setOrigin(getWidth() / 2, getHeight() / 2);
         this.maxHealth = maxHealth;
         this.health = maxHealth;
-        if (holdingCapacity > 9) holdingCapacity = 9;
+        if (holdingCapacity > 9) holdingCapacity = 9; // User can only select 1-9 items
         this.holding = new ArrayList<>(holdingCapacity);
         this.holdingCapacity = holdingCapacity;
         this.tileWidth = tiledMap.getTileWidth();
@@ -59,6 +62,13 @@ public abstract class Entity extends Actor {
         return holding;
     }
 
+    /**
+     * Adds an item to the entity's holding.
+     * If the holding is full, the item is dropped.
+     *
+     * @param item the item to add
+     * @return true if the item was added, false otherwise
+     */
     public boolean addItem(Item item) {
         if (holding.size() == holdingCapacity) {
             return false;
@@ -68,15 +78,26 @@ public abstract class Entity extends Actor {
         return true;
     }
 
+    /**
+     * Picks up the item on the same tile as the entity.
+     * If there is no item on the tile, nothing happens.
+     * If the entity is holding an item, the item is dropped.
+     *
+     * @return true if an item was picked up, false otherwise
+     */
     public boolean pickup() {
         // TODO: Check item is on same square
         // Pickup item in holding place
-        // onPickup(): Princess game wins, sprite disappears
+        // onPickup(): Princess game wins
         Integer[] coords = getTileCoordinates();
         System.out.println("Not implemented yet");
         return false;
     }
 
+    /**
+     * Drops the item at the entities item index.
+     * The item is removed from the holding and placed on the map.
+     */
     public void drop() {
         try {
             Item droppedItem = holding.remove(itemIndex);
@@ -87,6 +108,9 @@ public abstract class Entity extends Actor {
         }
     }
 
+    /**
+     * Drops every item in the entity's holding.
+     */
     public void dropAll() {
         for (int i = 0; i < holding.size(); i++) {
             switchItem(i);
@@ -94,10 +118,23 @@ public abstract class Entity extends Actor {
         }
     }
 
+    /**
+     * Switches the item in the entity's holding to the item at the given index.
+     * If the index is out of bounds, nothing happens.
+     * If the index is the same as the current item index, nothing happens.
+     *
+     * @param index the index of the item to switch to
+     */
     public void switchItem(int index) {
         itemIndex = index;
     }
 
+    /**
+     * Decreases the entity's health by the specified amount.
+     * If the entity's health is 0 or less, it is considered dead.
+     *
+     * @param damage the amount of damage to deal
+     */
     public void damage(int damage) {
         health -= damage;
         if (health <= 0) {
@@ -105,16 +142,34 @@ public abstract class Entity extends Actor {
         }
     }
 
+    /**
+     * Heals the entity by the specified amount.
+     * Will only be healed up to the entity's max health.
+     *
+     * @param heal the amount to heal
+     */
     public void heal(int heal) {
         health += heal;
         if (health > maxHealth) health = maxHealth;
     }
 
+    /**
+     * Kills the entity.
+     * If the entity is a player, the game is over.
+     * Entity is removed from the map.
+     */
     public void die() {
         dropAll();
         isDead = true;
     }
 
+    /**
+     * Performs an action if supplied a valid key
+     * By default, does nothing
+     *
+     * @param key the key to check
+     * @return true if the key was valid, false otherwise
+     */
     public boolean open(Key key) {
         System.out.println("Cannot be opened");
         return false;
@@ -124,8 +179,12 @@ public abstract class Entity extends Actor {
         return movementRange;
     }
 
+    /**
+     * @return the range of the cannon the entity is holding
+     */
     public Integer getFiringRange() {
         for (Item item : holding) {
+            // Change to weapon class?
             if (item instanceof Cannon) {
                 return ((Cannon) item).getRange();
             }
@@ -133,6 +192,13 @@ public abstract class Entity extends Actor {
         return 0;
     }
 
+    /**
+     * Checks if coordinates are outside the enitites bounds
+     *
+     * @param x x coordinate
+     * @param y y coordinate
+     * @return true if coordinates are outside the entities bounds
+     */
     public boolean isOutOfRange(float x, float y) {
         float xDiff = Math.abs(getX() - x);
         float yDiff = Math.abs(getY() - y);
@@ -143,7 +209,26 @@ public abstract class Entity extends Actor {
         return alliance;
     }
 
+    /**
+     * Converts normal coordinates to coordinates of the tiles.
+     *
+     * @return the coordinates of the tile the entity is on
+     */
     public Integer[] getTileCoordinates() {
         return new Integer[]{(int) getX() / tileWidth, (int) getY() / tileHeight};
     }
+
+    public boolean isDead() {
+        return isDead;
+    }
+
+    public int getTileHeight() {
+        return tileHeight;
+    }
+
+    public int getTileWidth() {
+        return tileWidth;
+    }
+
+
 }

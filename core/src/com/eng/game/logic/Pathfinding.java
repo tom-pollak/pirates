@@ -9,13 +9,16 @@ import com.eng.game.pathfinding.pathfinding.grid.finders.ThetaStarGridFinder;
 
 import java.util.List;
 
+/**
+ * Theta* search on a tiled map.
+ */
 public class Pathfinding {
     private final ThetaStarGridFinder<GridCell> finder;
     NavigationTiledMapLayer navLayer;
 
     public Pathfinding() {
         TiledMap map = new NavTmxMapLoader("navigation", "walkable", "0").load("maps/world.tmx");
-        navLayer = (NavigationTiledMapLayer) map.getLayers().get("navigation");
+        navLayer = (NavigationTiledMapLayer) map.getLayers().get("navigation"); // Use navigation layer to determine walkable tiles
         GridFinderOptions options = new GridFinderOptions();
         options.allowDiagonal = true;
         finder = new ThetaStarGridFinder<>(GridCell.class, options);

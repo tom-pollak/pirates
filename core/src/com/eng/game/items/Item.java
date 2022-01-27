@@ -14,15 +14,25 @@ public class Item extends Actor {
         this.description = description;
     }
 
-    public void use() {
+    public void use(int tileX, int tileY) {
         System.out.println(name + "cannot be used");
     }
 
+    /**
+     * Called when the item is picked up
+     * By default sets actor's texture invisible
+     */
     public void onPickup() {
+        // Win if home base picks up princess
         System.out.println("You picked up " + name);
     }
 
+    /**
+     * Called when the item is dropped
+     * By default sets actor's texture visible
+     */
     public void onDrop() {
+        // Texture appears
         System.out.println("Dropped " + name);
     }
 

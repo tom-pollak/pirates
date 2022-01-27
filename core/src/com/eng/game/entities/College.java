@@ -4,6 +4,11 @@ import com.badlogic.gdx.graphics.Texture;
 import com.eng.game.logic.Alliance;
 import com.eng.game.map.BackgroundTiledMap;
 
+/**
+ * Leader & base entity for each team
+ * Creates the college and its alliance
+ * Spawn point for ships and generates coins
+ */
 public class College extends Entity {
     private final Alliance alliance;
     private final Integer range;
@@ -20,6 +25,11 @@ public class College extends Entity {
         generateCoins(delta);
     }
 
+    /**
+     * Generates coins for the college over time.
+     *
+     * @param delta time since last update
+     */
     private void generateCoins(float delta) {
         float coinMultiplier = 0.5F;
         if (delta > 0) {
@@ -27,7 +37,6 @@ public class College extends Entity {
 
         }
     }
-
 
     public Integer getMovementRange() {
         return range;

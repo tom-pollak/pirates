@@ -11,6 +11,9 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 
 
+/**
+ * Loads and renders an orthogonal tiled map.
+ */
 public class BackgroundTiledMap extends Actor {
 
     private final TiledMap map;
@@ -27,7 +30,6 @@ public class BackgroundTiledMap extends Actor {
         camera.update();
         this.stage = stage;
         this.stage.getViewport().setCamera(camera);
-
     }
 
     public MapLayers getLayers() {
@@ -44,6 +46,13 @@ public class BackgroundTiledMap extends Actor {
         return indexLayer.getTileHeight();
     }
 
+    /**
+     * Checks if the tile at the given coordinates is blocked.
+     *
+     * @param x: the x coordinate of the tile
+     * @param y: the y coordinate of the tile
+     * @return: true if the tile has the blocked property, false otherwise
+     */
     public boolean isCellBlocked(float x, float y) {
         for (int i = 0; i < map.getLayers().getCount(); i++) {
             TiledMapTileLayer collisionLayer = (TiledMapTileLayer) map.getLayers().get(i);
@@ -59,20 +68,16 @@ public class BackgroundTiledMap extends Actor {
     public void draw(Batch batch, float parentAlpha) {
         render();
         super.draw(batch, parentAlpha);
-
     }
 
     public void render() {
         camera.update();
         renderer.setView(camera);
         renderer.render();
-
     }
 
     public void dispose() {
         renderer.dispose();
         map.dispose();
     }
-
-
 }

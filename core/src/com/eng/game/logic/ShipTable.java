@@ -5,6 +5,9 @@ import com.sun.tools.javac.util.Pair;
 
 import java.util.ArrayList;
 
+/**
+ * Contains all the ships currently in the game.
+ */
 public class ShipTable {
     ArrayList<Ship> ships = new ArrayList<>();
 
@@ -17,6 +20,12 @@ public class ShipTable {
     }
 
 
+    /**
+     * Gets the closest enemy ship to the given ship.
+     *
+     * @param ship: The original ship.
+     * @return: The closest enemy ship, the tile distance between the ships.
+     */
     public Pair<Ship, Float> getClosestEnemyShip(Ship ship) {
         Ship closest = null;
         float distance = Float.MAX_VALUE;
@@ -31,7 +40,6 @@ public class ShipTable {
                 closest = newShip;
             }
         }
-        return new Pair<>(closest, distance);
-//        return closest;
+        return new Pair<>(closest, distance / ship.getTileWidth());
     }
 }

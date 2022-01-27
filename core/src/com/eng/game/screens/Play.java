@@ -12,6 +12,9 @@ import com.eng.game.logic.ShipTable;
 import com.eng.game.map.BackgroundTiledMap;
 
 
+/**
+ * Main class that implements the game screen
+ */
 public class Play implements Screen {
 
     private final Stage stage = new Stage();
@@ -19,6 +22,9 @@ public class Play implements Screen {
     private BackgroundTiledMap backgroundTiledMap;
     private EnemyShip enemyShip;
 
+    /**
+     * Initializes the game screen
+     */
     @Override
     public void show() {
         Pathfinding pathfinding = new Pathfinding();
@@ -47,6 +53,11 @@ public class Play implements Screen {
         stage.addActor(enemyShip);
     }
 
+    /**
+     * Updates the screen
+     *
+     * @param delta time since last update
+     */
     @Override
     public void render(float delta) {
         Gdx.gl.glClearColor(0, 0, 0, 1);
@@ -67,6 +78,12 @@ public class Play implements Screen {
         enemyShip.getTexture().dispose();
     }
 
+    /**
+     * Resizes the screen and scales the camera accordingly
+     *
+     * @param width:  new screen width
+     * @param height: new screen height
+     */
     @Override
     public void resize(int width, int height) {
         stage.getViewport().update(width, height);

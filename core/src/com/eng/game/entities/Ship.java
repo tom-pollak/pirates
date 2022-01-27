@@ -22,13 +22,19 @@ public class Ship extends Entity {
         addItem(new Cannon(10, 6, 2));
     }
 
-
     @Override
     public void draw(Batch batch, float parentAlpha) {
         batch.draw(texture, getX(), getY());
         super.draw(batch, parentAlpha);
     }
 
+    /**
+     * Updates ships position
+     * Calculates the ships position based on the velocity and delta time
+     * If the ship moves inside a blocked tile, the ship is moved back to the previous position and the velocity is set to 0
+     *
+     * @param delta time since last update
+     */
     @Override
     public void act(float delta) {
         super.act(delta);
@@ -36,62 +42,62 @@ public class Ship extends Entity {
         boolean collisionX = false, collisionY = false;
 
         setX(getX() + velocity.x * delta);
+        increment = Math.min(getTileWidth(), getWidth()) / 2;
 
-        // calculate the increment for collidesLeft and collidesRight
-        increment = backgroundTiledMap.getTileWidth();
-        increment = getWidth() < increment ? getWidth() / 2 : increment / 2;
-
-        if (velocity.x < 0) // going left
+        if (velocity.x < 0)
             collisionX = collidesLeft();
-        else if (velocity.x > 0) // going right
+        else if (velocity.x > 0)
             collisionX = collidesRight();
 
-        // react to x collision
         if (collisionX) {
             setX(oldX);
             velocity.x = 0;
         }
 
-        // move on y
         setY(getY() + velocity.y * delta);
+        increment = Math.min(getTileHeight(), getHeight()) / 2;
 
-
-        // calculate the increment for collidesBottom and collidesTop
-        increment = backgroundTiledMap.getTileHeight();
-        increment = getHeight() < increment ? getHeight() / 2 : increment / 2;
-
-
-        if (velocity.y < 0) // going down
+        if (velocity.y < 0)
             collisionY = collidesBottom();
-        else if (velocity.y > 0) // going up
+        else if (velocity.y > 0)
             collisionY = collidesTop();
 
-        // react to y collision
         if (collisionY) {
             setY(oldY);
             velocity.y = 0;
         }
-
     }
 
+    /**
+     * @return true if the ship collides to a tile on the right
+     */
     public boolean collidesRight() {
         for (float i = 0; i <= getHeight(); i += increment)
             if (backgroundTiledMap.isCellBlocked(getX() + getWidth(), getY() + i)) return true;
         return false;
     }
 
+    /**
+     * @return true if the ship collides to a tile on the left
+     */
     public boolean collidesLeft() {
         for (float i = 0; i <= getHeight(); i += increment)
             if (backgroundTiledMap.isCellBlocked(getX(), getY() + i)) return true;
         return false;
     }
 
+    /**
+     * @return true if the ship collides to a tile on the top
+     */
     public boolean collidesTop() {
         for (float i = 0; i <= getWidth(); i += increment)
             if (backgroundTiledMap.isCellBlocked(getX() + i, getY() + getHeight())) return true;
         return false;
     }
 
+    /**
+     * @return true if the ship collides to a tile on the bottom
+     */
     public boolean collidesBottom() {
         for (float i = 0; i <= getWidth(); i += increment)
             if (backgroundTiledMap.isCellBlocked(getX() + i, getY())) return true;

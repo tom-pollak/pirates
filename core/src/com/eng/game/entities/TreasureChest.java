@@ -15,6 +15,13 @@ public class TreasureChest extends Entity {
         this.keyAlliance = new Alliance(toString(), this);
     }
 
+    /**
+     * If key is allied with the chest, the chest is opened.
+     *
+     * @param key the key to check
+     * @return true if the chest is opened, false otherwise
+     */
+    @Override
     public boolean open(Key key) {
         if (keyAlliance.isAlly(key)) {
             System.out.println("You have opened the chest");
