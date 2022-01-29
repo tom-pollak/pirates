@@ -4,6 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.eng.game.PirateGame;
 import com.eng.game.entities.College;
 import com.eng.game.entities.EnemyShip;
 import com.eng.game.entities.Player;
@@ -21,7 +22,11 @@ public class Play implements Screen {
     private Player player;
     private BackgroundTiledMap backgroundTiledMap;
     private EnemyShip enemyShip;
+    PirateGame game;
 
+    public Play(PirateGame game) {
+        this.game = game;
+    }
     /**
      * Initializes the game screen
      */
