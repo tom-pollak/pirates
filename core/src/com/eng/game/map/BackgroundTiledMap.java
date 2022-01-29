@@ -9,6 +9,7 @@ import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.sun.tools.javac.util.Pair;
 
 
 /**
@@ -49,19 +50,39 @@ public class BackgroundTiledMap extends Actor {
     /**
      * Checks if the tile at the given coordinates is blocked.
      *
-     * @param x: the x coordinate of the tile
-     * @param y: the y coordinate of the tile
+     * @param tileX: the x coordinate of the tile
+     * @param tileY: the y coordinate of the tile
      * @return: true if the tile has the blocked property, false otherwise
      */
-    public boolean isCellBlocked(float x, float y) {
+    public boolean isTileBlocked(int tileX, int tileY) {
         for (int i = 0; i < map.getLayers().getCount(); i++) {
             TiledMapTileLayer collisionLayer = (TiledMapTileLayer) map.getLayers().get(i);
-            TiledMapTileLayer.Cell cell = collisionLayer.getCell((int) (x / collisionLayer.getTileWidth()), (int) (y / collisionLayer.getTileHeight()));
+            TiledMapTileLayer.Cell cell = collisionLayer.getCell(tileX, tileY);
 
             if (cell != null && cell.getTile() != null && cell.getTile().getProperties().containsKey("blocked"))
                 return true;
         }
         return false;
+    }
+
+
+    /**
+     * Returns the tile coordinates of the given world coordinates.
+     *
+     * @param x the x coordinate of the world
+     * @param y the y coordinate of the world
+     * @return a pair containing the tile x and tile y coordinates
+     */
+    public Pair<Integer, Integer> getTileCoords(float x, float y) {
+        return new Pair<Integer, Integer>((int) (x / getTileWidth()), (int) (y / getTileHeight()));
+    }
+
+    public int getTileX(float x) {
+        return (int) (x / getTileWidth());
+    }
+
+    public int getTileY(float y) {
+        return (int) (y / getTileHeight());
     }
 
     @Override

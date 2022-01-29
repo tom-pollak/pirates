@@ -1,6 +1,7 @@
 package com.eng.game.entities;
 
 import com.badlogic.gdx.graphics.Texture;
+import com.eng.game.logic.ActorTable;
 import com.eng.game.logic.Alliance;
 import com.eng.game.map.BackgroundTiledMap;
 
@@ -13,12 +14,14 @@ public class College extends Entity {
     private final Alliance alliance;
     private final Integer range;
 
-    public College(BackgroundTiledMap tiledMap, String name, int health, int holdingCapacity, Integer range) {
-        super(tiledMap, new Texture("img/ship.png"), health, holdingCapacity);
+    public College(BackgroundTiledMap tiledMap, ActorTable actorTable, String name, int health, int holdingCapacity, Integer range) {
+        super(tiledMap, new Texture("img/college.png"), health, holdingCapacity);
         this.alliance = new Alliance(name, this);
         this.alliance.addAlly(this);
         this.alliance.setLeader(this);
         this.range = range;
+        this.actorTable = actorTable;
+        this.actorTable.addEntity(this);
     }
 
     public void update(float delta) {

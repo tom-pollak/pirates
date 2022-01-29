@@ -4,11 +4,9 @@
     - [ ] Add colleges
     - [ ] Get consistent sprites
     - [ ] Sprite similar to alliance
+    - [ ] Better hitboxes
 - [ ] Enemy Ships
     - [ ] Spawn periodically at enemy colleges
-    - [ ] Implement movement
-    - [ ] Roam randomly around base region
-    - [ ] Pathfinding towards player and other enemies when player is in range
 - [ ] Create coin/point system
     - [ ] Holding base over time
     - [ ] Finding random treasure chests in the ocean
@@ -21,3 +19,7 @@
     - [ ] When player dies
     - [ ] When all treasure chests are found
     - [ ] When princess is returned to the main college
+
+- In background tile renderer make getTileCoords(x,y)
+- Create new type tileCoords
+- Redo all tilecoords stuff through this interface

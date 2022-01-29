@@ -1,31 +1,25 @@
 package com.eng.game.entities;
 
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.math.Vector2;
 import com.eng.game.items.Cannon;
+import com.eng.game.logic.ActorTable;
 import com.eng.game.map.BackgroundTiledMap;
 
 public class Ship extends Entity {
 
     public final float speed = 175;
-    private final Texture texture;
-    private final BackgroundTiledMap backgroundTiledMap;
     public Vector2 velocity = new Vector2();
     private float increment;
 
-    public Ship(BackgroundTiledMap tiledMap, Texture texture, int health, int holdingCapacity, Integer movementRange, BackgroundTiledMap backgroundTiledMap) {
-        super(tiledMap, texture, health, holdingCapacity);
-        this.texture = texture;
-        this.backgroundTiledMap = backgroundTiledMap;
+    public Ship(BackgroundTiledMap map, ActorTable actorTable, Texture texture, int health, int holdingCapacity, Integer movementRange) {
+        super(map, texture, health, holdingCapacity);
         this.movementRange = movementRange;
-        addItem(new Cannon(10, 6, 2));
-    }
-
-    @Override
-    public void draw(Batch batch, float parentAlpha) {
-        batch.draw(texture, getX(), getY());
-        super.draw(batch, parentAlpha);
+        this.actorTable = actorTable;
+        this.actorTable.addEntity(this);
+        Cannon cannon = new Cannon(10, 6, 2, map);
+        actorTable.addItem(cannon);
+        addItem(cannon);
     }
 
     /**
@@ -42,7 +36,7 @@ public class Ship extends Entity {
         boolean collisionX = false, collisionY = false;
 
         setX(getX() + velocity.x * delta);
-        increment = Math.min(getTileWidth(), getWidth()) / 2;
+        increment = Math.min(map.getTileWidth(), getWidth()) / 2;
 
         if (velocity.x < 0)
             collisionX = collidesLeft();
@@ -55,7 +49,7 @@ public class Ship extends Entity {
         }
 
         setY(getY() + velocity.y * delta);
-        increment = Math.min(getTileHeight(), getHeight()) / 2;
+        increment = Math.min(map.getTileHeight(), getHeight()) / 2;
 
         if (velocity.y < 0)
             collisionY = collidesBottom();
@@ -73,7 +67,7 @@ public class Ship extends Entity {
      */
     public boolean collidesRight() {
         for (float i = 0; i <= getHeight(); i += increment)
-            if (backgroundTiledMap.isCellBlocked(getX() + getWidth(), getY() + i)) return true;
+            if (map.isTileBlocked(map.getTileX(getX() + getWidth()), map.getTileY(getY() + i))) return true;
         return false;
     }
 
@@ -82,7 +76,7 @@ public class Ship extends Entity {
      */
     public boolean collidesLeft() {
         for (float i = 0; i <= getHeight(); i += increment)
-            if (backgroundTiledMap.isCellBlocked(getX(), getY() + i)) return true;
+            if (map.isTileBlocked(map.getTileX(getX()), map.getTileY(getY() + i))) return true;
         return false;
     }
 
@@ -91,7 +85,7 @@ public class Ship extends Entity {
      */
     public boolean collidesTop() {
         for (float i = 0; i <= getWidth(); i += increment)
-            if (backgroundTiledMap.isCellBlocked(getX() + i, getY() + getHeight())) return true;
+            if (map.isTileBlocked(map.getTileX(getX() + i), map.getTileY(getY() + getHeight()))) return true;
         return false;
     }
 
@@ -100,7 +94,7 @@ public class Ship extends Entity {
      */
     public boolean collidesBottom() {
         for (float i = 0; i <= getWidth(); i += increment)
-            if (backgroundTiledMap.isCellBlocked(getX() + i, getY())) return true;
+            if (map.isTileBlocked(map.getTileX(getX() + i), map.getTileY(getY()))) return true;
         return false;
     }
 

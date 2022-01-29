@@ -5,7 +5,7 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
-import com.eng.game.logic.ShipTable;
+import com.eng.game.logic.ActorTable;
 import com.eng.game.map.BackgroundTiledMap;
 
 /**
@@ -69,6 +69,9 @@ public class Player extends Ship {
                 case 'f':
                     drop();
                     break;
+                case ' ':
+                    useItem();
+                    break;
 
             }
             /* Select holding item */
@@ -80,10 +83,8 @@ public class Player extends Ship {
         }
     };
 
-    public Player(BackgroundTiledMap backgroundTiledMap, ShipTable shipTable) {
-        super(backgroundTiledMap, new Texture("img/player.png"), 100, 3, 100, backgroundTiledMap);
-        shipTable.addShip(this);
-
+    public Player(BackgroundTiledMap map, ActorTable actorTable) {
+        super(map, actorTable, new Texture("img/player.png"), 100, 3, 100);
     }
 
     @Override

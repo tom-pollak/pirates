@@ -1,8 +1,12 @@
 package com.eng.game.items;
 
+import com.badlogic.gdx.graphics.Texture;
+import com.eng.game.map.BackgroundTiledMap;
+
 public class Princess extends Item {
-    public Princess() {
-        super("Princess", "A beautiful princess");
+    public Princess(BackgroundTiledMap map) {
+        super("Princess", "A beautiful princess", new Texture("img/princess.png"), map);
+
     }
 
     /**

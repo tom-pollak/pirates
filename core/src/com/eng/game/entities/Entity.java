@@ -1,12 +1,16 @@
 package com.eng.game.entities;
 
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.eng.game.items.Cannon;
 import com.eng.game.items.Item;
 import com.eng.game.items.Key;
+import com.eng.game.logic.ActorTable;
 import com.eng.game.logic.Alliance;
 import com.eng.game.map.BackgroundTiledMap;
+import com.sun.tools.javac.util.Pair;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 
@@ -14,33 +18,39 @@ import java.util.ArrayList;
  * Main actor class for all non-inanimate objects in the game.
  */
 public abstract class Entity extends Actor {
+    public final BackgroundTiledMap map;
+    protected final Texture texture;
     private final ArrayList<Item> holding;
     private final int holdingCapacity;
-    private final Texture texture;
     public int maxHealth;
     public int health;
     public Alliance alliance = Alliance.NEUTRAL;
     public boolean isDead = false;
     public int coins = 0;
-    protected int tileWidth;
-    protected int tileHeight;
+    @NotNull
+    protected ActorTable actorTable;
     Integer movementRange = null;
     private int itemIndex = 0;
 
-
-    Entity(BackgroundTiledMap tiledMap, Texture texture, int maxHealth, int holdingCapacity) {
-        this.texture = texture;
-        this.setWidth(texture.getWidth());
-        this.setHeight(texture.getHeight());
-        this.setBounds(0, 0, texture.getWidth(), texture.getHeight());
-        this.setOrigin(getWidth() / 2, getHeight() / 2);
+    public Entity(BackgroundTiledMap map, Texture texture, int maxHealth, int holdingCapacity) {
         this.maxHealth = maxHealth;
         this.health = maxHealth;
         if (holdingCapacity > 9) holdingCapacity = 9; // User can only select 1-9 items
         this.holding = new ArrayList<>(holdingCapacity);
         this.holdingCapacity = holdingCapacity;
-        this.tileWidth = tiledMap.getTileWidth();
-        this.tileHeight = tiledMap.getTileHeight();
+        this.map = map;
+        this.texture = texture;
+
+        this.setWidth(texture.getWidth());
+        this.setHeight(texture.getHeight());
+        this.setBounds(0, 0, texture.getWidth(), texture.getHeight());
+        this.setOrigin(getWidth() / 2, getHeight() / 2);
+    }
+
+    @Override
+    public void draw(Batch batch, float parentAlpha) {
+        batch.draw(texture, getX(), getY());
+        super.draw(batch, parentAlpha);
     }
 
     @Override
@@ -62,20 +72,16 @@ public abstract class Entity extends Actor {
         return holding;
     }
 
-    /**
-     * Adds an item to the entity's holding.
-     * If the holding is full, the item is dropped.
-     *
-     * @param item the item to add
-     * @return true if the item was added, false otherwise
-     */
-    public boolean addItem(Item item) {
-        if (holding.size() == holdingCapacity) {
-            return false;
+    public Item getHeldItem() {
+        try {
+            return holding.get(itemIndex);
+        } catch (IndexOutOfBoundsException e) {
+            return null;
         }
+    }
+
+    public void addItem(Item item) {
         holding.add(item);
-        // Use return value to check if item was added
-        return true;
     }
 
     /**
@@ -86,36 +92,84 @@ public abstract class Entity extends Actor {
      * @return true if an item was picked up, false otherwise
      */
     public boolean pickup() {
-        // TODO: Check item is on same square
-        // Pickup item in holding place
-        // onPickup(): Princess game wins
-        Integer[] coords = getTileCoordinates();
-        System.out.println("Not implemented yet");
-        return false;
+        Item item = actorTable.getItemOnTile(getTileX(), getTileY());
+        if (item == null) {
+            System.out.println("No item on tile");
+            return false;
+        }
+        item.onPickup();
+        if (getHeldItem() != null) {
+            drop();
+        }
+        addItem(item);
+        return true;
+    }
+
+    /**
+     * Finds empty tiles on or around a tiles x and y coordinates.
+     * A tile is empty if it is not occupied by an item and the tile is not blocked.
+     *
+     * @param tileX x coordinate of the tile to check around
+     * @param tileY y coordinate of the tile to check around
+     * @return a pair of coordinates of an empty tile
+     */
+    public Pair<Integer, Integer> findEmptyTile(int tileX, int tileY) {
+        for (int x = tileX - 1; x <= tileX + 1; x++) {
+            for (int y = tileY - 1; y <= tileY + 1; y++) {
+                if (actorTable.getItemOnTile(x, y) == null && !map.isTileBlocked(x, y)) {
+                    return new Pair<>(x, y);
+                }
+            }
+        }
+        return null;
     }
 
     /**
      * Drops the item at the entities item index.
      * The item is removed from the holding and placed on the map.
+     * The item will be placed on an empty tile around the entity.
+     *
+     * @return true if the item was dropped, false otherwise
      */
-    public void drop() {
+    public boolean drop() {
+        float x = getX();
+        float y = getY();
         try {
             Item droppedItem = holding.remove(itemIndex);
-            droppedItem.setPosition(getX(), getY());
+            if (actorTable.getItemOnTile(getTileX(), getTileY()) != null) {
+                Pair<Integer, Integer> emptyTile = findEmptyTile(getTileX(), getTileY());
+                if (emptyTile == null) {
+                    System.out.println("Entity.drop() - No empty tile found");
+                    return false;
+                }
+                x = emptyTile.fst;
+                y = emptyTile.snd;
+            }
+
+            droppedItem.setPosition(x, y);
             droppedItem.onDrop();
         } catch (IndexOutOfBoundsException e) {
             System.out.println("No item to drop");
+            return false;
         }
+        return true;
     }
 
     /**
      * Drops every item in the entity's holding.
+     *
+     * @return true if all items were dropped, false otherwise
      */
-    public void dropAll() {
+    public boolean dropAll() {
+        boolean droppedAll = true;
         for (int i = 0; i < holding.size(); i++) {
             switchItem(i);
-            drop();
+            boolean dropped = drop();
+            if (!dropped) {
+                droppedAll = false;
+            }
         }
+        return droppedAll;
     }
 
     /**
@@ -127,6 +181,15 @@ public abstract class Entity extends Actor {
      */
     public void switchItem(int index) {
         itemIndex = index;
+    }
+
+    public void useItem() {
+        Item item = getHeldItem();
+        if (item != null) {
+            item.use();
+        } else {
+            System.out.println("No item to use");
+        }
     }
 
     /**
@@ -209,26 +272,15 @@ public abstract class Entity extends Actor {
         return alliance;
     }
 
-    /**
-     * Converts normal coordinates to coordinates of the tiles.
-     *
-     * @return the coordinates of the tile the entity is on
-     */
-    public Integer[] getTileCoordinates() {
-        return new Integer[]{(int) getX() / tileWidth, (int) getY() / tileHeight};
+    public int getTileX() {
+        return (int) getX() / map.getTileWidth();
+    }
+
+    public int getTileY() {
+        return (int) getY() / map.getTileHeight();
     }
 
     public boolean isDead() {
         return isDead;
     }
-
-    public int getTileHeight() {
-        return tileHeight;
-    }
-
-    public int getTileWidth() {
-        return tileWidth;
-    }
-
-
 }

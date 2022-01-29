@@ -3,21 +3,19 @@ package com.eng.game.entities;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.Vector2;
 import com.eng.game.items.Cannon;
+import com.eng.game.logic.ActorTable;
 import com.eng.game.logic.Pathfinding;
-import com.eng.game.logic.ShipTable;
 import com.eng.game.map.BackgroundTiledMap;
 import com.eng.game.pathfinding.pathfinding.grid.GridCell;
 import com.sun.tools.javac.util.Pair;
 
 public class EnemyShip extends Ship {
-    private final ShipTable shipTable;
     private final Pathfinding pathfinding;
 
-    public EnemyShip(BackgroundTiledMap backgroundTiledMap, ShipTable shipTable, Pathfinding pathfinding) {
+    public EnemyShip(BackgroundTiledMap map, ActorTable actorTable, Pathfinding pathfinding) {
         // TODO: add enemy ship texture based on alliance
-        super(backgroundTiledMap, new Texture("img/ship.png"), 100, 3, 200, backgroundTiledMap);
-        addItem(new Cannon(10, 150, 2));
-        this.shipTable = shipTable;
+        super(map, actorTable, new Texture("img/ship.png"), 100, 3, 200);
+        addItem(new Cannon(10, 150, 2, map));
         this.pathfinding = pathfinding;
     }
 
@@ -68,7 +66,7 @@ public class EnemyShip extends Ship {
      */
     @Override
     public void act(float delta) {
-        Pair<Ship, Float> target = shipTable.getClosestEnemyShip(this);
+        Pair<Ship, Float> target = actorTable.getClosestEnemyShip(this);
         Ship targetShip = target.fst;
         float tileDistance = target.snd;
 
@@ -80,21 +78,19 @@ public class EnemyShip extends Ship {
             velocity.y = generateVelocity(oldVelocities.y, velocity.y);
         } else {
             // Pathfind to the target ship
-            Integer[] shipTileCoordinates = getTileCoordinates();
-            Integer[] targetShipTileCoordinates = targetShip.getTileCoordinates();
-            GridCell searchPath = pathfinding.findPath(shipTileCoordinates[0], shipTileCoordinates[1], targetShipTileCoordinates[0], targetShipTileCoordinates[1]).get(0);
+            GridCell searchPath = pathfinding.findPath(getTileX(), getTileY(), targetShip.getTileX(), targetShip.getTileY()).get(0);
 
             // Navigate towards first tile in search path
-            if (searchPath.getX() > shipTileCoordinates[0]) {
+            if (searchPath.getX() > getTileX()) {
                 velocity.x = speed;
-            } else if (searchPath.getX() < shipTileCoordinates[0]) {
+            } else if (searchPath.getX() < getTileX()) {
                 velocity.x = -speed;
             } else {
                 velocity.x = 0;
             }
-            if (searchPath.getY() > shipTileCoordinates[1]) {
+            if (searchPath.getY() > getTileY()) {
                 velocity.y = speed;
-            } else if (searchPath.getY() < shipTileCoordinates[1]) {
+            } else if (searchPath.getY() < getTileY()) {
                 velocity.y = -speed;
             } else {
                 velocity.y = 0;

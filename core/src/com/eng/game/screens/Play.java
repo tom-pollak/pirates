@@ -7,8 +7,8 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.eng.game.entities.College;
 import com.eng.game.entities.EnemyShip;
 import com.eng.game.entities.Player;
+import com.eng.game.logic.ActorTable;
 import com.eng.game.logic.Pathfinding;
-import com.eng.game.logic.ShipTable;
 import com.eng.game.map.BackgroundTiledMap;
 
 
@@ -28,29 +28,26 @@ public class Play implements Screen {
     @Override
     public void show() {
         Pathfinding pathfinding = new Pathfinding();
-        ShipTable shipTable = new ShipTable();
+        ActorTable actorTable = new ActorTable(stage);
         backgroundTiledMap = new BackgroundTiledMap(stage);
         stage.addActor(backgroundTiledMap);
 
-        College college = new College(backgroundTiledMap, "James", 100, 3, 1000);
+        College college = new College(backgroundTiledMap, actorTable, "James", 100, 3, 1000);
 
-        stage.addActor(college);
         college.setPosition(5 * backgroundTiledMap.getTileWidth(), 13 * backgroundTiledMap.getTileHeight());
         System.out.println(college + " " + college.getAlliance());
 
         Gdx.input.setInputProcessor(stage);
-        player = new Player(backgroundTiledMap, shipTable);
+        player = new Player(backgroundTiledMap, actorTable);
         player.setPosition(4 * backgroundTiledMap.getTileWidth(), 13 * backgroundTiledMap.getTileHeight());
 
         stage.setKeyboardFocus(player);
         player.addListener(player.input);
-        stage.addActor(player);
 
-        enemyShip = new EnemyShip(backgroundTiledMap, shipTable, pathfinding);
+        enemyShip = new EnemyShip(backgroundTiledMap, actorTable, pathfinding);
         enemyShip.setPosition(5 * backgroundTiledMap.getTileWidth(), 13 * backgroundTiledMap.getTileHeight());
         enemyShip.setSize(5, 10);
         college.getAlliance().addAlly(enemyShip);
-        stage.addActor(enemyShip);
     }
 
     /**
