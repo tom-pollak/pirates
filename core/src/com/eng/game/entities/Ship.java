@@ -49,7 +49,6 @@ public class Ship extends Entity {
             setY(oldY);
             velocity.y = 0;
         }
-
     }
 
     public String toString() {

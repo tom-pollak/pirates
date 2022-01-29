@@ -11,7 +11,7 @@ import com.sun.tools.javac.util.Pair;
 import java.util.ArrayList;
 
 /**
- * Contains all the ships currently in the game.
+ * Is a repository for all actors in the game.
  */
 public class ActorTable {
     private final ArrayList<Item> items = new ArrayList<>();

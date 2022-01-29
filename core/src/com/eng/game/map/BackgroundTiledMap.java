@@ -14,7 +14,6 @@ import com.badlogic.gdx.math.Intersector;
 import com.badlogic.gdx.math.Polygon;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.sun.tools.javac.util.Pair;
 import com.badlogic.gdx.utils.FloatArray;
 import com.eng.game.entities.Ship;
 import com.sun.tools.javac.util.Pair;
@@ -23,7 +22,7 @@ import java.util.Objects;
 
 
 /**
- * Loads and renders an orthogonal tiled map.
+ * Loads renders and calculates collisions for a tiled map.
  */
 public class BackgroundTiledMap extends Actor {
 
@@ -77,7 +76,6 @@ public class BackgroundTiledMap extends Actor {
         return false;
     }
 
-
     /**
      * Returns the tile coordinates of the given world coordinates.
      *
@@ -86,7 +84,7 @@ public class BackgroundTiledMap extends Actor {
      * @return a pair containing the tile x and tile y coordinates
      */
     public Pair<Integer, Integer> getTileCoords(float x, float y) {
-        return new Pair<Integer, Integer>((int) (x / getTileWidth()), (int) (y / getTileHeight()));
+        return new Pair<>((int) (x / getTileWidth()), (int) (y / getTileHeight()));
     }
 
     public int getTileX(float x) {
@@ -101,14 +99,12 @@ public class BackgroundTiledMap extends Actor {
     public void draw(Batch batch, float parentAlpha) {
         render();
         super.draw(batch, parentAlpha);
-
     }
 
     public void render() {
         camera.update();
         renderer.setView(camera);
         renderer.render();
-
     }
 
     public void dispose() {
@@ -116,13 +112,27 @@ public class BackgroundTiledMap extends Actor {
         map.dispose();
     }
 
-    public boolean isCollided(Polygon hitbox, Polygon collider) {
+    /**
+     * Checks whether the two givin polygons intersect.
+     *
+     * @param hitbox   the first polygon
+     * @param collider the second polygon
+     * @return true if the two polygons intersect, false otherwise
+     */
+    public boolean isCollision(Polygon hitbox, Polygon collider) {
         return Intersector.intersectPolygons(
                 new FloatArray(hitbox.getTransformedVertices()),
                 new FloatArray(collider.getTransformedVertices()));
     }
 
-
+    /**
+     * Calculates if the ship has collided with land on the x or y axis.
+     *
+     * @param ship the ship to check
+     * @param oldX the old x coordinate of the ship
+     * @param oldY the old y coordinate of the ship
+     * @return A boolean pair containing the x and y axis collision
+     */
     public Pair<Boolean, Boolean> getCollisions(Ship ship, float oldX, float oldY) {
         boolean collidedX = false;
         boolean collidedY = false;
@@ -139,18 +149,14 @@ public class BackgroundTiledMap extends Actor {
 
         for (PolygonMapObject colliders : objects.getByType(PolygonMapObject.class)) {
             Polygon collider = colliders.getPolygon();
-            if (isCollided(hitbox, collider)) {
+            if (isCollision(hitbox, collider)) {
                 hitbox.setPosition(ship.getX(), oldY);
-                if (isCollided(hitbox, collider)) collidedX = true;
+                if (isCollision(hitbox, collider)) collidedX = true;
 
                 hitbox.setPosition(oldX, ship.getY());
-                if (isCollided(hitbox, collider)) collidedY = true;
-
+                if (isCollision(hitbox, collider)) collidedY = true;
             }
-
         }
         return new Pair<>(collidedX, collidedY);
-
     }
-
 }

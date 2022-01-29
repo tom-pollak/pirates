@@ -78,22 +78,25 @@ public class EnemyShip extends Ship {
             velocity.y = generateVelocity(oldVelocities.y, velocity.y);
         } else {
             // Pathfind to the target ship
-            GridCell searchPath = pathfinding.findPath(getTileX(), getTileY(), targetShip.getTileX(), targetShip.getTileY()).get(0);
+            try {
+                GridCell searchPath = pathfinding.findPath(getTileX(), getTileY(), targetShip.getTileX(), targetShip.getTileY()).get(0);
 
-            // Navigate towards first tile in search path
-            if (searchPath.getX() > getTileX()) {
-                velocity.x = speed;
-            } else if (searchPath.getX() < getTileX()) {
-                velocity.x = -speed;
-            } else {
-                velocity.x = 0;
-            }
-            if (searchPath.getY() > getTileY()) {
-                velocity.y = speed;
-            } else if (searchPath.getY() < getTileY()) {
-                velocity.y = -speed;
-            } else {
-                velocity.y = 0;
+                // Navigate towards first tile in search path
+                if (searchPath.getX() > getTileX()) {
+                    velocity.x = speed;
+                } else if (searchPath.getX() < getTileX()) {
+                    velocity.x = -speed;
+                } else {
+                    velocity.x = 0;
+                }
+                if (searchPath.getY() > getTileY()) {
+                    velocity.y = speed;
+                } else if (searchPath.getY() < getTileY()) {
+                    velocity.y = -speed;
+                } else {
+                    velocity.y = 0;
+                }
+            } catch (NullPointerException ignored) {
             }
             super.act(delta);
         }
