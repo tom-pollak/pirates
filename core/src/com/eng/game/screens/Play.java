@@ -4,6 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.eng.game.PirateGame;
 import com.eng.game.entities.EnemyShip;
 import com.eng.game.entities.Player;
 import com.eng.game.map.BackgroundTiledMap;
@@ -15,8 +16,11 @@ public class Play implements Screen {
     public BackgroundTiledMap backgroundTiledMap;
     private Player player;
     private EnemyShip enemyShip;
+    PirateGame game;
 
-
+    public Play(PirateGame game) {
+        this.game = game;
+    }
     @Override
     public void show() {
         backgroundTiledMap = new BackgroundTiledMap(stage);
