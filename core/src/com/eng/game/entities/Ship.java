@@ -5,6 +5,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.eng.game.items.Cannon;
 import com.eng.game.logic.ActorTable;
 import com.eng.game.map.BackgroundTiledMap;
+import com.sun.tools.javac.util.Pair;
 
 public class Ship extends Entity {
 
@@ -36,65 +37,60 @@ public class Ship extends Entity {
         boolean collisionX = false, collisionY = false;
 
         setX(getX() + velocity.x * delta);
-        increment = Math.min(map.getTileWidth(), getWidth()) / 2;
+        setY(getY() + velocity.y * delta);
 
-        if (velocity.x < 0)
-            collisionX = collidesLeft();
-        else if (velocity.x > 0)
-            collisionX = collidesRight();
+        Pair<Boolean, Boolean> collisions = backgroundTiledMap.getCollisions(this, oldX, oldY);
+        boolean collisionX = collisions.fst;
+        boolean collisionY = collisions.snd;
 
         if (collisionX) {
             setX(oldX);
             velocity.x = 0;
         }
 
+        // move on y
         setY(getY() + velocity.y * delta);
-        increment = Math.min(map.getTileHeight(), getHeight()) / 2;
 
-        if (velocity.y < 0)
+
+        // calculate the increment for collidesBottom and collidesTop
+        increment = backgroundTiledMap.getTileHeight();
+        increment = getHeight() < increment ? getHeight() / 2 : increment / 2;
+
+
+        if (velocity.y < 0) // going down
             collisionY = collidesBottom();
-        else if (velocity.y > 0)
+        else if (velocity.y > 0) // going up
             collisionY = collidesTop();
 
+        // react to y collision
         if (collisionY) {
             setY(oldY);
             velocity.y = 0;
         }
+
     }
 
-    /**
-     * @return true if the ship collides to a tile on the right
-     */
     public boolean collidesRight() {
         for (float i = 0; i <= getHeight(); i += increment)
-            if (map.isTileBlocked(map.getTileX(getX() + getWidth()), map.getTileY(getY() + i))) return true;
+            if (backgroundTiledMap.isCellBlocked(getX() + getWidth(), getY() + i)) return true;
         return false;
     }
 
-    /**
-     * @return true if the ship collides to a tile on the left
-     */
     public boolean collidesLeft() {
         for (float i = 0; i <= getHeight(); i += increment)
-            if (map.isTileBlocked(map.getTileX(getX()), map.getTileY(getY() + i))) return true;
+            if (backgroundTiledMap.isCellBlocked(getX(), getY() + i)) return true;
         return false;
     }
 
-    /**
-     * @return true if the ship collides to a tile on the top
-     */
     public boolean collidesTop() {
         for (float i = 0; i <= getWidth(); i += increment)
-            if (map.isTileBlocked(map.getTileX(getX() + i), map.getTileY(getY() + getHeight()))) return true;
+            if (backgroundTiledMap.isCellBlocked(getX() + i, getY() + getHeight())) return true;
         return false;
     }
 
-    /**
-     * @return true if the ship collides to a tile on the bottom
-     */
     public boolean collidesBottom() {
         for (float i = 0; i <= getWidth(); i += increment)
-            if (map.isTileBlocked(map.getTileX(getX() + i), map.getTileY(getY()))) return true;
+            if (backgroundTiledMap.isCellBlocked(getX() + i, getY())) return true;
         return false;
     }
 
