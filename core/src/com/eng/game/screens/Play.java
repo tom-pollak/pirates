@@ -40,11 +40,11 @@ public class Play implements Screen {
         player.addListener(player.input);
         stage.addActor(player);
 
-        enemyShip = new EnemyShip(backgroundTiledMap, shipTable, pathfinding);
-        enemyShip.setPosition(5 * backgroundTiledMap.getTileWidth(), 13 * backgroundTiledMap.getTileHeight());
-        enemyShip.setSize(5, 10);
-        college.getAlliance().addAlly(enemyShip);
-        stage.addActor(enemyShip);
+//        enemyShip = new EnemyShip(backgroundTiledMap, shipTable, pathfinding);
+//        enemyShip.setPosition(5 * backgroundTiledMap.getTileWidth(), 13 * backgroundTiledMap.getTileHeight());
+//        enemyShip.setSize(5, 10);
+//        college.getAlliance().addAlly(enemyShip);
+//        stage.addActor(enemyShip);
     }
 
     @Override

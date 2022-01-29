@@ -47,7 +47,6 @@ public class Player extends Ship {
                     }
                     break;
                 case Input.Keys.W:
-                    System.out.println(!Gdx.input.isKeyPressed(Input.Keys.S));
                     if (!Gdx.input.isKeyPressed(Input.Keys.S)) {
                         velocity.y = 0;
                     } else {

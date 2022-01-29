@@ -32,6 +32,5 @@ public class ShipTable {
             }
         }
         return new Pair<>(closest, distance);
-//        return closest;
     }
 }

@@ -65,20 +65,24 @@ public class EnemyShip extends Ship {
         } else {
             Integer[] shipTileCoordinates = getTileCoordinates();
             Integer[] targetShipTileCoordinates = targetShip.getTileCoordinates();
-            GridCell path = pathfinding.findPath(shipTileCoordinates[0], shipTileCoordinates[1], targetShipTileCoordinates[0], targetShipTileCoordinates[1]).get(0);
-            if (path.getX() > shipTileCoordinates[0]) {
-                velocity.x = speed;
-            } else if (path.getX() < shipTileCoordinates[0]) {
-                velocity.x = -speed;
-            } else {
-                velocity.x = 0;
-            }
-            if (path.getY() > shipTileCoordinates[1]) {
-                velocity.y = speed;
-            } else if (path.getY() < shipTileCoordinates[1]) {
-                velocity.y = -speed;
-            } else {
-                velocity.y = 0;
+            try {
+                GridCell path = pathfinding.findPath(shipTileCoordinates[0], shipTileCoordinates[1], targetShipTileCoordinates[0], targetShipTileCoordinates[1]).get(0);
+                if (path.getX() > shipTileCoordinates[0]) {
+                    velocity.x = speed;
+                } else if (path.getX() < shipTileCoordinates[0]) {
+                    velocity.x = -speed;
+                } else {
+                    velocity.x = 0;
+                }
+                if (path.getY() > shipTileCoordinates[1]) {
+                    velocity.y = speed;
+                } else if (path.getY() < shipTileCoordinates[1]) {
+                    velocity.y = -speed;
+                } else {
+                    velocity.y = 0;
+                }
+            } catch (NullPointerException ignored) {
+
             }
             super.act(delta);
         }
