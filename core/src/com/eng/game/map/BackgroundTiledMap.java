@@ -14,6 +14,7 @@ import com.badlogic.gdx.math.Intersector;
 import com.badlogic.gdx.math.Polygon;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.sun.tools.javac.util.Pair;
 import com.badlogic.gdx.utils.FloatArray;
 import com.eng.game.entities.Ship;
 import com.sun.tools.javac.util.Pair;
@@ -21,9 +22,12 @@ import com.sun.tools.javac.util.Pair;
 import java.util.Objects;
 
 
+/**
+ * Loads and renders an orthogonal tiled map.
+ */
 public class BackgroundTiledMap extends Actor {
 
-    public final TiledMap map;
+    private final TiledMap map;
     private final OrthogonalTiledMapRenderer renderer;
     private final OrthographicCamera camera;
     Stage stage;
@@ -54,16 +58,43 @@ public class BackgroundTiledMap extends Actor {
         return indexLayer.getTileHeight();
     }
 
-    public boolean isCellBlocked(float x, float y) {
+    /**
+     * Checks if the tile at the given coordinates is blocked.
+     *
+     * @param tileX: the x coordinate of the tile
+     * @param tileY: the y coordinate of the tile
+     * @return: true if the tile has the blocked property, false otherwise
+     */
+    public boolean isTileBlocked(int tileX, int tileY) {
         for (int i = 0; i < map.getLayers().getCount(); i++) {
             if (!Objects.equals(map.getLayers().get(i).getName(), "collisionBoxes")) {
                 TiledMapTileLayer collisionLayer = (TiledMapTileLayer) map.getLayers().get(i);
-                TiledMapTileLayer.Cell cell = collisionLayer.getCell((int) (x / collisionLayer.getTileWidth()), (int) (y / collisionLayer.getTileHeight()));
+                TiledMapTileLayer.Cell cell = collisionLayer.getCell(tileX, tileY);
                 if (cell != null && cell.getTile() != null && cell.getTile().getProperties().containsKey("blocked"))
                     return true;
             }
         }
         return false;
+    }
+
+
+    /**
+     * Returns the tile coordinates of the given world coordinates.
+     *
+     * @param x the x coordinate of the world
+     * @param y the y coordinate of the world
+     * @return a pair containing the tile x and tile y coordinates
+     */
+    public Pair<Integer, Integer> getTileCoords(float x, float y) {
+        return new Pair<Integer, Integer>((int) (x / getTileWidth()), (int) (y / getTileHeight()));
+    }
+
+    public int getTileX(float x) {
+        return (int) (x / getTileWidth());
+    }
+
+    public int getTileY(float y) {
+        return (int) (y / getTileHeight());
     }
 
     @Override

@@ -55,6 +55,4 @@ public class Alliance {
     public String getName() {
         return name;
     }
-
-
 }
