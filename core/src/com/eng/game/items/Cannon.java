@@ -14,11 +14,23 @@ public class Cannon extends Item {
     }
 
     @Override
-    public void use() {
+    public void use(int tileX, int tileY) {
         fire();
     }
 
     public void fire() {
         System.out.println("Firing cannon");
+    }
+
+    public float getDamage() {
+        return damage;
+    }
+
+    public int getRange() {
+        return range;
+    }
+
+    public float getFireRate() {
+        return fireRate;
     }
 }

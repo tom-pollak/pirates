@@ -6,13 +6,15 @@ import com.eng.game.items.Item;
 import java.util.ArrayList;
 
 public class Alliance {
-    public static Alliance NEUTRAL;
+    public static Alliance NEUTRAL = new Alliance("Neutral", null);
     private final String name;
-    private ArrayList<Entity> alliedEntities;
-    private ArrayList<Item> alliedItems;
+    private final ArrayList<Entity> alliedEntities = new ArrayList<>();
+    private final ArrayList<Item> alliedItems = new ArrayList<>();
+    private Entity leader;
 
-    public Alliance(String name) {
+    public Alliance(String name, Entity leader) {
         this.name = name;
+        this.leader = leader;
     }
 
     @Override
@@ -23,13 +25,23 @@ public class Alliance {
                 '}';
     }
 
+    public Entity getLeader() {
+        return leader;
+    }
+
+    public void setLeader(Entity leader) {
+        this.leader = leader;
+    }
 
     public void addAlly(Entity entity) {
         alliedEntities.add(entity);
+        entity.alliance = this;
+        System.out.println(entity.getName() + " has joined the " + name + " alliance!");
     }
 
     public void addAlly(Item item) {
         alliedItems.add(item);
+        item.alliance = this;
     }
 
     public boolean isAlly(Entity entity) {
@@ -43,6 +55,4 @@ public class Alliance {
     public String getName() {
         return name;
     }
-
-
 }

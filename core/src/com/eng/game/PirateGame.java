@@ -4,6 +4,9 @@ import com.badlogic.gdx.Game;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.eng.game.screens.MainMenu;
 
+/**
+ * Initializes the game.
+ */
 public class PirateGame extends Game {
 
     public SpriteBatch batch;
