@@ -2,9 +2,22 @@ package com.eng.game.entities;
 
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
+import com.badlogic.gdx.maps.Map;
+import com.badlogic.gdx.maps.MapLayer;
+import com.badlogic.gdx.maps.MapObjects;
+import com.badlogic.gdx.maps.objects.PolygonMapObject;
+import com.badlogic.gdx.maps.objects.RectangleMapObject;
+import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
+import com.badlogic.gdx.maps.tiled.TmxMapLoader;
+import com.badlogic.gdx.math.Intersector;
+import com.badlogic.gdx.math.Polygon;
+import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.eng.game.items.Cannon;
 import com.eng.game.map.BackgroundTiledMap;
+
+import static com.badlogic.gdx.math.Intersector.intersectLinePolygon;
+import static com.badlogic.gdx.math.Intersector.intersectSegmentPolygon;
 
 public class Ship extends Entity {
 
@@ -41,10 +54,12 @@ public class Ship extends Entity {
         increment = backgroundTiledMap.getTileWidth();
         increment = getWidth() < increment ? getWidth() / 2 : increment / 2;
 
-        if (velocity.x < 0) // going left
-            collisionX = collidesLeft();
-        else if (velocity.x > 0) // going right
-            collisionX = collidesRight();
+        collisionX = backgroundTiledMap.newCollidesX(this);
+
+//        if (velocity.x < 0) // going left
+//            collisionX = collidesLeft();
+//        else if (velocity.x > 0) // going right
+//            collisionX = collidesRight();
 
         // react to x collision
         if (collisionX) {
@@ -61,12 +76,13 @@ public class Ship extends Entity {
         increment = getHeight() < increment ? getHeight() / 2 : increment / 2;
 
 
-        if (velocity.y < 0) // going down
-            collisionY = collidesBottom();
-        else if (velocity.y > 0) // going up
-            collisionY = collidesTop();
+        collisionY = backgroundTiledMap.newCollidesY(this);
+//        if (velocity.y < 0) // going down
+//            collisionY = collidesBottom();
+//        else if (velocity.y > 0) // going up
+//            collisionY = collidesTop();
 
-        // react to y collision
+//         react to y collision
         if (collisionY) {
             setY(oldY);
             velocity.y = 0;
@@ -97,6 +113,8 @@ public class Ship extends Entity {
             if (backgroundTiledMap.isCellBlocked(getX() + i, getY())) return true;
         return false;
     }
+
+
 
     public String toString() {
         return "Ship";
