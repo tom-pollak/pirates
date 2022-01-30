@@ -15,7 +15,7 @@ import com.badlogic.gdx.math.Polygon;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.FloatArray;
-import com.eng.game.entities.Ship;
+import com.eng.game.actor.GameActor;
 import com.sun.tools.javac.util.Pair;
 
 import java.util.Objects;
@@ -128,32 +128,25 @@ public class BackgroundTiledMap extends Actor {
     /**
      * Calculates if the ship has collided with land on the x or y axis.
      *
-     * @param ship the ship to check
-     * @param oldX the old x coordinate of the ship
-     * @param oldY the old y coordinate of the ship
+     * @param actor the ship to check
+     * @param oldX  the old x coordinate of the ship
+     * @param oldY  the old y coordinate of the ship
      * @return A boolean pair containing the x and y axis collision
      */
-    public Pair<Boolean, Boolean> getCollisions(Ship ship, float oldX, float oldY) {
+    public Pair<Boolean, Boolean> getMapCollisions(GameActor actor, float oldX, float oldY) {
         boolean collidedX = false;
         boolean collidedY = false;
         MapLayer collisionObjectLayer = map.getLayers().get("collisionBoxes");
         MapObjects objects = collisionObjectLayer.getObjects();
-        Polygon hitbox = new Polygon();
-        hitbox.setVertices(new float[]{
-                0, 0,
-                ship.getWidth(), 0,
-                0, ship.getHeight(),
-                ship.getWidth(), ship.getHeight()
-        });
-        hitbox.setPosition(ship.getX(), ship.getY());
+        Polygon hitbox = actor.getHitbox();
 
         for (PolygonMapObject colliders : objects.getByType(PolygonMapObject.class)) {
             Polygon collider = colliders.getPolygon();
             if (isCollision(hitbox, collider)) {
-                hitbox.setPosition(ship.getX(), oldY);
+                hitbox.setPosition(actor.getX(), oldY);
                 if (isCollision(hitbox, collider)) collidedX = true;
 
-                hitbox.setPosition(oldX, ship.getY());
+                hitbox.setPosition(oldX, actor.getY());
                 if (isCollision(hitbox, collider)) collidedY = true;
             }
         }

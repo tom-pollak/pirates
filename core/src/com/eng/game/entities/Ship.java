@@ -13,12 +13,10 @@ public class Ship extends Entity {
     public Vector2 velocity = new Vector2();
 
     public Ship(BackgroundTiledMap map, ActorTable actorTable, Texture texture, int health, int holdingCapacity, Integer movementRange) {
-        super(map, texture, health, holdingCapacity);
+        super(map, actorTable, texture, health, holdingCapacity);
+        actorTable.addActor(this);
         this.movementRange = movementRange;
-        this.actorTable = actorTable;
-        this.actorTable.addEntity(this);
-        Cannon cannon = new Cannon(10, 6, 2, map);
-        actorTable.addItem(cannon);
+        Cannon cannon = new Cannon(10, 6, 2, map, actorTable);
         addItem(cannon);
     }
 
@@ -37,17 +35,17 @@ public class Ship extends Entity {
         setX(getX() + velocity.x * delta);
         setY(getY() + velocity.y * delta);
 
-        Pair<Boolean, Boolean> collisions = map.getCollisions(this, oldX, oldY);
+        Pair<Boolean, Boolean> collisions = map.getMapCollisions(this, oldX, oldY);
         boolean collisionX = collisions.fst;
         boolean collisionY = collisions.snd;
 
         if (collisionX) {
             setX(oldX);
-            velocity.x = 0;
+//            velocity.x = 0;
         }
         if (collisionY) {
             setY(oldY);
-            velocity.y = 0;
+//            velocity.y = 0;
         }
     }
 

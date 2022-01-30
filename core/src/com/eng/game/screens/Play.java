@@ -19,23 +19,25 @@ import com.eng.game.map.BackgroundTiledMap;
 public class Play implements Screen {
 
     private final Stage stage = new Stage();
+    PirateGame game;
     private Player player;
     private BackgroundTiledMap backgroundTiledMap;
     private EnemyShip enemyShip;
-    PirateGame game;
 
     public Play(PirateGame game) {
         this.game = game;
     }
+
     /**
      * Initializes the game screen
      */
     @Override
     public void show() {
         Pathfinding pathfinding = new Pathfinding();
-        ActorTable actorTable = new ActorTable(stage);
         backgroundTiledMap = new BackgroundTiledMap(stage);
         stage.addActor(backgroundTiledMap);
+
+        ActorTable actorTable = new ActorTable(stage, backgroundTiledMap);
 
         College college = new College(backgroundTiledMap, actorTable, "James", 100, 3, 1000);
 

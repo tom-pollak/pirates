@@ -19,7 +19,6 @@ public class Alliance {
 
     @Override
     public String toString() {
-        // TODO: Not sure about this string?
         return "Alliance{" +
                 "name='" + name + '\'' +
                 '}';
@@ -43,6 +42,8 @@ public class Alliance {
         alliedItems.add(item);
         item.alliance = this;
     }
+
+    // Make isEnemy which is isAlly \cup NEUTRAL?
 
     public boolean isAlly(Entity entity) {
         return alliedEntities.contains(entity);

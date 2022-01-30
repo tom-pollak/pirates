@@ -15,13 +15,12 @@ public class College extends Entity {
     private final Integer range;
 
     public College(BackgroundTiledMap tiledMap, ActorTable actorTable, String name, int health, int holdingCapacity, Integer range) {
-        super(tiledMap, new Texture("img/college.png"), health, holdingCapacity);
+        super(tiledMap, actorTable, new Texture("img/college.png"), health, holdingCapacity);
         this.alliance = new Alliance(name, this);
         this.alliance.addAlly(this);
         this.alliance.setLeader(this);
         this.range = range;
-        this.actorTable = actorTable;
-        this.actorTable.addEntity(this);
+        actorTable.addActor(this);
     }
 
     public void update(float delta) {

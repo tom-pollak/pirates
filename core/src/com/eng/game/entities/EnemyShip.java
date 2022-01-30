@@ -1,7 +1,6 @@
 package com.eng.game.entities;
 
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.math.Vector2;
 import com.eng.game.items.Cannon;
 import com.eng.game.logic.ActorTable;
 import com.eng.game.logic.Pathfinding;
@@ -9,13 +8,15 @@ import com.eng.game.map.BackgroundTiledMap;
 import com.eng.game.pathfinding.pathfinding.grid.GridCell;
 import com.sun.tools.javac.util.Pair;
 
+import java.util.List;
+
 public class EnemyShip extends Ship {
     private final Pathfinding pathfinding;
 
     public EnemyShip(BackgroundTiledMap map, ActorTable actorTable, Pathfinding pathfinding) {
         // TODO: add enemy ship texture based on alliance
         super(map, actorTable, new Texture("img/ship.png"), 100, 3, 200);
-        addItem(new Cannon(10, 150, 2, map));
+        addItem(new Cannon(10, 150, 2, map, actorTable));
         this.pathfinding = pathfinding;
     }
 
@@ -26,32 +27,27 @@ public class EnemyShip extends Ship {
      * If the ship is moving in the same velocity, keep the velocity or (sometimes) reverse it
      * If the ship has stopped, it has collided with a wall, so reverse direction
      *
-     * @param oldVelocity the old velocity
-     * @param newVelocity velocity after checking for collisions
+     * @param velocity the current velocity on the x or y-axis
      * @return the new velocity
      */
-    private float generateVelocity(float oldVelocity, float newVelocity) {
-        //
-        if (oldVelocity == 0) {
+    private float generateVelocity(float velocity) {
+        if (velocity == 0) {
             if (Math.random() < 0.5) {
                 return speed;
             } else {
                 return -speed;
             }
         }
-        if (newVelocity == 0) {
-            return -speed;
-        }
         try {
             // Bounding region for the ship
-            if (alliance.getLeader().isOutOfRange(getX(), getY())) return -newVelocity;
+            if (alliance.getLeader().isOutOfRange(getX(), getY())) return -velocity;
         } catch (NullPointerException ignored) {
         }
         // Randomly change direction
         if (Math.random() < 0.01) {
-            return -newVelocity;
+            return -velocity;
         }
-        return newVelocity;
+        return velocity;
     }
 
     @Override
@@ -72,31 +68,47 @@ public class EnemyShip extends Ship {
 
         // If ship is in firing range, move randomly like before
         if (targetShip == null || tileDistance <= (float) getFiringRange() - 2) {
-            Vector2 oldVelocities = velocity;
-            super.act(delta);
-            velocity.x = generateVelocity(oldVelocities.x, velocity.x);
-            velocity.y = generateVelocity(oldVelocities.y, velocity.y);
+            float oldX = getX(), oldY = getY();
+
+            setX(getX() + velocity.x * delta);
+            setY(getY() + velocity.y * delta);
+
+            Pair<Boolean, Boolean> collisions = map.getMapCollisions(this, oldX, oldY);
+            boolean collisionX = collisions.fst;
+            boolean collisionY = collisions.snd;
+            if (collisionX) {
+                setX(oldX);
+//                velocity.x = 0;
+            } else velocity.x = generateVelocity(velocity.x);
+
+            if (collisionY) {
+                setY(oldY);
+//                velocity.y = 0;
+            } else velocity.y = generateVelocity(velocity.y);
+
         } else {
             // Pathfind to the target ship
-            try {
-                GridCell searchPath = pathfinding.findPath(getTileX(), getTileY(), targetShip.getTileX(), targetShip.getTileY()).get(0);
+            List<GridCell> searchPath = pathfinding.findPath(getTileX(), getTileY(), targetShip.getTileX(), targetShip.getTileY());
+            if (searchPath == null) {
+                super.act(delta);
+                return;
+            }
 
-                // Navigate towards first tile in search path
-                if (searchPath.getX() > getTileX()) {
-                    velocity.x = speed;
-                } else if (searchPath.getX() < getTileX()) {
-                    velocity.x = -speed;
-                } else {
-                    velocity.x = 0;
-                }
-                if (searchPath.getY() > getTileY()) {
-                    velocity.y = speed;
-                } else if (searchPath.getY() < getTileY()) {
-                    velocity.y = -speed;
-                } else {
-                    velocity.y = 0;
-                }
-            } catch (NullPointerException ignored) {
+            // Navigate towards first tile in search path
+            GridCell firstNode = searchPath.get(0);
+            if (firstNode.getX() > getTileX()) {
+                velocity.x = speed;
+            } else if (firstNode.getX() < getTileX()) {
+                velocity.x = -speed;
+            } else {
+                velocity.x = 0;
+            }
+            if (firstNode.getY() > getTileY()) {
+                velocity.y = speed;
+            } else if (firstNode.getY() < getTileY()) {
+                velocity.y = -speed;
+            } else {
+                velocity.y = 0;
             }
             super.act(delta);
         }

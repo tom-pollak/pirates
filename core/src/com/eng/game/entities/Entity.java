@@ -2,7 +2,7 @@ package com.eng.game.entities;
 
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
-import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.eng.game.actor.GameActor;
 import com.eng.game.items.Cannon;
 import com.eng.game.items.Item;
 import com.eng.game.items.Key;
@@ -10,16 +10,13 @@ import com.eng.game.logic.ActorTable;
 import com.eng.game.logic.Alliance;
 import com.eng.game.map.BackgroundTiledMap;
 import com.sun.tools.javac.util.Pair;
-import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 
 /**
  * Main actor class for all non-inanimate objects in the game.
  */
-public abstract class Entity extends Actor {
-    public final BackgroundTiledMap map;
-    protected final Texture texture;
+public abstract class Entity extends GameActor {
     private final ArrayList<Item> holding;
     private final int holdingCapacity;
     public int maxHealth;
@@ -27,24 +24,16 @@ public abstract class Entity extends Actor {
     public Alliance alliance = Alliance.NEUTRAL;
     public boolean isDead = false;
     public int coins = 0;
-    @NotNull
-    protected ActorTable actorTable;
     Integer movementRange = null;
     private int itemIndex = 0;
 
-    public Entity(BackgroundTiledMap map, Texture texture, int maxHealth, int holdingCapacity) {
+    public Entity(BackgroundTiledMap map, ActorTable actorTable, Texture texture, int maxHealth, int holdingCapacity) {
+        super(map, actorTable, texture);
         this.maxHealth = maxHealth;
         this.health = maxHealth;
         if (holdingCapacity > 9) holdingCapacity = 9; // User can only select 1-9 items
         this.holding = new ArrayList<>(holdingCapacity);
         this.holdingCapacity = holdingCapacity;
-        this.map = map;
-        this.texture = texture;
-
-        this.setWidth(texture.getWidth());
-        this.setHeight(texture.getHeight());
-        this.setBounds(0, 0, texture.getWidth(), texture.getHeight());
-        this.setOrigin(getWidth() / 2, getHeight() / 2);
     }
 
     @Override
@@ -92,7 +81,7 @@ public abstract class Entity extends Actor {
      * @return true if an item was picked up, false otherwise
      */
     public boolean pickup() {
-        Item item = actorTable.getItemOnTile(getTileX(), getTileY());
+        Item item = actorTable.getItemInEntity(this);
         if (item == null) {
             System.out.println("No item on tile");
             return false;
@@ -105,24 +94,6 @@ public abstract class Entity extends Actor {
         return true;
     }
 
-    /**
-     * Finds empty tiles on or around a tiles x and y coordinates.
-     * A tile is empty if it is not occupied by an item and the tile is not blocked.
-     *
-     * @param tileX x coordinate of the tile to check around
-     * @param tileY y coordinate of the tile to check around
-     * @return a pair of coordinates of an empty tile
-     */
-    public Pair<Integer, Integer> findEmptyTile(int tileX, int tileY) {
-        for (int x = tileX - 1; x <= tileX + 1; x++) {
-            for (int y = tileY - 1; y <= tileY + 1; y++) {
-                if (actorTable.getItemOnTile(x, y) == null && !map.isTileBlocked(x, y)) {
-                    return new Pair<>(x, y);
-                }
-            }
-        }
-        return null;
-    }
 
     /**
      * Drops the item at the entities item index.
@@ -136,8 +107,8 @@ public abstract class Entity extends Actor {
         float y = getY();
         try {
             Item droppedItem = holding.remove(itemIndex);
-            if (actorTable.getItemOnTile(getTileX(), getTileY()) != null) {
-                Pair<Integer, Integer> emptyTile = findEmptyTile(getTileX(), getTileY());
+            if (actorTable.getItemInEntity(this) != null) {
+                Pair<Integer, Integer> emptyTile = droppedItem.findEmptyTile(getOriginX(), getOriginY());
                 if (emptyTile == null) {
                     System.out.println("Entity.drop() - No empty tile found");
                     return false;
@@ -272,13 +243,6 @@ public abstract class Entity extends Actor {
         return alliance;
     }
 
-    public int getTileX() {
-        return (int) getX() / map.getTileWidth();
-    }
-
-    public int getTileY() {
-        return (int) getY() / map.getTileHeight();
-    }
 
     public boolean isDead() {
         return isDead;

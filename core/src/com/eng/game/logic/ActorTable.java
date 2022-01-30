@@ -6,6 +6,7 @@ import com.eng.game.entities.Entity;
 import com.eng.game.entities.Ship;
 import com.eng.game.entities.TreasureChest;
 import com.eng.game.items.Item;
+import com.eng.game.map.BackgroundTiledMap;
 import com.sun.tools.javac.util.Pair;
 
 import java.util.ArrayList;
@@ -19,52 +20,63 @@ public class ActorTable {
     private final ArrayList<College> colleges = new ArrayList<>();
     private final ArrayList<TreasureChest> treasureChests = new ArrayList<>();
     private final Stage stage;
+    private final BackgroundTiledMap map;
 
-    public ActorTable(Stage stage) {
+    public ActorTable(Stage stage, BackgroundTiledMap map) {
         this.stage = stage;
+        this.map = map;
     }
 
-    public void addEntity(Ship ship) {
+    public boolean willItemCollide(Item item, float x, float y) {
+        for (Item checkItem : items) {
+            if (map.isCollision(item.getHitbox(), checkItem.getHitbox())) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public void addActor(Ship ship) {
         if (ship.getStage() == null) {
             stage.addActor(ship);
         }
         ships.add(ship);
     }
 
-    public void addEntity(College college) {
+    public void addActor(College college) {
         if (college.getStage() == null) {
             stage.addActor(college);
         }
         colleges.add(college);
     }
 
-    public void addEntity(TreasureChest treasureChest) {
+    public void addActor(TreasureChest treasureChest) {
         if (treasureChest.getStage() == null) {
             stage.addActor(treasureChest);
         }
         treasureChests.add(treasureChest);
     }
 
-    public void removeEntity(College college) {
-        colleges.remove(college);
-    }
-
-    public void removeEntity(Ship ship) {
-        ships.remove(ship);
-    }
-
-    public void removeEntity(TreasureChest treasureChest) {
-        treasureChests.remove(treasureChest);
-    }
-
-    public void addItem(Item item) {
+    public void addActor(Item item) {
         if (item.getStage() == null) {
             stage.addActor(item);
         }
         items.add(item);
     }
 
-    public void removeItem(Item item) {
+    public void removeActor(College college) {
+        colleges.remove(college);
+    }
+
+    public void removeActor(Ship ship) {
+        ships.remove(ship);
+    }
+
+    public void removeActor(TreasureChest treasureChest) {
+        treasureChests.remove(treasureChest);
+    }
+
+    public void removeActor(Item item) {
         items.remove(item);
     }
 
@@ -76,23 +88,24 @@ public class ActorTable {
         return items;
     }
 
-    public Item getItemOnTile(int tileX, int tileY) {
+    public Item getItemInEntity(Entity entity) {
+
         for (Item item : items) {
-            if (item.getTileX() == tileX && item.getTileY() == tileY && !item.isHeld) {
+            if (map.isCollision(entity.getHitbox(), item.getHitbox()) && !item.isHeld) {
                 return item;
             }
         }
         return null;
     }
 
-    public ArrayList<Entity> getEntitiesOnTile(int tileX, int tileY) {
+    public ArrayList<Entity> getCollidingEntities(Entity entity) {
         ArrayList<Entity> entities = new ArrayList<>();
         ArrayList<Entity> entitiesOnTile = new ArrayList<>();
         entities.addAll(ships);
         entities.addAll(colleges);
         entities.addAll(treasureChests);
-        for (Entity entity : entities) {
-            if (entity.getTileX() == tileX && entity.getTileY() == tileY) {
+        for (Entity collidingEntity : entities) {
+            if (map.isCollision(entity.getHitbox(), collidingEntity.getHitbox())) {
                 entitiesOnTile.add(entity);
             }
         }
@@ -119,6 +132,6 @@ public class ActorTable {
                 closest = newShip;
             }
         }
-        return new Pair<>(closest, distance / ship.map.getTileWidth());
+        return new Pair<>(closest, distance / map.getTileWidth());
     }
 }

@@ -11,11 +11,10 @@ public class TreasureChest extends Entity {
     private final String description;
 
     public TreasureChest(BackgroundTiledMap tiledMap, ActorTable actorTable, Alliance keyAlliance, String description) {
-        super(tiledMap, new Texture("img/ship.png"), 100, 3);
+        super(tiledMap, actorTable, new Texture("img/ship.png"), 100, 3);
+        actorTable.addActor(this);
         this.description = description;
         this.keyAlliance = new Alliance(toString(), this);
-        this.actorTable = actorTable;
-        this.actorTable.addEntity(this);
     }
 
     /**
@@ -40,7 +39,7 @@ public class TreasureChest extends Entity {
     }
 
     public Key generateKey() {
-        Key key = new Key("Key", description, map);
+        Key key = new Key("Key", description, map, actorTable);
         addKey(key);
         return key;
     }

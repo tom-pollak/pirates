@@ -2,24 +2,24 @@ package com.eng.game.items;
 
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
-import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.eng.game.actor.GameActor;
+import com.eng.game.logic.ActorTable;
 import com.eng.game.logic.Alliance;
 import com.eng.game.map.BackgroundTiledMap;
+import com.sun.tools.javac.util.Pair;
 
-public class Item extends Actor {
+
+public class Item extends GameActor {
     private final String name;
     private final String description;
-    private final BackgroundTiledMap map;
-    private final Texture texture;
     public Alliance alliance = Alliance.NEUTRAL;
     public boolean isHeld = false;
 
-    public Item(String name, String description, Texture texture, BackgroundTiledMap map) {
-        super();
+    public Item(String name, String description, Texture texture, BackgroundTiledMap map, ActorTable actorTable) {
+        super(map, actorTable, texture);
+        actorTable.addActor(this);
         this.name = name;
         this.description = description;
-        this.map = map;
-        this.texture = texture;
     }
 
     @Override
@@ -70,11 +70,21 @@ public class Item extends Actor {
         return name;
     }
 
-    public int getTileX() {
-        return (int) getX() / map.getTileWidth();
-    }
-
-    public int getTileY() {
-        return (int) getY() / map.getTileHeight();
+    /**
+     * Finds coordinate that the item can be placed without overlapping with another item or the tile is not blocked.
+     *
+     * @param startX x coordinate of the tile to check around
+     * @param startY y coordinate of the tile to check around
+     * @return a pair of coordinates
+     */
+    public Pair<Integer, Integer> findEmptyTile(float startX, float startY) {
+        for (int x = (int) ((int) startX - 2 * getWidth()); x <= startX + 2 * getWidth(); x++) {
+            for (int y = (int) ((int) startY - 2 * getHeight()); y <= startY + 2 * getHeight(); y++) {
+                if (actorTable.willItemCollide(this, x, y) && !map.isTileBlocked(x, y)) {
+                    return new Pair<>(x, y);
+                }
+            }
+        }
+        return null;
     }
 }

@@ -3,6 +3,7 @@ package com.eng.game.logic;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.eng.game.pathfinding.bridge.NavTmxMapLoader;
 import com.eng.game.pathfinding.bridge.NavigationTiledMapLayer;
+import com.eng.game.pathfinding.pathfinding.PathFindingException;
 import com.eng.game.pathfinding.pathfinding.grid.GridCell;
 import com.eng.game.pathfinding.pathfinding.grid.finders.GridFinderOptions;
 import com.eng.game.pathfinding.pathfinding.grid.finders.ThetaStarGridFinder;
@@ -25,6 +26,10 @@ public class Pathfinding {
     }
 
     public List<GridCell> findPath(int startX, int startY, int endX, int endY) {
-        return finder.findPath(startX, startY, endX, endY, navLayer);
+        try {
+            return finder.findPath(startX, startY, endX, endY, navLayer);
+        } catch (NullPointerException | PathFindingException ignored) {
+            return null;
+        }
     }
 }

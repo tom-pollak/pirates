@@ -1,11 +1,12 @@
 package com.eng.game.items;
 
 import com.badlogic.gdx.graphics.Texture;
+import com.eng.game.logic.ActorTable;
 import com.eng.game.map.BackgroundTiledMap;
 
 public class Key extends Item {
-    public Key(String name, String description, BackgroundTiledMap map) {
-        super(name, description, new Texture("img/key.png"), map);
+    public Key(String name, String description, BackgroundTiledMap map, ActorTable actorTable) {
+        super(name, description, new Texture("img/key.png"), map, actorTable);
     }
 
     /**
