@@ -70,7 +70,7 @@ public class Play implements Screen {
         stage.act();
         stage.draw();
 
-        stage.getCamera().position.set(player.getX() + player.getWidth() / 2, player.getY() + player.getHeight() / 2, 0);
+        stage.getCamera().position.set(player.getOriginX(), player.getOriginY(), 0);
         stage.getCamera().update();
     }
 

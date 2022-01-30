@@ -136,6 +136,15 @@ public class BackgroundTiledMap extends Actor {
     public Pair<Boolean, Boolean> getMapCollisions(GameActor actor, float oldX, float oldY) {
         boolean collidedX = false;
         boolean collidedY = false;
+
+        if (actor.getX() < 0 || actor.getRight() > map.getProperties().get("width", Integer.class) * getTileWidth()) {
+            collidedX = true;
+        }
+        if (actor.getY() < 0 || actor.getTop() > map.getProperties().get("height", Integer.class) * getTileHeight()) {
+            collidedY = true;
+        }
+
+
         MapLayer collisionObjectLayer = map.getLayers().get("collisionBoxes");
         MapObjects objects = collisionObjectLayer.getObjects();
         Polygon hitbox = actor.getHitbox();

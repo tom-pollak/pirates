@@ -83,7 +83,7 @@ public abstract class Entity extends GameActor {
     public boolean pickup() {
         Item item = actorTable.getItemInEntity(this);
         if (item == null) {
-            System.out.println("No item on tile");
+            System.out.println("No item to pick up");
             return false;
         }
         item.onPickup();
