@@ -15,7 +15,7 @@ public class College extends Entity {
     private final Integer range;
 
     public College(BackgroundTiledMap tiledMap, ActorTable actorTable, String name, int health, int holdingCapacity, Integer range) {
-        super(tiledMap, actorTable, new Texture("img/college.png"), health, holdingCapacity);
+        super(tiledMap, actorTable, new Texture("img/college.gif"), health, holdingCapacity);
         this.alliance = new Alliance(name, this);
         this.alliance.addAlly(this);
         this.alliance.setLeader(this);

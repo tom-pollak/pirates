@@ -70,7 +70,7 @@ public abstract class Entity extends GameActor {
     }
 
     public void addItem(Item item) {
-        holding.add(item);
+        holding.add(itemIndex, item);
     }
 
     /**
@@ -152,6 +152,7 @@ public abstract class Entity extends GameActor {
      */
     public void switchItem(int index) {
         itemIndex = index;
+        System.out.println("Entity.switchItem() - switched to item " + getHeldItem());
     }
 
     public void useItem() {

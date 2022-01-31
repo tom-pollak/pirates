@@ -74,10 +74,10 @@ public class Player extends Ship {
                     break;
 
             }
-            /* Select holding item */
 
-            if (Character.isDigit(character) && (int) character >= 1 && (int) character <= 9) {
-                switchItem((int) character - 1);
+            /* Select holding item */
+            if (Character.isDigit(character)) {
+                switchItem(Character.getNumericValue(character) - 1);
             }
             return true;
         }
