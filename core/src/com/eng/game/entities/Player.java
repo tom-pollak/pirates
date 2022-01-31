@@ -80,6 +80,7 @@ public class Player extends Ship {
                 switchItem(Character.getNumericValue(character) - 1);
             }
             return true;
+
         }
     };
 

@@ -22,17 +22,17 @@ public class Play implements Screen {
 
     private final Stage stage = new Stage();
     PirateGame game;
-    private Player player;
+    public static Player player;
     private EnemyShip enemyShip;
 
     private final SpriteBatch batch;
     private final BitmapFont font;
-    private int timer;
+    private static int timer;
     private float timeCounter;
 
     public Play(PirateGame game) {
         this.game = game;
-        timer = 600;
+        setTimer(600);
         batch = new SpriteBatch();
         font = new BitmapFont();
         font.setColor(1, 1,1, 1);
@@ -87,16 +87,16 @@ public class Play implements Screen {
         timeCounter += delta;
         if (timeCounter >= 1){
             timeCounter = 0;
-            timer -= 1;
+            setTimer(getTimer() - 1);
         }
 
         // Draw the timer
         batch.begin();
-        font.draw(batch, "Time: " + timer, stage.getWidth() / 100 * 89, stage.getHeight() / 100 * 98);
+        font.draw(batch, "Time: " + getTimer(), stage.getWidth() / 100 * 89, stage.getHeight() / 100 * 98);
         batch.end();
 
-        // End if timer reaches zero
-        if (timer == 0){
+        // End game if timer reaches zero or players health reaches zero
+        if (getTimer() == 0 || player.health == 0){
             this.dispose();
             game.setScreen(new LoseMenu(game));
         }
@@ -141,6 +141,13 @@ public class Play implements Screen {
 
     }
 
+    public static int getTimer() {
+        return timer;
+    }
+
+    public void setTimer(int timer) {
+        this.timer = timer;
+    }
 }
 
 
