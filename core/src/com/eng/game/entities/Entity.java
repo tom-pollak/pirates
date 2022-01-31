@@ -57,6 +57,10 @@ public abstract class Entity extends GameActor {
         return texture;
     }
 
+    public void setTexture(Texture texture) {
+        this.texture = texture;
+    }
+
     public ArrayList<Item> getHolding() {
         return holding;
     }
@@ -151,14 +155,19 @@ public abstract class Entity extends GameActor {
      * @param index the index of the item to switch to
      */
     public void switchItem(int index) {
-        itemIndex = index;
-        System.out.println("Entity.switchItem() - switched to item " + getHeldItem());
+        if (index > 0 || index < holdingCapacity) {
+            System.out.println("Entity.switchItem() - switched to item " + getHeldItem());
+            itemIndex = index;
+        } else {
+            System.out.println("Entity.switchItem() - index out of bounds");
+        }
     }
 
     public void useItem() {
         Item item = getHeldItem();
         if (item != null) {
-            item.use();
+            System.out.println(actorTable.getCollidingEntities(this));
+            item.use(actorTable.getCollidingEntities(this));
         } else {
             System.out.println("No item to use");
         }

@@ -1,5 +1,7 @@
 package com.eng.game.entities;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
 import com.eng.game.items.Key;
 import com.eng.game.logic.ActorTable;
@@ -10,11 +12,21 @@ public class TreasureChest extends Entity {
     private final Alliance keyAlliance;
     private final String description;
 
-    public TreasureChest(BackgroundTiledMap tiledMap, ActorTable actorTable, Alliance keyAlliance, String description) {
-        super(tiledMap, actorTable, new Texture("img/ship.png"), 100, 3);
+    public TreasureChest(BackgroundTiledMap tiledMap, ActorTable actorTable, String description) {
+        super(tiledMap, actorTable, new Texture("img/treasure-chest.png"), 100, 3);
         actorTable.addActor(this);
         this.description = description;
         this.keyAlliance = new Alliance(toString(), this);
+        Pixmap pixmapOriginal = new Pixmap(Gdx.files.internal("img/treasure-chest.png"));
+        Pixmap pixmapNew = new Pixmap(50, 50, pixmapOriginal.getFormat());
+        pixmapNew.drawPixmap(pixmapOriginal,
+                0, 0, pixmapOriginal.getWidth(), pixmapOriginal.getHeight(),
+                0, 0, pixmapNew.getWidth(), pixmapNew.getHeight()
+        );
+        Texture texture = new Texture(pixmapNew);
+        pixmapOriginal.dispose();
+        pixmapNew.dispose();
+        setTexture(texture);
     }
 
     /**
@@ -27,7 +39,7 @@ public class TreasureChest extends Entity {
     public boolean open(Key key) {
         if (keyAlliance.isAlly(key)) {
             System.out.println("You have opened the chest");
-            die();
+            setTexture(new Texture("img/treasure-chest-open.png"));
             return true;
         }
         System.out.println("You need a key to open this chest");

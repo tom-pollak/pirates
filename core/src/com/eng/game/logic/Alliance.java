@@ -1,6 +1,7 @@
 package com.eng.game.logic;
 
 import com.eng.game.entities.Entity;
+import com.eng.game.entities.Ship;
 import com.eng.game.items.Item;
 
 import java.util.ArrayList;
@@ -35,7 +36,6 @@ public class Alliance {
     public void addAlly(Entity entity) {
         alliedEntities.add(entity);
         entity.alliance = this;
-        System.out.println(entity.getName() + " has joined the " + name + " alliance!");
     }
 
     public void addAlly(Item item) {
@@ -44,6 +44,20 @@ public class Alliance {
     }
 
     // Make isEnemy which is isAlly \cup NEUTRAL?
+
+    public ArrayList<Ship> getShips() {
+        ArrayList<Ship> ships = new ArrayList<>();
+        for (Entity entity : alliedEntities) {
+            if (entity instanceof Ship) {
+                ships.add((Ship) entity);
+            }
+        }
+        return ships;
+    }
+
+    public ArrayList<Item> getAlliedItems() {
+        return alliedItems;
+    }
 
     public boolean isAlly(Entity entity) {
         return alliedEntities.contains(entity);

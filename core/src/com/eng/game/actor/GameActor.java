@@ -9,8 +9,8 @@ import com.eng.game.map.BackgroundTiledMap;
 public class GameActor extends Actor {
 
     protected final BackgroundTiledMap map;
-    protected final Texture texture;
     protected final ActorTable actorTable;
+    protected Texture texture;
 
     public GameActor(BackgroundTiledMap map, ActorTable actorTable, Texture texture) {
         super();
@@ -20,7 +20,7 @@ public class GameActor extends Actor {
 
         this.setWidth(texture.getWidth());
         this.setHeight(texture.getHeight());
-        this.setBounds(0, 0, texture.getWidth(), texture.getHeight());
+        this.setBounds(0, 0, getWidth(), getHeight());
         this.setOrigin(getX() + getWidth() / 2, getY() + getHeight() / 2);
     }
 

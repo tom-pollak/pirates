@@ -1,7 +1,6 @@
 package com.eng.game.entities;
 
 import com.badlogic.gdx.graphics.Texture;
-import com.eng.game.items.Cannon;
 import com.eng.game.logic.ActorTable;
 import com.eng.game.logic.Pathfinding;
 import com.eng.game.map.BackgroundTiledMap;
@@ -13,10 +12,9 @@ import java.util.List;
 public class EnemyShip extends Ship {
     private final Pathfinding pathfinding;
 
-    public EnemyShip(BackgroundTiledMap map, ActorTable actorTable, Pathfinding pathfinding) {
+    public EnemyShip(BackgroundTiledMap map, ActorTable actorTable, Pathfinding pathfinding, Texture shipTexture) {
         // TODO: add enemy ship texture based on alliance
-        super(map, actorTable, new Texture("img/ship.png"), 100, 3, 200);
-        addItem(new Cannon(10, 150, 2, map, actorTable));
+        super(map, actorTable, shipTexture, 100, 3, 375);
         this.pathfinding = pathfinding;
     }
 
@@ -44,7 +42,7 @@ public class EnemyShip extends Ship {
         } catch (NullPointerException ignored) {
         }
         // Randomly change direction
-        if (Math.random() < 0.01) {
+        if (Math.random() < 0.02) {
             return -velocity;
         }
         return velocity;
@@ -67,7 +65,7 @@ public class EnemyShip extends Ship {
         float tileDistance = target.snd;
 
         // If ship is in firing range, move randomly like before
-        if (targetShip == null || tileDistance <= (float) getFiringRange() - 2) {
+        if (targetShip == null || tileDistance <= (float) getFiringRange() * 0.75f) {
             float oldX = getX(), oldY = getY();
 
             setX(getX() + velocity.x * delta);
@@ -78,12 +76,12 @@ public class EnemyShip extends Ship {
             boolean collisionY = collisions.snd;
             if (collisionX) {
                 setX(oldX);
-//                velocity.x = 0;
+                velocity.x = -velocity.x;
             } else velocity.x = generateVelocity(velocity.x);
 
             if (collisionY) {
                 setY(oldY);
-//                velocity.y = 0;
+                velocity.y = -velocity.y;
             } else velocity.y = generateVelocity(velocity.y);
 
         } else {

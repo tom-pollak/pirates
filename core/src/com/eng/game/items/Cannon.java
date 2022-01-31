@@ -18,7 +18,7 @@ public class Cannon extends Item {
     }
 
     @Override
-    public void use(int tileX, int tileY) {
+    public void use(Integer x, Integer y) {
         fire();
     }
 

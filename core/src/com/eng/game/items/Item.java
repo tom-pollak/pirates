@@ -3,10 +3,13 @@ package com.eng.game.items;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.eng.game.actor.GameActor;
+import com.eng.game.entities.Entity;
 import com.eng.game.logic.ActorTable;
 import com.eng.game.logic.Alliance;
 import com.eng.game.map.BackgroundTiledMap;
 import com.sun.tools.javac.util.Pair;
+
+import java.util.ArrayList;
 
 
 public class Item extends GameActor {
@@ -30,11 +33,11 @@ public class Item extends GameActor {
         super.draw(batch, parentAlpha);
     }
 
-    public void use(int tileX, int tileY) {
+    public void use(ArrayList<Entity> entities) {
         System.out.println(name + " cannot be used");
     }
 
-    public void use() {
+    public void use(Integer x, Integer y) {
         System.out.println(name + " cannot be used");
     }
 

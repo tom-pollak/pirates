@@ -3,7 +3,6 @@ package com.eng.game;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.eng.game.screens.MainMenu;
-import com.eng.game.screens.WinMenu;
 
 /**
  * Initializes the game.

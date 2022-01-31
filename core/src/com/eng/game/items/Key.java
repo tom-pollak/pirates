@@ -1,8 +1,13 @@
 package com.eng.game.items;
 
 import com.badlogic.gdx.graphics.Texture;
+import com.eng.game.entities.Entity;
+import com.eng.game.entities.TreasureChest;
 import com.eng.game.logic.ActorTable;
 import com.eng.game.map.BackgroundTiledMap;
+
+import java.util.ArrayList;
+
 
 public class Key extends Item {
     public Key(String name, String description, BackgroundTiledMap map, ActorTable actorTable) {
@@ -12,12 +17,16 @@ public class Key extends Item {
     /**
      * Calls the method open for the entity on the same tile as the key
      *
-     * @param tileX the x coordinate of the tile
-     * @param tileY the y coordinate of the tile
+     * @param entities the entities currently interactable with the key
      */
+
     @Override
-    public void use(int tileX, int tileY) {
-        super.use(tileX, tileY);
+    public void use(ArrayList<Entity> entities) {
         // TODO: implement use
+        for (Entity entity : entities) {
+            if (entity instanceof TreasureChest) {
+                entity.open(this);
+            }
+        }
     }
 }

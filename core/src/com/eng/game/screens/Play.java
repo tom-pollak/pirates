@@ -3,6 +3,7 @@ package com.eng.game.screens;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.Stage;
@@ -10,9 +11,12 @@ import com.eng.game.PirateGame;
 import com.eng.game.entities.College;
 import com.eng.game.entities.EnemyShip;
 import com.eng.game.entities.Player;
+import com.eng.game.entities.TreasureChest;
+import com.eng.game.items.Key;
 import com.eng.game.logic.ActorTable;
 import com.eng.game.logic.Pathfinding;
 import com.eng.game.map.BackgroundTiledMap;
+import com.sun.tools.javac.util.Pair;
 
 
 /**
@@ -31,6 +35,7 @@ public class Play implements Screen {
 
     public Play(PirateGame game) {
         this.game = game;
+        Gdx.input.setInputProcessor(stage);
         setTimer(600);
         batch = new SpriteBatch();
         font = new BitmapFont();
@@ -53,25 +58,28 @@ public class Play implements Screen {
         Pathfinding pathfinding = new Pathfinding();
         BackgroundTiledMap backgroundTiledMap = new BackgroundTiledMap(stage);
         stage.addActor(backgroundTiledMap);
-
         ActorTable actorTable = new ActorTable(stage, backgroundTiledMap);
 
-        College college = new College(backgroundTiledMap, actorTable, "James", 100, 3, 1000);
-
-        college.setPosition(22 * backgroundTiledMap.getTileWidth(), 87 * backgroundTiledMap.getTileHeight());
-        System.out.println(college + " " + college.getAlliance());
-
-        Gdx.input.setInputProcessor(stage);
         player = new Player(backgroundTiledMap, actorTable);
-        player.setPosition(22 * backgroundTiledMap.getTileWidth(), 70 * backgroundTiledMap.getTileHeight());
-
+        player.setPosition(698, 2560);
         stage.setKeyboardFocus(player);
         player.addListener(player.input);
 
-        enemyShip = new EnemyShip(backgroundTiledMap, actorTable, pathfinding);
-        enemyShip.setPosition(12 * backgroundTiledMap.getTileWidth(), 89 * backgroundTiledMap.getTileHeight());
-        enemyShip.setSize(5, 10);
-        college.getAlliance().addAlly(enemyShip);
+        // Player college
+        new College(backgroundTiledMap, actorTable, pathfinding, new Texture("img/james.png"), "James", 100, 3, 1500, new Pair<>(698, 2560), 0).setPosition(704, 2765);
+
+        // Enemy colleges
+        new College(backgroundTiledMap, actorTable, pathfinding, new Texture("img/halifax.png"), "Halifax", 100, 3, 1500, new Pair<>(394, 367), 3).setPosition(579, 216);
+        new College(backgroundTiledMap, actorTable, pathfinding, new Texture("img/constantine.png"), "Constantine", 100, 3, 1500, new Pair<>(2590, 642), 4).setPosition(2704, 463);
+        new College(backgroundTiledMap, actorTable, pathfinding, new Texture("img/alcuin.png"), "Alcuin", 100, 3, 1500, new Pair<>(2674, 2497), 5).setPosition(2744, 2711);
+
+
+        // Treasure chests
+        TreasureChest chest = new TreasureChest(backgroundTiledMap, actorTable, "Glistening treasure");
+        chest.setPosition(1698, 1308);
+        Key key = chest.generateKey();
+        key.setPosition(2800, 240);
+
     }
 
     /**
@@ -111,11 +119,9 @@ public class Play implements Screen {
 
     @Override
     public void dispose() {
-        //backgroundTiledMap.dispose();
         player.getTexture().dispose();
         enemyShip.getTexture().dispose();
         font.dispose();
-        //batch.dispose();
     }
 
     /**
