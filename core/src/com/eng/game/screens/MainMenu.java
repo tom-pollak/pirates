@@ -19,6 +19,7 @@ public class MainMenu implements Screen {
 
 
     private final BitmapFont font;
+    private final BitmapFont title;
 
     private final int backgroundx;
     private final int backgroundy;
@@ -37,8 +38,11 @@ public class MainMenu implements Screen {
 
         // Sets text style
         font = new BitmapFont();
+        title = new BitmapFont();
         font.setColor(1, 1,1, 1);
+        title.setColor(1f, 195f/255f,0f, 1f);
         font.getData().setScale(backgroundx / 300, backgroundy / 300);
+        title.getData().setScale(backgroundx / 200, backgroundy / 200);
     }
 
     @Override
@@ -53,6 +57,7 @@ public class MainMenu implements Screen {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         game.batch.begin();
         game.batch.draw(background, 0, 0, backgroundx, backgroundy);
+        title.draw(game.batch, "Pirates!", backgroundx / 3 + 25, backgroundy / 4 * 3);
         font.draw(game.batch, "Press space to start", backgroundx / 4 + 25, backgroundy / 2);
 
 
