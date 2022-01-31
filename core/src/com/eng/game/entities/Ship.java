@@ -47,6 +47,7 @@ public class Ship extends Entity {
             setY(oldY);
 //            velocity.y = 0;
         }
+        this.setOrigin(getX() + getWidth() / 2, getY() + getHeight() / 2);
     }
 
     public String toString() {

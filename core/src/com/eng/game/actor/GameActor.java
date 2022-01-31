@@ -21,7 +21,7 @@ public class GameActor extends Actor {
         this.setWidth(texture.getWidth());
         this.setHeight(texture.getHeight());
         this.setBounds(0, 0, texture.getWidth(), texture.getHeight());
-        this.setOrigin(getWidth() / 2, getHeight() / 2);
+        this.setOrigin(getX() + getWidth() / 2, getY() + getHeight() / 2);
     }
 
     public Polygon getHitbox() {
