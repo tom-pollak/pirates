@@ -3,6 +3,8 @@ package com.eng.game.screens;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.eng.game.PirateGame;
 import com.eng.game.entities.College;
@@ -21,11 +23,19 @@ public class Play implements Screen {
     private final Stage stage = new Stage();
     PirateGame game;
     private Player player;
-    private BackgroundTiledMap backgroundTiledMap;
     private EnemyShip enemyShip;
+
+    private final SpriteBatch batch;
+    private final BitmapFont font;
+    private int timer;
+    private float timeCounter;
 
     public Play(PirateGame game) {
         this.game = game;
+        timer = 600;
+        batch = new SpriteBatch();
+        font = new BitmapFont();
+        font.setColor(1, 1,1, 1);
     }
 
     /**
@@ -34,7 +44,7 @@ public class Play implements Screen {
     @Override
     public void show() {
         Pathfinding pathfinding = new Pathfinding();
-        backgroundTiledMap = new BackgroundTiledMap(stage);
+        BackgroundTiledMap backgroundTiledMap = new BackgroundTiledMap(stage);
         stage.addActor(backgroundTiledMap);
 
         ActorTable actorTable = new ActorTable(stage, backgroundTiledMap);
@@ -64,7 +74,7 @@ public class Play implements Screen {
      */
     @Override
     public void render(float delta) {
-        Gdx.gl.glClearColor(0, 0, 0, 1);
+        Gdx.gl.glClearColor(150f / 255f, 238f / 255f , 1f, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
         stage.act();
@@ -72,14 +82,34 @@ public class Play implements Screen {
 
         stage.getCamera().position.set(player.getOriginX(), player.getOriginY(), 0);
         stage.getCamera().update();
+
+        // Makes the timer count down
+        timeCounter += delta;
+        if (timeCounter >= 1){
+            timeCounter = 0;
+            timer -= 1;
+        }
+
+        // Draw the timer
+        batch.begin();
+        font.draw(batch, "Time: " + timer, stage.getWidth() / 100 * 89, stage.getHeight() / 100 * 98);
+        batch.end();
+
+        // End if timer reaches zero
+        if (timer == 0){
+            this.dispose();
+            game.setScreen(new LoseMenu(game));
+        }
     }
 
 
     @Override
     public void dispose() {
-        backgroundTiledMap.dispose();
+        //backgroundTiledMap.dispose();
         player.getTexture().dispose();
         enemyShip.getTexture().dispose();
+        font.dispose();
+        //batch.dispose();
     }
 
     /**
