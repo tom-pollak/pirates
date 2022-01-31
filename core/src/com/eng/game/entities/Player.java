@@ -71,6 +71,7 @@ public class Player extends Ship {
                     break;
                 case ' ':
                     useItem();
+                    System.out.println(getX() + " " + getY());
                     break;
 
             }

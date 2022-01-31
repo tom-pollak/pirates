@@ -20,14 +20,13 @@ import com.eng.game.map.BackgroundTiledMap;
  */
 public class Play implements Screen {
 
-    private final Stage stage = new Stage();
-    PirateGame game;
     public static Player player;
-    private EnemyShip enemyShip;
-
+    private static int timer;
+    private final Stage stage = new Stage();
     private final SpriteBatch batch;
     private final BitmapFont font;
-    private static int timer;
+    PirateGame game;
+    private EnemyShip enemyShip;
     private float timeCounter;
 
     public Play(PirateGame game) {
@@ -35,7 +34,15 @@ public class Play implements Screen {
         setTimer(600);
         batch = new SpriteBatch();
         font = new BitmapFont();
-        font.setColor(1, 1,1, 1);
+        font.setColor(1, 1, 1, 1);
+    }
+
+    public static int getTimer() {
+        return timer;
+    }
+
+    public void setTimer(int timer) {
+        Play.timer = timer;
     }
 
     /**
@@ -51,18 +58,18 @@ public class Play implements Screen {
 
         College college = new College(backgroundTiledMap, actorTable, "James", 100, 3, 1000);
 
-        college.setPosition(5 * backgroundTiledMap.getTileWidth(), 13 * backgroundTiledMap.getTileHeight());
+        college.setPosition(22 * backgroundTiledMap.getTileWidth(), 87 * backgroundTiledMap.getTileHeight());
         System.out.println(college + " " + college.getAlliance());
 
         Gdx.input.setInputProcessor(stage);
         player = new Player(backgroundTiledMap, actorTable);
-        player.setPosition(4 * backgroundTiledMap.getTileWidth(), 13 * backgroundTiledMap.getTileHeight());
+        player.setPosition(22 * backgroundTiledMap.getTileWidth(), 70 * backgroundTiledMap.getTileHeight());
 
         stage.setKeyboardFocus(player);
         player.addListener(player.input);
 
         enemyShip = new EnemyShip(backgroundTiledMap, actorTable, pathfinding);
-        enemyShip.setPosition(5 * backgroundTiledMap.getTileWidth(), 13 * backgroundTiledMap.getTileHeight());
+        enemyShip.setPosition(12 * backgroundTiledMap.getTileWidth(), 89 * backgroundTiledMap.getTileHeight());
         enemyShip.setSize(5, 10);
         college.getAlliance().addAlly(enemyShip);
     }
@@ -74,7 +81,7 @@ public class Play implements Screen {
      */
     @Override
     public void render(float delta) {
-        Gdx.gl.glClearColor(150f / 255f, 238f / 255f , 1f, 1);
+        Gdx.gl.glClearColor(150f / 255f, 238f / 255f, 1f, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
         stage.act();
@@ -85,7 +92,7 @@ public class Play implements Screen {
 
         // Makes the timer count down
         timeCounter += delta;
-        if (timeCounter >= 1){
+        if (timeCounter >= 1) {
             timeCounter = 0;
             setTimer(getTimer() - 1);
         }
@@ -96,12 +103,11 @@ public class Play implements Screen {
         batch.end();
 
         // End game if timer reaches zero or players health reaches zero
-        if (getTimer() == 0 || player.health == 0){
+        if (getTimer() == 0 || player.health == 0) {
             this.dispose();
             game.setScreen(new LoseMenu(game));
         }
     }
-
 
     @Override
     public void dispose() {
@@ -139,14 +145,6 @@ public class Play implements Screen {
     public void hide() {
         dispose();
 
-    }
-
-    public static int getTimer() {
-        return timer;
-    }
-
-    public void setTimer(int timer) {
-        this.timer = timer;
     }
 }
 
