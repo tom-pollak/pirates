@@ -1,7 +1,9 @@
 package com.eng.game.logic;
 
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.eng.game.entities.*;
+import com.eng.game.entities.Entity;
+import com.eng.game.entities.Player;
+import com.eng.game.entities.Ship;
 import com.eng.game.items.Item;
 import com.eng.game.map.BackgroundTiledMap;
 import com.sun.tools.javac.util.Pair;
@@ -13,12 +15,10 @@ import java.util.ArrayList;
  */
 public class ActorTable {
     private final ArrayList<Item> items = new ArrayList<>();
-    private final ArrayList<Ship> ships = new ArrayList<>();
-    private final ArrayList<College> colleges = new ArrayList<>();
-    private final ArrayList<TreasureChest> treasureChests = new ArrayList<>();
-    private final ArrayList<CannonBall> cannonBalls = new ArrayList<>();
+    private final ArrayList<Entity> entities = new ArrayList<>();
     private final Stage stage;
     private final BackgroundTiledMap map;
+    private Player player;
 
     public ActorTable(Stage stage, BackgroundTiledMap map) {
         this.stage = stage;
@@ -34,32 +34,18 @@ public class ActorTable {
         return false;
     }
 
-    public void addActor(Ship ship) {
-        if (ship.getStage() == null) {
-            stage.addActor(ship);
+    public void addActor(Entity entity) {
+        if (entity instanceof Player) {
+            this.player = (Player) entity;
         }
-        ships.add(ship);
+        if (entity.getStage() == null) {
+            stage.addActor(entity);
+        }
+        entities.add(entity);
     }
 
-    public void addActor(CannonBall cannonBall) {
-        if (cannonBall.getStage() == null) {
-            stage.addActor(cannonBall);
-        }
-        cannonBalls.add(cannonBall);
-    }
-
-    public void addActor(College college) {
-        if (college.getStage() == null) {
-            stage.addActor(college);
-        }
-        colleges.add(college);
-    }
-
-    public void addActor(TreasureChest treasureChest) {
-        if (treasureChest.getStage() == null) {
-            stage.addActor(treasureChest);
-        }
-        treasureChests.add(treasureChest);
+    public Player getPlayer() {
+        return player;
     }
 
     public void addActor(Item item) {
@@ -69,16 +55,8 @@ public class ActorTable {
         items.add(item);
     }
 
-    public void removeActor(College college) {
-        colleges.remove(college);
-    }
-
-    public void removeActor(Ship ship) {
-        ships.remove(ship);
-    }
-
-    public void removeActor(TreasureChest treasureChest) {
-        treasureChests.remove(treasureChest);
+    public void removeActor(Entity entity) {
+        entities.remove(entity);
     }
 
     public void removeActor(Item item) {
@@ -86,6 +64,12 @@ public class ActorTable {
     }
 
     public ArrayList<Ship> getShips() {
+        ArrayList<Ship> ships = new ArrayList<>();
+        for (Entity entity : entities) {
+            if (entity instanceof Ship) {
+                ships.add((Ship) entity);
+            }
+        }
         return ships;
     }
 
@@ -103,11 +87,7 @@ public class ActorTable {
     }
 
     public ArrayList<Entity> getCollidingEntities(Entity entity) {
-        ArrayList<Entity> entities = new ArrayList<>();
         ArrayList<Entity> entitiesOnTile = new ArrayList<>();
-        entities.addAll(ships);
-        entities.addAll(colleges);
-        entities.addAll(treasureChests);
         for (Entity collidingEntity : entities) {
             if (map.isCollision(entity.getHitbox(), collidingEntity.getHitbox()) && !collidingEntity.equals(entity)) {
                 entitiesOnTile.add(collidingEntity);
@@ -128,15 +108,15 @@ public class ActorTable {
         }
         Ship closest = null;
         float distance = Float.MAX_VALUE;
-        for (Ship newShip : ships) {
-            if (ship.getAlliance().isAlly(newShip) || ship.isOutOfRange(newShip.getX(), newShip.getY()) || ship.getAlliance().getLeader().isOutOfRange(newShip.getX(), newShip.getY())) {
+        for (Entity newShip : entities) {
+            if (!(newShip instanceof Ship) || ship.getAlliance().isAlly(newShip) || ship.isOutOfRange(newShip.getX(), newShip.getY()) || ship.getAlliance().getLeader().isOutOfRange(newShip.getX(), newShip.getY())) {
                 continue;
             }
 
             float d = (float) Math.sqrt(Math.pow(ship.getX() - newShip.getX(), 2) + Math.pow(ship.getY() - newShip.getY(), 2));
             if (d < distance) {
                 distance = d;
-                closest = newShip;
+                closest = (Ship) newShip;
             }
         }
         return new Pair<>(closest, distance / map.getTileWidth());
