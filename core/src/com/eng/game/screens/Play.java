@@ -13,6 +13,7 @@ import com.eng.game.entities.EnemyShip;
 import com.eng.game.entities.Player;
 import com.eng.game.entities.TreasureChest;
 import com.eng.game.items.Cannon;
+import com.eng.game.items.Coin;
 import com.eng.game.items.Key;
 import com.eng.game.items.Princess;
 import com.eng.game.logic.ActorTable;
@@ -29,18 +30,17 @@ import java.util.Objects;
 public class Play implements Screen {
 
     public static Player player;
+    public static boolean hasKey;
+    public static boolean gotChest;
+    public static String collegeDeath;
     private static int timer;
     private final Stage stage = new Stage();
     private final SpriteBatch batch;
     private final BitmapFont font;
+    private final Texture heart;
     PirateGame game;
     private EnemyShip enemyShip;
     private float timeCounter;
-    private final Texture heart;
-
-    public static boolean hasKey;
-    public static boolean gotChest;
-    public static String collegeDeath;
     private boolean halifax_defeated;
     private boolean alcuin_defeated;
     private boolean constantine_defeated;
@@ -103,6 +103,7 @@ public class Play implements Screen {
         TreasureChest chest = new TreasureChest(map, actorTable, "Wooden chest");
         chest.setPosition(1698, 1308);
         chest.addItem(new Cannon(50, 5, 5, 250, map, actorTable));
+        chest.addItem(new Coin(map, actorTable, 100));
         Key key = chest.generateKey();
         key.setPosition(2800, 240);
 
@@ -137,39 +138,34 @@ public class Play implements Screen {
         font.draw(batch, "Time: " + getTimer(), stage.getWidth() / 100 * 89, stage.getHeight() / 100 * 99);
 
         // Test for college death
-        if (Objects.equals(collegeDeath, "Halifax college")){
+        if (Objects.equals(collegeDeath, "Halifax college")) {
             halifax_defeated = true;
-        }
-        else if (Objects.equals(collegeDeath, "Constantine college")){
+        } else if (Objects.equals(collegeDeath, "Constantine college")) {
             constantine_defeated = true;
-        }
-        else if (Objects.equals(collegeDeath, "Alcuin college")){
+        } else if (Objects.equals(collegeDeath, "Alcuin college")) {
             alcuin_defeated = true;
         }
 
         // draw objectives
         font.draw(batch, "Objectives:", stage.getWidth() / 100 * 89, stage.getHeight() / 100 * 95);
-        if (!halifax_defeated){
+        if (!halifax_defeated) {
             font.draw(batch, "Defeat Halifax", stage.getWidth() / 100 * 89, stage.getHeight() / 100 * 90);
-        }
-        else{
+        } else {
             font.draw(batch, "Return Princess", stage.getWidth() / 100 * 89, stage.getHeight() / 100 * 90);
         }
-        if (!constantine_defeated){
+        if (!constantine_defeated) {
             font.draw(batch, "Defeat Constantine", stage.getWidth() / 100 * 89, stage.getHeight() / 100 * 87);
         }
-        if (!alcuin_defeated){
+        if (!alcuin_defeated) {
             font.draw(batch, "Defeat Alcuin", stage.getWidth() / 100 * 89, stage.getHeight() / 100 * 84);
         }
-        if (!hasKey && !gotChest){
+        if (!hasKey && !gotChest) {
             font.draw(batch, "Get Key", stage.getWidth() / 100 * 89, stage.getHeight() / 100 * 81);
-        }
-        else if (hasKey && gotChest){
+        } else if (hasKey && gotChest) {
             font.draw(batch, "Get Chest", stage.getWidth() / 100 * 89, stage.getHeight() / 100 * 81);
         }
 
         batch.end();
-
 
 
         // End game if timer reaches zero or players health reaches zero
@@ -180,7 +176,7 @@ public class Play implements Screen {
 
         //Draw health
         batch.begin();
-        for (int i = 0; i < Math.round(player.health/10); i++) batch.draw(heart, 10 + i * 50, stage.getHeight()-60);
+        for (int i = 0; i < Math.round(player.health / 10); i++) batch.draw(heart, 10 + i * 50, stage.getHeight() - 60);
         batch.end();
     }
 

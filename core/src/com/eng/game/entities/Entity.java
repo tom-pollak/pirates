@@ -4,6 +4,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.eng.game.actor.GameActor;
 import com.eng.game.items.Cannon;
+import com.eng.game.items.Coin;
 import com.eng.game.items.Item;
 import com.eng.game.items.Key;
 import com.eng.game.logic.ActorTable;
@@ -81,7 +82,7 @@ public abstract class Entity extends GameActor {
 
     public void addItem(Item item, int index) {
         item.onPickup(getAlliance());
-        holding.add(index, item);
+        if (!(item instanceof Coin)) holding.add(index, item);
     }
 
     public void addItem(Item item) {
@@ -280,5 +281,9 @@ public abstract class Entity extends GameActor {
                 actor.setAlliance(newAlliance);
             }
         }
+    }
+
+    public void addCoins(int amount) {
+        coins += amount;
     }
 }

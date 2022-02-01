@@ -27,6 +27,14 @@ public class GameActor extends Actor {
         this.setBounds(0, 0, getWidth(), getHeight());
     }
 
+    /**
+     * Create a texture with different dimensions from the original
+     *
+     * @param imgPath path to the image
+     * @param width   new width
+     * @param height  new height
+     * @return the new resized texture
+     */
     public static Texture getScaledTexture(String imgPath, int width, int height) {
         Pixmap pixmapOriginal = new Pixmap(Gdx.files.internal(imgPath));
         Pixmap pixmapNew = new Pixmap(width, height, pixmapOriginal.getFormat());
