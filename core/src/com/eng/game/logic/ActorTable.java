@@ -94,7 +94,6 @@ public class ActorTable {
     }
 
     public Item getItemInEntity(Entity entity) {
-
         for (Item item : items) {
             if (map.isCollision(entity.getHitbox(), item.getHitbox()) && !item.isHeld) {
                 return item;

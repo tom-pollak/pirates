@@ -69,8 +69,10 @@ public class College extends Entity {
         setPosition(spawnPoint.fst, spawnPoint.snd);
         dropAll();
         setPosition(position.x, position.y);
-        // Destroyed college texture
         setTexture(new Texture("img/college.gif"));
+        for (Ship ship : getAlliance().getShips()) {
+            ship.setTexture(new Texture("img/ship.png"));
+        }
         System.out.println(getName() + "college destroyed!");
 
     }

@@ -1,8 +1,7 @@
 package com.eng.game.entities;
 
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.glutils.FileTextureData;
 import com.eng.game.items.Key;
 import com.eng.game.logic.ActorTable;
 import com.eng.game.logic.Alliance;
@@ -23,18 +22,12 @@ public class TreasureChest extends Entity {
 //        this.setOrigin(getX() + getWidth() / 2, getX() + getHeight() / 2);
     }
 
-    public void setChestTexture(String imgPath) {
-        Pixmap pixmapOriginal = new Pixmap(Gdx.files.internal(imgPath));
-        Pixmap pixmapNew = new Pixmap(50, 50, pixmapOriginal.getFormat());
-        pixmapNew.drawPixmap(pixmapOriginal,
-                0, 0, pixmapOriginal.getWidth(), pixmapOriginal.getHeight(),
-                0, 0, pixmapNew.getWidth(), pixmapNew.getHeight()
-        );
-        Texture texture = new Texture(pixmapNew);
-        pixmapOriginal.dispose();
-        pixmapNew.dispose();
+    @Override
+    public void setTexture(Texture texture) {
+        texture = getScaledTexture(((FileTextureData) texture.getTextureData()).getFileHandle().path(), 50, 50);
         super.setTexture(texture);
     }
+
 
     /**
      * If key is allied with the chest, the chest is opened.

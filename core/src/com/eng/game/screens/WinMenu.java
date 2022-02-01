@@ -7,28 +7,25 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.eng.game.PirateGame;
-import com.eng.game.entities.Player;
 
 public class WinMenu implements Screen {
-    PirateGame game;
     private final BitmapFont font;
     private final Texture background;
-
     private final int backgroundx;
     private final int backgroundy;
-
+    PirateGame game;
     private int score;
 
-    public WinMenu(PirateGame game){
+    public WinMenu(PirateGame game) {
         this.game = game;
 
 
         background = new Texture("img/Background.PNG");
-        backgroundx = (int)(background.getWidth() * 1.1);
-        backgroundy = (int)(background.getHeight() / 1.1);
+        backgroundx = (int) (background.getWidth() * 1.1);
+        backgroundy = (int) (background.getHeight() / 1.1);
 
         font = new BitmapFont();
-        font.setColor(0, 1,0, 1);
+        font.setColor(0, 1, 0, 1);
         font.getData().setScale(backgroundx / 300, backgroundy / 300);
 
         score = Play.getTimer() * 100;
@@ -57,7 +54,7 @@ public class WinMenu implements Screen {
 
         // change scene when space bar is pressed
         //if ((Gdx.input.isKeyPressed(Input.Keys.SPACE))){
-        if (Gdx.input.isKeyJustPressed(Input.Keys.SPACE)){
+        if (Gdx.input.isKeyJustPressed(Input.Keys.SPACE)) {
             this.dispose();
             game.setScreen(new MainMenu((game)));
         }
@@ -75,12 +72,10 @@ public class WinMenu implements Screen {
 
     @Override
     public void resume() {
-
     }
 
     @Override
     public void hide() {
-
     }
 
     @Override
