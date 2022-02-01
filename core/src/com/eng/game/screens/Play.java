@@ -3,14 +3,22 @@ package com.eng.game.screens;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.eng.game.PirateGame;
 import com.eng.game.entities.College;
 import com.eng.game.entities.EnemyShip;
 import com.eng.game.entities.Player;
+import com.eng.game.entities.TreasureChest;
+import com.eng.game.items.Cannon;
+import com.eng.game.items.Key;
+import com.eng.game.items.Princess;
 import com.eng.game.logic.ActorTable;
 import com.eng.game.logic.Pathfinding;
 import com.eng.game.map.BackgroundTiledMap;
+import com.sun.tools.javac.util.Pair;
 
 
 /**
@@ -18,14 +26,30 @@ import com.eng.game.map.BackgroundTiledMap;
  */
 public class Play implements Screen {
 
+    public static Player player;
+    private static int timer;
     private final Stage stage = new Stage();
+    private final SpriteBatch batch;
+    private final BitmapFont font;
     PirateGame game;
-    private Player player;
-    private BackgroundTiledMap backgroundTiledMap;
     private EnemyShip enemyShip;
+    private float timeCounter;
 
     public Play(PirateGame game) {
         this.game = game;
+        Gdx.input.setInputProcessor(stage);
+        setTimer(600);
+        batch = new SpriteBatch();
+        font = new BitmapFont();
+        font.setColor(1, 1, 1, 1);
+    }
+
+    public static int getTimer() {
+        return timer;
+    }
+
+    public void setTimer(int timer) {
+        Play.timer = timer;
     }
 
     /**
@@ -34,27 +58,37 @@ public class Play implements Screen {
     @Override
     public void show() {
         Pathfinding pathfinding = new Pathfinding();
-        backgroundTiledMap = new BackgroundTiledMap(stage);
-        stage.addActor(backgroundTiledMap);
+        BackgroundTiledMap map = new BackgroundTiledMap(stage);
+        stage.addActor(map);
+        ActorTable actorTable = new ActorTable(stage, map);
 
-        ActorTable actorTable = new ActorTable(stage, backgroundTiledMap);
-
-        College college = new College(backgroundTiledMap, actorTable, "James", 100, 3, 1000);
-
-        college.setPosition(5 * backgroundTiledMap.getTileWidth(), 13 * backgroundTiledMap.getTileHeight());
-        System.out.println(college + " " + college.getAlliance());
-
-        Gdx.input.setInputProcessor(stage);
-        player = new Player(backgroundTiledMap, actorTable);
-        player.setPosition(4 * backgroundTiledMap.getTileWidth(), 13 * backgroundTiledMap.getTileHeight());
-
+        player = new Player(map, actorTable);
+        player.setPosition(698, 2560);
         stage.setKeyboardFocus(player);
-        player.addListener(player.input);
+//        player.addListener(player.input);
+        Gdx.input.setInputProcessor(player.input);
 
-        enemyShip = new EnemyShip(backgroundTiledMap, actorTable, pathfinding);
-        enemyShip.setPosition(5 * backgroundTiledMap.getTileWidth(), 13 * backgroundTiledMap.getTileHeight());
-        enemyShip.setSize(5, 10);
-        college.getAlliance().addAlly(enemyShip);
+        // Player college
+        College playerCollege = new College(map, actorTable, pathfinding, new Texture("img/james.png"), "James", 100, 3, 1500, new Pair<>(698, 2560), 0);
+        playerCollege.setPosition(704, 2765);
+        player.setAlliance(playerCollege.getAlliance());
+
+
+        // Enemy colleges
+        College enemyCollege = new College(map, actorTable, pathfinding, new Texture("img/halifax.png"), "Halifax", 100, 3, 1500, new Pair<>(394, 367), 3);
+        enemyCollege.setPosition(579, 216);
+        enemyCollege.addItem(new Princess(map, actorTable));
+        new College(map, actorTable, pathfinding, new Texture("img/constantine.png"), "Constantine", 100, 3, 1500, new Pair<>(2590, 642), 4).setPosition(2704, 463);
+        new College(map, actorTable, pathfinding, new Texture("img/alcuin.png"), "Alcuin", 100, 3, 1500, new Pair<>(2674, 2497), 5).setPosition(2744, 2711);
+
+
+        // Treasure chests
+        TreasureChest chest = new TreasureChest(map, actorTable, "Wooden chest");
+        chest.setPosition(1698, 1308);
+        chest.addItem(new Cannon(50, 5, 5, 250, map, actorTable));
+        Key key = chest.generateKey();
+        key.setPosition(2800, 240);
+
     }
 
     /**
@@ -64,7 +98,7 @@ public class Play implements Screen {
      */
     @Override
     public void render(float delta) {
-        Gdx.gl.glClearColor(0, 0, 0, 1);
+        Gdx.gl.glClearColor(150f / 255f, 238f / 255f, 1f, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
         stage.act();
@@ -72,14 +106,30 @@ public class Play implements Screen {
 
         stage.getCamera().position.set(player.getOriginX(), player.getOriginY(), 0);
         stage.getCamera().update();
-    }
 
+        // Makes the timer count down
+        timeCounter += delta;
+        if (timeCounter >= 1) {
+            timeCounter = 0;
+            setTimer(getTimer() - 1);
+        }
+
+        // Draw the timer
+        batch.begin();
+        font.draw(batch, "Time: " + getTimer(), stage.getWidth() / 100 * 89, stage.getHeight() / 100 * 98);
+        batch.end();
+
+        // End game if timer reaches zero or players health reaches zero
+        if (getTimer() == 0 || player.health == 0) {
+            this.dispose();
+            game.setScreen(new LoseMenu(game));
+        }
+    }
 
     @Override
     public void dispose() {
-        backgroundTiledMap.dispose();
         player.getTexture().dispose();
-        enemyShip.getTexture().dispose();
+        font.dispose();
     }
 
     /**
@@ -110,7 +160,6 @@ public class Play implements Screen {
         dispose();
 
     }
-
 }
 
 

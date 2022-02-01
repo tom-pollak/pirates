@@ -4,13 +4,15 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.Polygon;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.eng.game.logic.ActorTable;
+import com.eng.game.logic.Alliance;
 import com.eng.game.map.BackgroundTiledMap;
 
 public class GameActor extends Actor {
 
     protected final BackgroundTiledMap map;
-    protected final Texture texture;
     protected final ActorTable actorTable;
+    protected Texture texture;
+    protected Alliance alliance = Alliance.NEUTRAL;
 
     public GameActor(BackgroundTiledMap map, ActorTable actorTable, Texture texture) {
         super();
@@ -20,8 +22,26 @@ public class GameActor extends Actor {
 
         this.setWidth(texture.getWidth());
         this.setHeight(texture.getHeight());
-        this.setBounds(0, 0, texture.getWidth(), texture.getHeight());
+        this.setBounds(0, 0, getWidth(), getHeight());
+    }
+
+    @Override
+    public void setPosition(float x, float y) {
+        super.setPosition(x, y);
         this.setOrigin(getX() + getWidth() / 2, getY() + getHeight() / 2);
+
+    }
+
+    @Override
+    public void setX(float x) {
+        super.setX(x);
+        this.setOriginX(getX() + getWidth() / 2);
+    }
+
+    @Override
+    public void setY(float y) {
+        super.setY(y);
+        this.setOriginY(getY() + getHeight() / 2);
     }
 
     public Polygon getHitbox() {
@@ -42,5 +62,16 @@ public class GameActor extends Actor {
 
     public int getTileY() {
         return (int) getY() / map.getTileHeight();
+    }
+
+    public Alliance getAlliance() {
+        return alliance;
+    }
+
+    public void setAlliance(Alliance newAlliance) {
+        alliance.removeAlly(this);
+
+        this.alliance = newAlliance;
+        newAlliance.addAlly(this);
     }
 }

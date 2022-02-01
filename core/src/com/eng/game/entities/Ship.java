@@ -16,7 +16,7 @@ public class Ship extends Entity {
         super(map, actorTable, texture, health, holdingCapacity);
         actorTable.addActor(this);
         this.movementRange = movementRange;
-        Cannon cannon = new Cannon(10, 6, 2, map, actorTable);
+        Cannon cannon = new Cannon(10, 18, 0.5f, 600, map, actorTable);
         addItem(cannon);
     }
 
@@ -32,8 +32,8 @@ public class Ship extends Entity {
         super.act(delta);
         float oldX = getX(), oldY = getY();
 
-        setX(getX() + velocity.x * delta);
-        setY(getY() + velocity.y * delta);
+        setPosition(getX() + velocity.x * delta, getY() + velocity.y * delta);
+
 
         Pair<Boolean, Boolean> collisions = map.getMapCollisions(this, oldX, oldY);
         boolean collisionX = collisions.fst;
@@ -41,11 +41,9 @@ public class Ship extends Entity {
 
         if (collisionX) {
             setX(oldX);
-//            velocity.x = 0;
         }
         if (collisionY) {
             setY(oldY);
-//            velocity.y = 0;
         }
         this.setOrigin(getX() + getWidth() / 2, getY() + getHeight() / 2);
     }

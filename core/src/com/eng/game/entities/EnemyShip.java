@@ -1,7 +1,6 @@
 package com.eng.game.entities;
 
 import com.badlogic.gdx.graphics.Texture;
-import com.eng.game.items.Cannon;
 import com.eng.game.logic.ActorTable;
 import com.eng.game.logic.Pathfinding;
 import com.eng.game.map.BackgroundTiledMap;
@@ -13,10 +12,9 @@ import java.util.List;
 public class EnemyShip extends Ship {
     private final Pathfinding pathfinding;
 
-    public EnemyShip(BackgroundTiledMap map, ActorTable actorTable, Pathfinding pathfinding) {
+    public EnemyShip(BackgroundTiledMap map, ActorTable actorTable, Pathfinding pathfinding, Texture shipTexture) {
         // TODO: add enemy ship texture based on alliance
-        super(map, actorTable, new Texture("img/ship.png"), 100, 3, 200);
-        addItem(new Cannon(10, 150, 2, map, actorTable));
+        super(map, actorTable, shipTexture, 20, 3, 375);
         this.pathfinding = pathfinding;
     }
 
@@ -44,7 +42,7 @@ public class EnemyShip extends Ship {
         } catch (NullPointerException ignored) {
         }
         // Randomly change direction
-        if (Math.random() < 0.01) {
+        if (Math.random() < 0.02) {
             return -velocity;
         }
         return velocity;
@@ -62,28 +60,32 @@ public class EnemyShip extends Ship {
      */
     @Override
     public void act(float delta) {
+        Ship targetShip = null;
+        float tileDistance = 0;
         Pair<Ship, Float> target = actorTable.getClosestEnemyShip(this);
-        Ship targetShip = target.fst;
-        float tileDistance = target.snd;
+        if (target != null) {
+            targetShip = target.fst;
+            tileDistance = target.snd;
+
+        }
 
         // If ship is in firing range, move randomly like before
-        if (targetShip == null || tileDistance <= (float) getFiringRange() - 2) {
+        if (targetShip == null || tileDistance <= (float) getFiringRange() * 0.75f) {
             float oldX = getX(), oldY = getY();
 
-            setX(getX() + velocity.x * delta);
-            setY(getY() + velocity.y * delta);
+            setPosition(getX() + velocity.x * delta, getY() + velocity.y * delta);
 
             Pair<Boolean, Boolean> collisions = map.getMapCollisions(this, oldX, oldY);
             boolean collisionX = collisions.fst;
             boolean collisionY = collisions.snd;
             if (collisionX) {
                 setX(oldX);
-//                velocity.x = 0;
+                velocity.x = -velocity.x;
             } else velocity.x = generateVelocity(velocity.x);
 
             if (collisionY) {
                 setY(oldY);
-//                velocity.y = 0;
+                velocity.y = -velocity.y;
             } else velocity.y = generateVelocity(velocity.y);
 
         } else {
@@ -95,23 +97,26 @@ public class EnemyShip extends Ship {
             }
 
             // Navigate towards first tile in search path
-            GridCell firstNode = searchPath.get(0);
-            if (firstNode.getX() > getTileX()) {
-                velocity.x = speed;
-            } else if (firstNode.getX() < getTileX()) {
-                velocity.x = -speed;
-            } else {
-                velocity.x = 0;
+            try {
+                GridCell firstNode = searchPath.get(0);
+                if (firstNode.getX() > getTileX()) {
+                    velocity.x = speed;
+                } else if (firstNode.getX() < getTileX()) {
+                    velocity.x = -speed;
+                } else {
+                    velocity.x = 0;
+                }
+                if (firstNode.getY() > getTileY()) {
+                    velocity.y = speed;
+                } else if (firstNode.getY() < getTileY()) {
+                    velocity.y = -speed;
+                } else {
+                    velocity.y = 0;
+                }
+                super.act(delta);
+            } catch (IndexOutOfBoundsException ignored) {
+                super.act(delta);
             }
-            if (firstNode.getY() > getTileY()) {
-                velocity.y = speed;
-            } else if (firstNode.getY() < getTileY()) {
-                velocity.y = -speed;
-            } else {
-                velocity.y = 0;
-            }
-            super.act(delta);
         }
-
     }
 }

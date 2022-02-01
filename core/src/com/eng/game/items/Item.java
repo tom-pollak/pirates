@@ -3,16 +3,18 @@ package com.eng.game.items;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.eng.game.actor.GameActor;
+import com.eng.game.entities.Entity;
 import com.eng.game.logic.ActorTable;
 import com.eng.game.logic.Alliance;
 import com.eng.game.map.BackgroundTiledMap;
 import com.sun.tools.javac.util.Pair;
 
+import java.util.ArrayList;
+
 
 public class Item extends GameActor {
     private final String name;
     private final String description;
-    public Alliance alliance = Alliance.NEUTRAL;
     public boolean isHeld = false;
 
     public Item(String name, String description, Texture texture, BackgroundTiledMap map, ActorTable actorTable) {
@@ -30,11 +32,11 @@ public class Item extends GameActor {
         super.draw(batch, parentAlpha);
     }
 
-    public void use(int tileX, int tileY) {
+    public void use(ArrayList<Entity> entities) {
         System.out.println(name + " cannot be used");
     }
 
-    public void use() {
+    public void use(float x, float y) {
         System.out.println(name + " cannot be used");
     }
 
@@ -42,10 +44,10 @@ public class Item extends GameActor {
      * Called when the item is picked up
      * By default sets actor's texture invisible
      */
-    public void onPickup() {
+    public void onPickup(Alliance alliance) {
         // Win if home base picks up princess
         isHeld = true;
-        System.out.println("You picked up " + name);
+        this.setAlliance(alliance);
     }
 
     /**
@@ -53,9 +55,8 @@ public class Item extends GameActor {
      * By default sets actor's texture visible
      */
     public void onDrop() {
-        // Texture appears
         isHeld = false;
-        System.out.println("Dropped " + name);
+        setAlliance(Alliance.NEUTRAL);
     }
 
     public String getName() {
@@ -68,6 +69,11 @@ public class Item extends GameActor {
 
     public String toString() {
         return name;
+    }
+
+    @Override
+    public void act(float delta) {
+        super.act(delta);
     }
 
     /**

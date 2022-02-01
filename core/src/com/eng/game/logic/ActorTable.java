@@ -1,10 +1,7 @@
 package com.eng.game.logic;
 
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.eng.game.entities.College;
-import com.eng.game.entities.Entity;
-import com.eng.game.entities.Ship;
-import com.eng.game.entities.TreasureChest;
+import com.eng.game.entities.*;
 import com.eng.game.items.Item;
 import com.eng.game.map.BackgroundTiledMap;
 import com.sun.tools.javac.util.Pair;
@@ -19,6 +16,7 @@ public class ActorTable {
     private final ArrayList<Ship> ships = new ArrayList<>();
     private final ArrayList<College> colleges = new ArrayList<>();
     private final ArrayList<TreasureChest> treasureChests = new ArrayList<>();
+    private final ArrayList<CannonBall> cannonBalls = new ArrayList<>();
     private final Stage stage;
     private final BackgroundTiledMap map;
 
@@ -41,6 +39,13 @@ public class ActorTable {
             stage.addActor(ship);
         }
         ships.add(ship);
+    }
+
+    public void addActor(CannonBall cannonBall) {
+        if (cannonBall.getStage() == null) {
+            stage.addActor(cannonBall);
+        }
+        cannonBalls.add(cannonBall);
     }
 
     public void addActor(College college) {
@@ -105,8 +110,8 @@ public class ActorTable {
         entities.addAll(colleges);
         entities.addAll(treasureChests);
         for (Entity collidingEntity : entities) {
-            if (map.isCollision(entity.getHitbox(), collidingEntity.getHitbox())) {
-                entitiesOnTile.add(entity);
+            if (map.isCollision(entity.getHitbox(), collidingEntity.getHitbox()) && !collidingEntity.equals(entity)) {
+                entitiesOnTile.add(collidingEntity);
             }
         }
         return entitiesOnTile;
@@ -119,6 +124,9 @@ public class ActorTable {
      * @return: The closest enemy ship, the tile distance between the ships.
      */
     public Pair<Ship, Float> getClosestEnemyShip(Ship ship) {
+        if (ship.getAlliance().getLeader() == null) {
+            return null;
+        }
         Ship closest = null;
         float distance = Float.MAX_VALUE;
         for (Ship newShip : ships) {
