@@ -6,6 +6,8 @@ import com.eng.game.entities.CannonBall;
 import com.eng.game.logic.ActorTable;
 import com.eng.game.map.BackgroundTiledMap;
 
+import static com.eng.game.screens.Play.player;
+
 public class Cannon extends Item {
     private final float damage;
     private final int range;

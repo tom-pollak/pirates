@@ -9,6 +9,10 @@ import com.eng.game.map.BackgroundTiledMap;
 import com.eng.game.screens.Play;
 import com.sun.tools.javac.util.Pair;
 
+import java.util.Objects;
+
+import static com.eng.game.screens.Play.player;
+
 /**
  * Leader & base entity for each team
  * Creates the college and its alliance
@@ -32,8 +36,15 @@ public class College extends Entity {
 
     @Override
     public void act(float delta) {
-        generateCoins(delta);
         generateShips(delta);
+        generateShips(delta);
+        if(getHeldItem() != null && Objects.equals(getHeldItem().toString(), "Cannon")){
+            Pair<Ship, Float> closestEnemyShip = actorTable.getClosestEnemyShip(this);
+            if(closestEnemyShip.fst != null) {
+                useItem(closestEnemyShip.fst.getX(), closestEnemyShip.fst.getY());
+                getHeldItem().setPosition(getX(), getY());
+            }
+        };
         // Check pickup area
     }
 
@@ -55,6 +66,7 @@ public class College extends Entity {
             EnemyShip enemyShip = new EnemyShip(map, actorTable, pathfinding, alliance.getShipTexture());
             enemyShip.setPosition(spawnPoint.fst, spawnPoint.snd);
             enemyShip.setAlliance(getAlliance());
+            System.out.println(enemyShip.getHeldItem());
 
         }
     }

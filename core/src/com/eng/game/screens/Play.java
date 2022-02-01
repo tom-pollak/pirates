@@ -92,11 +92,17 @@ public class Play implements Screen {
 
 
         // Enemy colleges
-        College enemyCollege = new College(map, actorTable, pathfinding, new Texture("img/halifax.png"), "Halifax", 100, 3, 1500, new Pair<>(394, 367), 3);
-        enemyCollege.setPosition(579, 216);
-        enemyCollege.addItem(new Princess(map, actorTable));
-        new College(map, actorTable, pathfinding, new Texture("img/constantine.png"), "Constantine", 100, 3, 1500, new Pair<>(2590, 642), 4).setPosition(2704, 463);
-        new College(map, actorTable, pathfinding, new Texture("img/alcuin.png"), "Alcuin", 100, 3, 1500, new Pair<>(2674, 2497), 5).setPosition(2744, 2711);
+        College halifax = new College(map, actorTable, pathfinding, new Texture("img/halifax.png"), "Halifax", 100, 3, 1500, new Pair<>(394, 367), 3);
+        halifax.setPosition(579, 216);
+        halifax.addItem(new Cannon(10, 10, 2, 250, map, actorTable));
+        halifax.addItem(new Princess(map, actorTable));
+
+        College constantine = new College(map, actorTable, pathfinding, new Texture("img/constantine.png"), "Constantine", 100, 3, 1500, new Pair<>(2590, 642), 4);
+        constantine.setPosition(2704, 463);
+        constantine.addItem(new Cannon(10, 10, 2, 250, map, actorTable));
+        College alcuin = new College(map, actorTable, pathfinding, new Texture("img/alcuin.png"), "Alcuin", 100, 3, 1500, new Pair<>(2674, 2497), 5);
+        alcuin.setPosition(2744, 2711);
+        alcuin.addItem(new Cannon(10, 10, 2, 250, map, actorTable));
 
 
         // Treasure chests
