@@ -17,7 +17,11 @@ public class TreasureChest extends Entity {
         actorTable.addActor(this);
         this.description = description;
         this.keyAlliance = new Alliance(toString(), this);
-        Pixmap pixmapOriginal = new Pixmap(Gdx.files.internal("img/treasure-chest.png"));
+        setChestTexture("img/treasure-chest.png");
+    }
+
+    public void setChestTexture(String imgPath) {
+        Pixmap pixmapOriginal = new Pixmap(Gdx.files.internal(imgPath));
         Pixmap pixmapNew = new Pixmap(50, 50, pixmapOriginal.getFormat());
         pixmapNew.drawPixmap(pixmapOriginal,
                 0, 0, pixmapOriginal.getWidth(), pixmapOriginal.getHeight(),
@@ -26,7 +30,7 @@ public class TreasureChest extends Entity {
         Texture texture = new Texture(pixmapNew);
         pixmapOriginal.dispose();
         pixmapNew.dispose();
-        setTexture(texture);
+        super.setTexture(texture);
     }
 
     /**
@@ -39,7 +43,8 @@ public class TreasureChest extends Entity {
     public boolean open(Key key) {
         if (keyAlliance.isAlly(key)) {
             System.out.println("You have opened the chest");
-            setTexture(new Texture("img/treasure-chest-open.png"));
+            setChestTexture("img/treasure-chest-open.png");
+            dropAll();
             return true;
         }
         System.out.println("You need a key to open this chest");

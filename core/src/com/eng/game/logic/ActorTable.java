@@ -104,10 +104,9 @@ public class ActorTable {
         entities.addAll(ships);
         entities.addAll(colleges);
         entities.addAll(treasureChests);
-        System.out.println(treasureChests);
         for (Entity collidingEntity : entities) {
             if (map.isCollision(entity.getHitbox(), collidingEntity.getHitbox()) && !collidingEntity.equals(entity)) {
-                entitiesOnTile.add(entity);
+                entitiesOnTile.add(collidingEntity);
             }
         }
         return entitiesOnTile;

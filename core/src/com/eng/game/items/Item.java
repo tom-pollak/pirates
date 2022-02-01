@@ -56,7 +56,6 @@ public class Item extends GameActor {
      * By default sets actor's texture visible
      */
     public void onDrop() {
-        // Texture appears
         isHeld = false;
         System.out.println("Dropped " + name);
     }

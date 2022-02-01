@@ -73,6 +73,9 @@ public class Player extends Ship {
                     useItem();
                     System.out.println(getX() + " " + getY());
                     break;
+                case 'r':
+                    System.out.println(getHolding());
+                    break;
 
             }
 

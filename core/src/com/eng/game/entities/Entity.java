@@ -59,6 +59,10 @@ public abstract class Entity extends GameActor {
 
     public void setTexture(Texture texture) {
         this.texture = texture;
+        this.setWidth(texture.getWidth());
+        this.setHeight(texture.getHeight());
+        this.setBounds(getX(), getY(), getWidth(), getHeight());
+        this.setOrigin(getX() + getWidth() / 2, getY() + getHeight() / 2);
     }
 
     public ArrayList<Item> getHolding() {
@@ -107,20 +111,18 @@ public abstract class Entity extends GameActor {
      * @return true if the item was dropped, false otherwise
      */
     public boolean drop() {
-        float x = getX();
-        float y = getY();
         try {
             Item droppedItem = holding.remove(itemIndex);
-            if (actorTable.getItemInEntity(this) != null) {
-                Pair<Integer, Integer> emptyTile = droppedItem.findEmptyTile(getOriginX(), getOriginY());
-                if (emptyTile == null) {
-                    System.out.println("Entity.drop() - No empty tile found");
-                    return false;
-                }
-                x = emptyTile.fst;
-                y = emptyTile.snd;
+            Integer x;
+            Integer y;
+            Pair<Integer, Integer> emptyTile = droppedItem.findEmptyTile(getOriginX(), getOriginY());
+            if (emptyTile == null) {
+                System.out.println("Entity.drop() - No empty tile found");
+                return false;
             }
-
+            x = emptyTile.fst;
+            y = emptyTile.snd;
+            System.out.println("Entity.drop() - Dropping item at " + x + ", " + y);
             droppedItem.setPosition(x, y);
             droppedItem.onDrop();
         } catch (IndexOutOfBoundsException e) {
@@ -132,17 +134,12 @@ public abstract class Entity extends GameActor {
 
     /**
      * Drops every item in the entity's holding.
-     *
-     * @return true if all items were dropped, false otherwise
      */
     public boolean dropAll() {
         boolean droppedAll = true;
         for (int i = 0; i < holding.size(); i++) {
             switchItem(i);
             boolean dropped = drop();
-            if (!dropped) {
-                droppedAll = false;
-            }
         }
         return droppedAll;
     }
@@ -166,7 +163,6 @@ public abstract class Entity extends GameActor {
     public void useItem() {
         Item item = getHeldItem();
         if (item != null) {
-            System.out.println(actorTable.getCollidingEntities(this));
             item.use(actorTable.getCollidingEntities(this));
         } else {
             System.out.println("No item to use");

@@ -13,6 +13,7 @@ import com.eng.game.entities.EnemyShip;
 import com.eng.game.entities.Player;
 import com.eng.game.entities.TreasureChest;
 import com.eng.game.items.Key;
+import com.eng.game.items.Princess;
 import com.eng.game.logic.ActorTable;
 import com.eng.game.logic.Pathfinding;
 import com.eng.game.map.BackgroundTiledMap;
@@ -56,27 +57,28 @@ public class Play implements Screen {
     @Override
     public void show() {
         Pathfinding pathfinding = new Pathfinding();
-        BackgroundTiledMap backgroundTiledMap = new BackgroundTiledMap(stage);
-        stage.addActor(backgroundTiledMap);
-        ActorTable actorTable = new ActorTable(stage, backgroundTiledMap);
+        BackgroundTiledMap map = new BackgroundTiledMap(stage);
+        stage.addActor(map);
+        ActorTable actorTable = new ActorTable(stage, map);
 
-        player = new Player(backgroundTiledMap, actorTable);
+        player = new Player(map, actorTable);
         player.setPosition(698, 2560);
         stage.setKeyboardFocus(player);
         player.addListener(player.input);
 
         // Player college
-        new College(backgroundTiledMap, actorTable, pathfinding, new Texture("img/james.png"), "James", 100, 3, 1500, new Pair<>(698, 2560), 0).setPosition(704, 2765);
+        new College(map, actorTable, pathfinding, new Texture("img/james.png"), "James", 100, 3, 1500, new Pair<>(698, 2560), 0).setPosition(704, 2765);
 
         // Enemy colleges
-        new College(backgroundTiledMap, actorTable, pathfinding, new Texture("img/halifax.png"), "Halifax", 100, 3, 1500, new Pair<>(394, 367), 3).setPosition(579, 216);
-        new College(backgroundTiledMap, actorTable, pathfinding, new Texture("img/constantine.png"), "Constantine", 100, 3, 1500, new Pair<>(2590, 642), 4).setPosition(2704, 463);
-        new College(backgroundTiledMap, actorTable, pathfinding, new Texture("img/alcuin.png"), "Alcuin", 100, 3, 1500, new Pair<>(2674, 2497), 5).setPosition(2744, 2711);
+        new College(map, actorTable, pathfinding, new Texture("img/halifax.png"), "Halifax", 100, 3, 1500, new Pair<>(394, 367), 3).setPosition(579, 216);
+        new College(map, actorTable, pathfinding, new Texture("img/constantine.png"), "Constantine", 100, 3, 1500, new Pair<>(2590, 642), 4).setPosition(2704, 463);
+        new College(map, actorTable, pathfinding, new Texture("img/alcuin.png"), "Alcuin", 100, 3, 1500, new Pair<>(2674, 2497), 5).setPosition(2744, 2711);
 
 
         // Treasure chests
-        TreasureChest chest = new TreasureChest(backgroundTiledMap, actorTable, "Glistening treasure");
+        TreasureChest chest = new TreasureChest(map, actorTable, "Glistening treasure");
         chest.setPosition(1698, 1308);
+        chest.addItem(new Princess(map, actorTable));
         Key key = chest.generateKey();
         key.setPosition(2800, 240);
 
