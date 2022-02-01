@@ -20,6 +20,8 @@ import com.eng.game.logic.Pathfinding;
 import com.eng.game.map.BackgroundTiledMap;
 import com.sun.tools.javac.util.Pair;
 
+import java.util.Objects;
+
 
 /**
  * Main class that implements the game screen
@@ -36,6 +38,13 @@ public class Play implements Screen {
     private float timeCounter;
     private final Texture heart;
 
+    public static boolean hasKey;
+    public static boolean gotChest;
+    public static String collegeDeath;
+    private boolean halifax_defeated;
+    private boolean alcuin_defeated;
+    private boolean constantine_defeated;
+
     public Play(PirateGame game) {
         this.game = game;
         Gdx.input.setInputProcessor(stage);
@@ -44,6 +53,12 @@ public class Play implements Screen {
         font = new BitmapFont();
         font.setColor(1, 1, 1, 1);
         heart = new Texture("img/heart48x48.png");
+
+        hasKey = false;
+        constantine_defeated = false;
+        alcuin_defeated = false;
+        halifax_defeated = false;
+        gotChest = false;
     }
 
     public static int getTimer() {
@@ -119,8 +134,43 @@ public class Play implements Screen {
 
         // Draw the timer
         batch.begin();
-        font.draw(batch, "Time: " + getTimer(), stage.getWidth() / 100 * 89, stage.getHeight() / 100 * 98);
+        font.draw(batch, "Time: " + getTimer(), stage.getWidth() / 100 * 89, stage.getHeight() / 100 * 99);
+
+        // Test for college death
+        if (Objects.equals(collegeDeath, "Halifax college")){
+            halifax_defeated = true;
+        }
+        else if (Objects.equals(collegeDeath, "Constantine college")){
+            constantine_defeated = true;
+        }
+        else if (Objects.equals(collegeDeath, "Alcuin college")){
+            alcuin_defeated = true;
+        }
+
+        // draw objectives
+        font.draw(batch, "Objectives:", stage.getWidth() / 100 * 89, stage.getHeight() / 100 * 95);
+        if (!halifax_defeated){
+            font.draw(batch, "Defeat Halifax", stage.getWidth() / 100 * 89, stage.getHeight() / 100 * 90);
+        }
+        else{
+            font.draw(batch, "Return Princess", stage.getWidth() / 100 * 89, stage.getHeight() / 100 * 90);
+        }
+        if (!constantine_defeated){
+            font.draw(batch, "Defeat Constantine", stage.getWidth() / 100 * 89, stage.getHeight() / 100 * 87);
+        }
+        if (!alcuin_defeated){
+            font.draw(batch, "Defeat Alcuin", stage.getWidth() / 100 * 89, stage.getHeight() / 100 * 84);
+        }
+        if (!hasKey && !gotChest){
+            font.draw(batch, "Get Key", stage.getWidth() / 100 * 89, stage.getHeight() / 100 * 81);
+        }
+        else if (hasKey && gotChest){
+            font.draw(batch, "Get Chest", stage.getWidth() / 100 * 89, stage.getHeight() / 100 * 81);
+        }
+
         batch.end();
+
+
 
         // End game if timer reaches zero or players health reaches zero
         if (getTimer() == 0 || player.health == 0) {

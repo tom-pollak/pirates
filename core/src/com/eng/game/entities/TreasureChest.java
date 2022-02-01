@@ -6,6 +6,7 @@ import com.eng.game.items.Key;
 import com.eng.game.logic.ActorTable;
 import com.eng.game.logic.Alliance;
 import com.eng.game.map.BackgroundTiledMap;
+import com.eng.game.screens.Play;
 
 public class TreasureChest extends Entity {
     private final Alliance keyAlliance;
@@ -46,6 +47,7 @@ public class TreasureChest extends Entity {
             setTexture(new Texture("img/treasure-chest-open.png"));
             dropAll();
             opened = true;
+            Play.gotChest = true;
             return true;
         }
         System.out.println("You need the correct key to open the chest");
