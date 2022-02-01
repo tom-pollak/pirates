@@ -29,7 +29,7 @@ public class GameActor extends Actor {
 
     public static Texture getScaledTexture(String imgPath, int width, int height) {
         Pixmap pixmapOriginal = new Pixmap(Gdx.files.internal(imgPath));
-        Pixmap pixmapNew = new Pixmap(50, 50, pixmapOriginal.getFormat());
+        Pixmap pixmapNew = new Pixmap(width, height, pixmapOriginal.getFormat());
         pixmapNew.drawPixmap(pixmapOriginal,
                 0, 0, pixmapOriginal.getWidth(), pixmapOriginal.getHeight(),
                 0, 0, pixmapNew.getWidth(), pixmapNew.getHeight()
