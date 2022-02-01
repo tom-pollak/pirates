@@ -6,6 +6,7 @@ import com.eng.game.logic.ActorTable;
 import com.eng.game.logic.Alliance;
 import com.eng.game.logic.Pathfinding;
 import com.eng.game.map.BackgroundTiledMap;
+import com.eng.game.screens.Play;
 import com.sun.tools.javac.util.Pair;
 
 /**
@@ -64,6 +65,7 @@ public class College extends Entity {
 
     @Override
     public void die() {
+        Play.collegeDeath = getName();
         setAlliance(Alliance.NEUTRAL);
         Vector2 position = new Vector2(getX(), getY());
         setPosition(spawnPoint.fst, spawnPoint.snd);

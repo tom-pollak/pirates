@@ -6,6 +6,7 @@ import com.eng.game.entities.TreasureChest;
 import com.eng.game.logic.ActorTable;
 import com.eng.game.logic.Alliance;
 import com.eng.game.map.BackgroundTiledMap;
+import com.eng.game.screens.Play;
 
 import java.util.ArrayList;
 
@@ -34,5 +35,6 @@ public class Key extends Item {
     @Override
     public void onPickup(Alliance alliance) {
         isHeld = true;
+        Play.hasKey = true;
     }
 }
