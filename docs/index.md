@@ -13,7 +13,7 @@
 
 [5. Risk Assessment](https://docs.google.com/document/d/1g3HLXKF5VRvxAvN3h9Tt-1mJoLd69A2gwAQImHtG1-E/edit?usp=sharing)
 
-[6. Implementation (Currently filler link)](https://yourmom.com)
+[6. Implementation ](https://docs.google.com/document/d/1YG8bsia_lTQqxljFPh9bj9PvhsIY_wdNS1a5VIpnW1c/edit?usp=sharing)
 
 ## Code and executable
 [Github repository](https://github.com/tom-pollak/pirates)
