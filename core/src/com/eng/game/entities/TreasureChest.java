@@ -17,7 +17,7 @@ public class TreasureChest extends Entity {
         actorTable.addActor(this);
         this.description = description;
         this.keyAlliance = new Alliance(toString(), this, new Texture("img/key.png"));
-        setChestTexture("img/treasure-chest.png");
+        setTexture(texture);
 //        this.setPosition(getX(), getY());
 //        this.setOrigin(getX() + getWidth() / 2, getX() + getHeight() / 2);
     }
@@ -43,7 +43,7 @@ public class TreasureChest extends Entity {
         }
         if (keyAlliance.isAlly(key)) {
             System.out.println("You have opened the chest");
-            setChestTexture("img/treasure-chest-open.png");
+            setTexture(new Texture("img/treasure-chest-open.png"));
             dropAll();
             opened = true;
             return true;
