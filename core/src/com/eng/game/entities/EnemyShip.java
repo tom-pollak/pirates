@@ -14,7 +14,7 @@ public class EnemyShip extends Ship {
 
     public EnemyShip(BackgroundTiledMap map, ActorTable actorTable, Pathfinding pathfinding, Texture shipTexture) {
         // TODO: add enemy ship texture based on alliance
-        super(map, actorTable, shipTexture, 100, 3, 375);
+        super(map, actorTable, shipTexture, 20, 3, 375);
         this.pathfinding = pathfinding;
     }
 
@@ -60,16 +60,20 @@ public class EnemyShip extends Ship {
      */
     @Override
     public void act(float delta) {
+        Ship targetShip = null;
+        float tileDistance = 0;
         Pair<Ship, Float> target = actorTable.getClosestEnemyShip(this);
-        Ship targetShip = target.fst;
-        float tileDistance = target.snd;
+        if (target != null) {
+            targetShip = target.fst;
+            tileDistance = target.snd;
+
+        }
 
         // If ship is in firing range, move randomly like before
         if (targetShip == null || tileDistance <= (float) getFiringRange() * 0.75f) {
             float oldX = getX(), oldY = getY();
 
-            setX(getX() + velocity.x * delta);
-            setY(getY() + velocity.y * delta);
+            setPosition(getX() + velocity.x * delta, getY() + velocity.y * delta);
 
             Pair<Boolean, Boolean> collisions = map.getMapCollisions(this, oldX, oldY);
             boolean collisionX = collisions.fst;
@@ -93,23 +97,26 @@ public class EnemyShip extends Ship {
             }
 
             // Navigate towards first tile in search path
-            GridCell firstNode = searchPath.get(0);
-            if (firstNode.getX() > getTileX()) {
-                velocity.x = speed;
-            } else if (firstNode.getX() < getTileX()) {
-                velocity.x = -speed;
-            } else {
-                velocity.x = 0;
+            try {
+                GridCell firstNode = searchPath.get(0);
+                if (firstNode.getX() > getTileX()) {
+                    velocity.x = speed;
+                } else if (firstNode.getX() < getTileX()) {
+                    velocity.x = -speed;
+                } else {
+                    velocity.x = 0;
+                }
+                if (firstNode.getY() > getTileY()) {
+                    velocity.y = speed;
+                } else if (firstNode.getY() < getTileY()) {
+                    velocity.y = -speed;
+                } else {
+                    velocity.y = 0;
+                }
+                super.act(delta);
+            } catch (IndexOutOfBoundsException ignored) {
+                super.act(delta);
             }
-            if (firstNode.getY() > getTileY()) {
-                velocity.y = speed;
-            } else if (firstNode.getY() < getTileY()) {
-                velocity.y = -speed;
-            } else {
-                velocity.y = 0;
-            }
-            super.act(delta);
         }
-
     }
 }

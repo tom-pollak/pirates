@@ -12,6 +12,7 @@ import com.eng.game.entities.College;
 import com.eng.game.entities.EnemyShip;
 import com.eng.game.entities.Player;
 import com.eng.game.entities.TreasureChest;
+import com.eng.game.items.Cannon;
 import com.eng.game.items.Key;
 import com.eng.game.items.Princess;
 import com.eng.game.logic.ActorTable;
@@ -64,21 +65,27 @@ public class Play implements Screen {
         player = new Player(map, actorTable);
         player.setPosition(698, 2560);
         stage.setKeyboardFocus(player);
-        player.addListener(player.input);
+//        player.addListener(player.input);
+        Gdx.input.setInputProcessor(player.input);
 
         // Player college
-        new College(map, actorTable, pathfinding, new Texture("img/james.png"), "James", 100, 3, 1500, new Pair<>(698, 2560), 0).setPosition(704, 2765);
+        College playerCollege = new College(map, actorTable, pathfinding, new Texture("img/james.png"), "James", 100, 3, 1500, new Pair<>(698, 2560), 0);
+        playerCollege.setPosition(704, 2765);
+        player.setAlliance(playerCollege.getAlliance());
+
 
         // Enemy colleges
-        new College(map, actorTable, pathfinding, new Texture("img/halifax.png"), "Halifax", 100, 3, 1500, new Pair<>(394, 367), 3).setPosition(579, 216);
+        College enemyCollege = new College(map, actorTable, pathfinding, new Texture("img/halifax.png"), "Halifax", 100, 3, 1500, new Pair<>(394, 367), 3);
+        enemyCollege.setPosition(579, 216);
+        enemyCollege.addItem(new Princess(map, actorTable));
         new College(map, actorTable, pathfinding, new Texture("img/constantine.png"), "Constantine", 100, 3, 1500, new Pair<>(2590, 642), 4).setPosition(2704, 463);
         new College(map, actorTable, pathfinding, new Texture("img/alcuin.png"), "Alcuin", 100, 3, 1500, new Pair<>(2674, 2497), 5).setPosition(2744, 2711);
 
 
         // Treasure chests
-        TreasureChest chest = new TreasureChest(map, actorTable, "Glistening treasure");
+        TreasureChest chest = new TreasureChest(map, actorTable, "Wooden chest");
         chest.setPosition(1698, 1308);
-        chest.addItem(new Princess(map, actorTable));
+        chest.addItem(new Cannon(50, 5, 5, 250, map, actorTable));
         Key key = chest.generateKey();
         key.setPosition(2800, 240);
 
@@ -122,7 +129,6 @@ public class Play implements Screen {
     @Override
     public void dispose() {
         player.getTexture().dispose();
-        enemyShip.getTexture().dispose();
         font.dispose();
     }
 

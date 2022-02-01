@@ -15,7 +15,6 @@ import java.util.ArrayList;
 public class Item extends GameActor {
     private final String name;
     private final String description;
-    public Alliance alliance = Alliance.NEUTRAL;
     public boolean isHeld = false;
 
     public Item(String name, String description, Texture texture, BackgroundTiledMap map, ActorTable actorTable) {
@@ -37,7 +36,7 @@ public class Item extends GameActor {
         System.out.println(name + " cannot be used");
     }
 
-    public void use(Integer x, Integer y) {
+    public void use(float x, float y) {
         System.out.println(name + " cannot be used");
     }
 
@@ -45,10 +44,10 @@ public class Item extends GameActor {
      * Called when the item is picked up
      * By default sets actor's texture invisible
      */
-    public void onPickup() {
+    public void onPickup(Alliance alliance) {
         // Win if home base picks up princess
         isHeld = true;
-        System.out.println("You picked up " + name);
+        this.setAlliance(alliance);
     }
 
     /**
@@ -57,7 +56,7 @@ public class Item extends GameActor {
      */
     public void onDrop() {
         isHeld = false;
-        System.out.println("Dropped " + name);
+        setAlliance(Alliance.NEUTRAL);
     }
 
     public String getName() {
@@ -70,6 +69,11 @@ public class Item extends GameActor {
 
     public String toString() {
         return name;
+    }
+
+    @Override
+    public void act(float delta) {
+        super.act(delta);
     }
 
     /**

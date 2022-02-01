@@ -20,9 +20,7 @@ public abstract class Entity extends GameActor {
     private final ArrayList<Item> holding;
     private final int holdingCapacity;
     public int maxHealth;
-    public int health;
-    public Alliance alliance = Alliance.NEUTRAL;
-    public boolean isDead = false;
+    public float health;
     public int coins = 0;
     Integer movementRange = null;
     private int itemIndex = 0;
@@ -45,6 +43,10 @@ public abstract class Entity extends GameActor {
     @Override
     public void act(float delta) {
         super.act(delta);
+        for (Item item : holding) {
+            item.setPosition(getX(), getY());
+            item.setOrigin(getOriginX(), getOriginY());
+        }
     }
 
     public String getName() {
@@ -77,8 +79,14 @@ public abstract class Entity extends GameActor {
         }
     }
 
+    public void addItem(Item item, int index) {
+        item.onPickup(getAlliance());
+        holding.add(index, item);
+    }
+
     public void addItem(Item item) {
-        holding.add(itemIndex, item);
+        item.onPickup(getAlliance());
+        holding.add(item);
     }
 
     /**
@@ -94,14 +102,13 @@ public abstract class Entity extends GameActor {
             System.out.println("No item to pick up");
             return false;
         }
-        item.onPickup();
         if (getHeldItem() != null) {
             drop();
         }
-        addItem(item);
+        System.out.println("Picked up " + item);
+        addItem(item, itemIndex);
         return true;
     }
-
 
     /**
      * Drops the item at the entities item index.
@@ -115,6 +122,8 @@ public abstract class Entity extends GameActor {
             Item droppedItem = holding.remove(itemIndex);
             Integer x;
             Integer y;
+            System.out.println(getX() + " " + getY());
+            System.out.println(getOriginX() + " " + getOriginY());
             Pair<Integer, Integer> emptyTile = droppedItem.findEmptyTile(getOriginX(), getOriginY());
             if (emptyTile == null) {
                 System.out.println("Entity.drop() - No empty tile found");
@@ -125,6 +134,7 @@ public abstract class Entity extends GameActor {
             System.out.println("Entity.drop() - Dropping item at " + x + ", " + y);
             droppedItem.setPosition(x, y);
             droppedItem.onDrop();
+            System.out.println(this + " dropped " + droppedItem);
         } catch (IndexOutOfBoundsException e) {
             System.out.println("No item to drop");
             return false;
@@ -137,9 +147,8 @@ public abstract class Entity extends GameActor {
      */
     public boolean dropAll() {
         boolean droppedAll = true;
-        for (int i = 0; i < holding.size(); i++) {
-            switchItem(i);
-            boolean dropped = drop();
+        while (holding.size() > 0) {
+            droppedAll = drop();
         }
         return droppedAll;
     }
@@ -152,7 +161,7 @@ public abstract class Entity extends GameActor {
      * @param index the index of the item to switch to
      */
     public void switchItem(int index) {
-        if (index > 0 || index < holdingCapacity) {
+        if (index >= 0 && index < holdingCapacity) {
             System.out.println("Entity.switchItem() - switched to item " + getHeldItem());
             itemIndex = index;
         } else {
@@ -169,13 +178,22 @@ public abstract class Entity extends GameActor {
         }
     }
 
+    public void useItem(float x, float y) {
+        Item item = getHeldItem();
+        if (item != null) {
+            item.use(x, y);
+        } else {
+            System.out.println("No item to use");
+        }
+    }
+
     /**
      * Decreases the entity's health by the specified amount.
      * If the entity's health is 0 or less, it is considered dead.
      *
      * @param damage the amount of damage to deal
      */
-    public void damage(int damage) {
+    public void damage(float damage) {
         health -= damage;
         if (health <= 0) {
             die();
@@ -199,8 +217,11 @@ public abstract class Entity extends GameActor {
      * Entity is removed from the map.
      */
     public void die() {
+        if (!(this instanceof CannonBall))
+            System.out.println(this + " was destroyed!");
+        alliance.removeAlly(this);
         dropAll();
-        isDead = true;
+        remove();
     }
 
     /**
@@ -245,12 +266,19 @@ public abstract class Entity extends GameActor {
         return Math.sqrt(xDiff * xDiff + yDiff * yDiff) > getMovementRange();
     }
 
-    public Alliance getAlliance() {
-        return alliance;
-    }
-
-
-    public boolean isDead() {
-        return isDead;
+    @Override
+    public void setAlliance(Alliance newAlliance) {
+        ArrayList<GameActor> oldAllianceMembers = (ArrayList<GameActor>) alliance.getAllies().clone();
+        oldAllianceMembers.remove(this);
+        super.setAlliance(newAlliance);
+        for (Item item : this.getHolding()) {
+            item.setAlliance(newAlliance);
+        }
+        if (this instanceof College) {
+            super.setAlliance(alliance);
+            for (GameActor actor : oldAllianceMembers) {
+                actor.setAlliance(newAlliance);
+            }
+        }
     }
 }

@@ -12,5 +12,6 @@
         - When timer runs out
         - Lose screen
 
-- ActorTable & Background tile map extend stage
-- get from get stage function (override)
+4. College change texture on destruction - need texture
+6. Objects dropped in specific area are picked up by college - win condition with princess
+7. Create GameStage extend Stage, implements actorTable and background tile map

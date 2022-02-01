@@ -2,9 +2,10 @@ package com.eng.game.entities;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
+import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.scenes.scene2d.InputEvent;
-import com.badlogic.gdx.scenes.scene2d.InputListener;
+import com.badlogic.gdx.math.Vector3;
+import com.eng.game.items.Item;
 import com.eng.game.logic.ActorTable;
 import com.eng.game.map.BackgroundTiledMap;
 
@@ -12,9 +13,15 @@ import com.eng.game.map.BackgroundTiledMap;
  * Player class, extends a ship but in the players control
  */
 public class Player extends Ship {
-    public final InputListener input = new InputListener() {
+    public final InputProcessor input = new InputProcessor() {
+
+        private int x;
+        private int y;
+        private int pointer;
+        private int button;
+
         @Override
-        public boolean keyDown(InputEvent event, int keycode) {
+        public boolean keyDown(int keycode) {
             switch (keycode) {
                 case Input.Keys.W:
                     velocity.y = speed;
@@ -35,7 +42,7 @@ public class Player extends Ship {
         }
 
         @Override
-        public boolean keyUp(InputEvent event, int keycode) {
+        public boolean keyUp(int keycode) {
             switch (keycode) {
                 case Input.Keys.A:
                     /* D is pressed and A is released, reverse the direction */
@@ -61,7 +68,7 @@ public class Player extends Ship {
         }
 
         @Override
-        public boolean keyTyped(InputEvent event, char character) {
+        public boolean keyTyped(char character) {
             switch (character) {
                 case 'e':
                     pickup();
@@ -74,7 +81,11 @@ public class Player extends Ship {
                     System.out.println(getX() + " " + getY());
                     break;
                 case 'r':
-                    System.out.println(getHolding());
+                    System.out.println("Inventory:");
+                    for (int i = 0; i < getHolding().size(); i++) {
+                        Item item = getHolding().get(i);
+                        System.out.println("\t(" + (i + 1) + ") " + item.getName() + ": " + item.getDescription());
+                    }
                     break;
 
             }
@@ -85,6 +96,37 @@ public class Player extends Ship {
             }
             return true;
 
+        }
+
+
+        @Override
+        public boolean touchUp(int screenX, int screenY, int pointer, int button) {
+            return false;
+        }
+
+        @Override
+        public boolean touchDragged(int screenX, int screenY, int pointer) {
+            return false;
+        }
+
+        @Override
+        public boolean mouseMoved(int screenX, int screenY) {
+            return false;
+        }
+
+        @Override
+        public boolean scrolled(float amountX, float amountY) {
+            return false;
+        }
+
+        @Override
+        public boolean touchDown(int x, int y, int pointer, int button) {
+            Vector3 v = new Vector3(x, y, 0);
+            Vector3 position = getStage().getCamera().unproject(v);
+            if (button == Input.Buttons.LEFT) {
+                useItem(position.x, position.y);
+            }
+            return true;
         }
     };
 
