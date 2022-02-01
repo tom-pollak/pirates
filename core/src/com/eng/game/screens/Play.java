@@ -34,6 +34,7 @@ public class Play implements Screen {
     PirateGame game;
     private EnemyShip enemyShip;
     private float timeCounter;
+    private final Texture heart;
 
     public Play(PirateGame game) {
         this.game = game;
@@ -42,6 +43,7 @@ public class Play implements Screen {
         batch = new SpriteBatch();
         font = new BitmapFont();
         font.setColor(1, 1, 1, 1);
+        heart = new Texture("img/heart48x48.png");
     }
 
     public static int getTimer() {
@@ -89,6 +91,7 @@ public class Play implements Screen {
         Key key = chest.generateKey();
         key.setPosition(2800, 240);
 
+
     }
 
     /**
@@ -124,6 +127,11 @@ public class Play implements Screen {
             this.dispose();
             game.setScreen(new LoseMenu(game));
         }
+
+        //Draw health
+        batch.begin();
+        for (int i = 0; i < Math.round(player.health/10); i++) batch.draw(heart, 10 + i * 50, stage.getHeight()-60);
+        batch.end();
     }
 
     @Override
