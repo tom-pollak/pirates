@@ -20,4 +20,4 @@
 
 [Github repository](https://github.com/tom-pollak/pirates)
 
-[Executable](https://github.com/tom-pollak/pirates/actions/runs/1781577985)
+[Executable](https://github.com/tom-pollak/pirates/releases/tag/initial-release)
