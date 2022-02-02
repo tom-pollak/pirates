@@ -8,24 +8,24 @@
 
 ## Screens
 
-![image2](abstract-diagrams/Screen.png)
+![image2](abstract-diagrams/Screen.PNG)
 
 ## Entities
 
-![image3](abstract-diagrams/Entities.png)
+![image3](abstract-diagrams/Entities.PNG)
 
 ## Items
 
-![image4](abstract-diagrams/Item.png)
+![image4](abstract-diagrams/Item.PNG)
 
 ## Map
 
-![image5](abstract-diagrams/Map.png)
+![image5](abstract-diagrams/Map.PNG)
 
 ## Actor
 
-![image6](abstract-diagrams/Actor.png)
+![image6](abstract-diagrams/Actor.PNG)
 
 ## Pirate Game
 
-![image7](abstract-diagrams/PirateGame.png)
+![image7](abstract-diagrams/PirateGame.PNG)
