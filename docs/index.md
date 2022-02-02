@@ -8,7 +8,9 @@
 
 [3. Architecture (Currently filler link)](https://yourmom.com)
 
-[Our UMLs](https:/fmkdosfkdsofmsd.com)
+[Our abstract UML](https://drive.google.com/file/d/19hN6ZqFLzn44yTErp1MQMATL1uoHNuGq/view)
+
+[Our concrete UML]()
 
 [4. Method selection and planning](https://docs.google.com/document/d/1iX4kOhdxiNaErOkPPB1E6VQCM_uehNOk/edit?usp=sharing&ouid=116390212332220541330&rtpof=true&sd=true)
 
