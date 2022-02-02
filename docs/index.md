@@ -6,7 +6,11 @@
 
 [2. Requirements](https://docs.google.com/document/d/1bpRkCYkT6rfoMmKzJGhjbZGJ3ywb3sr_Nn-qCAdtLU4/edit?usp=sharing)
 
-[3. Architecture (Currently filler link)](https://yourmom.com)
+[3. Architecture](https://docs.google.com/document/d/1TWywjDawVS9qCuMoNTrSoeX4JfbLlzMiTt7n9iHMQbY/edit?usp=sharing)
+
+[3. Abstract Diagram]()
+
+[3. Concrete Diagram]()
 
 [4. Method selection and planning](https://docs.google.com/document/d/1iX4kOhdxiNaErOkPPB1E6VQCM_uehNOk/edit?usp=sharing&ouid=116390212332220541330&rtpof=true&sd=true)
 
@@ -14,7 +18,7 @@
 
 [5. Risk Assessment](https://docs.google.com/document/d/1g3HLXKF5VRvxAvN3h9Tt-1mJoLd69A2gwAQImHtG1-E/edit?usp=sharing)
 
-[6. Implementation ](https://docs.google.com/document/d/1YG8bsia_lTQqxljFPh9bj9PvhsIY_wdNS1a5VIpnW1c/edit?usp=sharing)
+[6. Implementation](https://docs.google.com/document/d/1YG8bsia_lTQqxljFPh9bj9PvhsIY_wdNS1a5VIpnW1c/edit?usp=sharing)
 
 ## Code and executable
 
