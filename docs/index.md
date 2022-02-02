@@ -18,4 +18,4 @@
 ## Code and executable
 [Github repository](https://github.com/tom-pollak/pirates)
 
-[Executable (Currently filler link](https:amogus/sus.com)
+[Executable (Currently filler link](https://github.com/tom-pollak/pirates/actions/runs/1781577985)
