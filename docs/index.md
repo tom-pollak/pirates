@@ -8,9 +8,9 @@
 
 [3. Architecture](https://docs.google.com/document/d/1TWywjDawVS9qCuMoNTrSoeX4JfbLlzMiTt7n9iHMQbY/edit?usp=sharing)
 
-[3. Abstract Diagram]()
+[3. Abstract Diagram](abstract.md)
 
-[3. Concrete Diagram]()
+[3. Concrete Diagram](concrete.md)
 
 [4. Method selection and planning](https://docs.google.com/document/d/1iX4kOhdxiNaErOkPPB1E6VQCM_uehNOk/edit?usp=sharing&ouid=116390212332220541330&rtpof=true&sd=true)
 
