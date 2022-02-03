@@ -62,7 +62,7 @@ public class BackgroundTiledMap extends Actor {
      *
      * @param tileX: the x coordinate of the tile
      * @param tileY: the y coordinate of the tile
-     * @return: true if the tile has the blocked property, false otherwise
+     * @return true if the tile has the blocked property, false otherwise
      */
     public boolean isTileBlocked(int tileX, int tileY) {
         for (int i = 0; i < map.getLayers().getCount(); i++) {

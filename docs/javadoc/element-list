@@ -1,0 +1,15 @@
+com.eng.game
+com.eng.game.actor
+com.eng.game.desktop
+com.eng.game.entities
+com.eng.game.items
+com.eng.game.logic
+com.eng.game.map
+com.eng.game.pathfinding.bridge
+com.eng.game.pathfinding.pathfinding
+com.eng.game.pathfinding.pathfinding.finders
+com.eng.game.pathfinding.pathfinding.grid
+com.eng.game.pathfinding.pathfinding.grid.finders
+com.eng.game.pathfinding.pathfinding.grid.heuristics
+com.eng.game.pathfinding.pathfinding.util
+com.eng.game.screens

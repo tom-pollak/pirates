@@ -99,7 +99,7 @@ public class ActorTable {
      * Gets the closest enemy ship to the given ship.
      *
      * @param ship: The original ship.
-     * @return: The closest enemy ship, the tile distance between the ships.
+     * @return The closest enemy ship, the tile distance between the ships.
      */
     public Pair<Ship, Float> getClosestEnemyShip(Entity ship) {
         if (ship.getAlliance().getLeader() == null) {

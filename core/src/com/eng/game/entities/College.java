@@ -11,7 +11,7 @@ import com.eng.game.map.BackgroundTiledMap;
 import com.eng.game.screens.Play;
 
 /**
- * Leader & base entity for each team
+ * Leader + base entity for each team
  * Creates the college and its alliance
  * Spawn point for ships and generates coins
  */
