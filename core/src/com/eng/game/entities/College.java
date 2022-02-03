@@ -2,14 +2,13 @@ package com.eng.game.entities;
 
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.Vector2;
+import com.eng.game.items.Cannon;
 import com.eng.game.logic.ActorTable;
 import com.eng.game.logic.Alliance;
+import com.eng.game.logic.Pair;
 import com.eng.game.logic.Pathfinding;
 import com.eng.game.map.BackgroundTiledMap;
 import com.eng.game.screens.Play;
-import com.sun.tools.javac.util.Pair;
-
-import java.util.Objects;
 
 /**
  * Leader & base entity for each team
@@ -29,21 +28,21 @@ public class College extends Entity {
         this.spawnPoint = spawnPoint;
         this.maxShips = maxShips;
         this.pathfinding = pathfinding;
+        setWeapon(new Cannon(10, 18, 0.4f, 600, map, actorTable));
         actorTable.addActor(this);
     }
 
     @Override
     public void act(float delta) {
         generateCoins(delta);
-        generateShips(delta);
-        if (getHeldItem() != null && Objects.equals(getHeldItem().toString(), "Cannon")) {
-            Pair<Ship, Float> closestEnemyShip = actorTable.getClosestEnemyShip(this);
-            if (closestEnemyShip.fst != null) {
-                useItem(closestEnemyShip.fst.getX(), closestEnemyShip.fst.getY());
-//                getHeldItem().setPosition(getX(), getY());
+        generateShips();
+        if (getWeapon() != null) {
+            Pair<Ship, Float> target = actorTable.getClosestEnemyShip(this);
+            if (target != null) {
+                getWeapon().use(target.fst.getX(), target.fst.getY());
             }
         }
-        // Check pickup area
+        super.act(delta);
     }
 
     /**
@@ -59,13 +58,14 @@ public class College extends Entity {
         }
     }
 
-    private void generateShips(float delta) {
-        if (getAlliance().getShips().size() < maxShips && Math.random() < 0.01) {
+    /**
+     * Generates ships for the college randomly up to a maximum number of ships
+     */
+    private void generateShips() {
+        if (getAlliance().getShips().size() < maxShips && Math.random() < 0.005 && getAlliance() != Alliance.NEUTRAL) {
             EnemyShip enemyShip = new EnemyShip(map, actorTable, pathfinding, alliance.getShipTexture());
             enemyShip.setPosition(spawnPoint.fst, spawnPoint.snd);
             enemyShip.setAlliance(getAlliance());
-            System.out.println(enemyShip.getHeldItem());
-
         }
     }
 

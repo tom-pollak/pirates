@@ -2,10 +2,9 @@ package com.eng.game.entities;
 
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.Vector2;
-import com.eng.game.items.Cannon;
 import com.eng.game.logic.ActorTable;
+import com.eng.game.logic.Pair;
 import com.eng.game.map.BackgroundTiledMap;
-import com.sun.tools.javac.util.Pair;
 
 public class Ship extends Entity {
 
@@ -16,8 +15,6 @@ public class Ship extends Entity {
         super(map, actorTable, texture, health, holdingCapacity);
         actorTable.addActor(this);
         this.movementRange = movementRange;
-        Cannon cannon = new Cannon(10, 18, 0.5f, 600, map, actorTable);
-        addItem(cannon);
     }
 
     /**

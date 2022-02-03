@@ -9,10 +9,11 @@ import com.eng.game.items.Item;
 import com.eng.game.items.Key;
 import com.eng.game.logic.ActorTable;
 import com.eng.game.logic.Alliance;
+import com.eng.game.logic.Pair;
 import com.eng.game.map.BackgroundTiledMap;
-import com.sun.tools.javac.util.Pair;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 
 /**
  * Main actor class for all non-inanimate objects in the game.
@@ -24,6 +25,7 @@ public abstract class Entity extends GameActor {
     public float health;
     public int coins = 0;
     Integer movementRange = null;
+    private Item weapon = null;
     private int itemIndex = 0;
 
     public Entity(BackgroundTiledMap map, ActorTable actorTable, Texture texture, int maxHealth, int holdingCapacity) {
@@ -47,6 +49,10 @@ public abstract class Entity extends GameActor {
         for (Item item : holding) {
             item.setPosition(getX(), getY());
             item.setOrigin(getOriginX(), getOriginY());
+        }
+        if (getWeapon() != null) {
+            getWeapon().setPosition(getX(), getY());
+            getWeapon().setOrigin(getOriginX(), getOriginY());
         }
     }
 
@@ -245,13 +251,8 @@ public abstract class Entity extends GameActor {
      * @return the range of the cannon the entity is holding
      */
     public Integer getFiringRange() {
-        for (Item item : holding) {
-            // Change to weapon class?
-            if (item instanceof Cannon) {
-                return ((Cannon) item).getRange();
-            }
-        }
-        return 0;
+        if (getWeapon() == null) return 0;
+        return ((Cannon) getWeapon()).getRange();
     }
 
     /**
@@ -269,7 +270,7 @@ public abstract class Entity extends GameActor {
 
     @Override
     public void setAlliance(Alliance newAlliance) {
-        ArrayList<GameActor> oldAllianceMembers = (ArrayList<GameActor>) alliance.getAllies().clone();
+        HashSet<GameActor> oldAllianceMembers = (HashSet<GameActor>) alliance.getAllies().clone();
         oldAllianceMembers.remove(this);
         super.setAlliance(newAlliance);
         for (Item item : this.getHolding()) {
@@ -285,5 +286,14 @@ public abstract class Entity extends GameActor {
 
     public void addCoins(int amount) {
         coins += amount;
+    }
+
+    public Item getWeapon() {
+        return weapon;
+    }
+
+    public void setWeapon(Item weapon) {
+        weapon.onPickup(getAlliance());
+        this.weapon = weapon;
     }
 }

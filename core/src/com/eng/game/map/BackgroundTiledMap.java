@@ -16,7 +16,7 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.FloatArray;
 import com.eng.game.actor.GameActor;
-import com.sun.tools.javac.util.Pair;
+import com.eng.game.logic.Pair;
 
 import java.util.Objects;
 

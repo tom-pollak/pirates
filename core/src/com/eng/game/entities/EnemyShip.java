@@ -1,11 +1,12 @@
 package com.eng.game.entities;
 
 import com.badlogic.gdx.graphics.Texture;
+import com.eng.game.items.Cannon;
 import com.eng.game.logic.ActorTable;
+import com.eng.game.logic.Pair;
 import com.eng.game.logic.Pathfinding;
 import com.eng.game.map.BackgroundTiledMap;
 import com.eng.game.pathfinding.pathfinding.grid.GridCell;
-import com.sun.tools.javac.util.Pair;
 
 import java.util.List;
 
@@ -16,6 +17,7 @@ public class EnemyShip extends Ship {
         // TODO: add enemy ship texture based on alliance
         super(map, actorTable, shipTexture, 20, 3, 375);
         this.pathfinding = pathfinding;
+        setWeapon(new Cannon(10, 10, 2, 250, map, actorTable));
     }
 
     /**
@@ -66,7 +68,6 @@ public class EnemyShip extends Ship {
         if (target != null) {
             targetShip = target.fst;
             tileDistance = target.snd;
-
         }
 
         // If ship is in firing range, move randomly like before

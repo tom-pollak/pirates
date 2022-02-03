@@ -6,7 +6,6 @@ import com.eng.game.entities.Player;
 import com.eng.game.entities.Ship;
 import com.eng.game.items.Item;
 import com.eng.game.map.BackgroundTiledMap;
-import com.sun.tools.javac.util.Pair;
 
 import java.util.ArrayList;
 
@@ -104,7 +103,6 @@ public class ActorTable {
      */
     public Pair<Ship, Float> getClosestEnemyShip(Entity ship) {
         if (ship.getAlliance().getLeader() == null) {
-            System.out.println("no leader");
             return null;
         }
         Ship closest = null;
@@ -119,6 +117,9 @@ public class ActorTable {
                 distance = d;
                 closest = (Ship) newShip;
             }
+        }
+        if (closest == null) {
+            return null;
         }
         return new Pair<>(closest, distance / map.getTileWidth());
     }

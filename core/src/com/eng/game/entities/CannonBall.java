@@ -23,6 +23,7 @@ public class CannonBall extends Entity {
         this.originalPosition = position;
         this.setPosition(position.x, position.y);
         this.setAlliance(alliance);
+        System.out.println("Cannon ball alliance" + alliance);
     }
 
     @Override
@@ -33,6 +34,7 @@ public class CannonBall extends Entity {
         ArrayList<Entity> collidingEntities = actorTable.getCollidingEntities(this);
         for (Entity entity : collidingEntities) {
             if (!alliance.isAlly(entity)) {
+                System.out.println("Cannon ball alliance" + alliance + " colliding entity alliance" + entity.getAlliance());
                 System.out.println("Cannon ball hit " + entity + " dealing " + damage + " damage");
                 entity.damage(damage);
                 die();

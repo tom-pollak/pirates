@@ -20,5 +20,5 @@ public class Princess extends Item {
         super.onPickup(alliance);
     }
     // Sorry I don't know where you need the function but to go to the win menu use
-    // game.setScreen(new WinMenu((game)));
+//     game.setScreen(new WinMenu((game)));
 }

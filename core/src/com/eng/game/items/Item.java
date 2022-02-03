@@ -6,8 +6,8 @@ import com.eng.game.actor.GameActor;
 import com.eng.game.entities.Entity;
 import com.eng.game.logic.ActorTable;
 import com.eng.game.logic.Alliance;
+import com.eng.game.logic.Pair;
 import com.eng.game.map.BackgroundTiledMap;
-import com.sun.tools.javac.util.Pair;
 
 import java.util.ArrayList;
 
@@ -28,8 +28,8 @@ public class Item extends GameActor {
     public void draw(Batch batch, float parentAlpha) {
         if (!isHeld) {
             batch.draw(texture, getX(), getY());
+            super.draw(batch, parentAlpha);
         }
-        super.draw(batch, parentAlpha);
     }
 
     public void use(ArrayList<Entity> entities) {

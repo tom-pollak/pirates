@@ -17,9 +17,9 @@ import com.eng.game.items.Coin;
 import com.eng.game.items.Key;
 import com.eng.game.items.Princess;
 import com.eng.game.logic.ActorTable;
+import com.eng.game.logic.Pair;
 import com.eng.game.logic.Pathfinding;
 import com.eng.game.map.BackgroundTiledMap;
-import com.sun.tools.javac.util.Pair;
 
 import java.util.Objects;
 
@@ -82,8 +82,11 @@ public class Play implements Screen {
         player = new Player(map, actorTable);
         player.setPosition(698, 2560);
         stage.setKeyboardFocus(player);
-//        player.addListener(player.input);
         Gdx.input.setInputProcessor(player.input);
+
+        // Put cannon in front of player
+        Cannon cannon = new Cannon(10, 18, 0.5f, 600, map, actorTable);
+        cannon.setPosition(698, 2500);
 
         // Player college
         College playerCollege = new College(map, actorTable, pathfinding, new Texture("img/james.png"), "James", 100, 3, 1500, new Pair<>(698, 2560), 0);
@@ -94,15 +97,10 @@ public class Play implements Screen {
         // Enemy colleges
         College halifax = new College(map, actorTable, pathfinding, new Texture("img/halifax.png"), "Halifax", 100, 3, 1500, new Pair<>(394, 367), 3);
         halifax.setPosition(579, 216);
-        halifax.addItem(new Cannon(10, 10, 2, 250, map, actorTable));
         halifax.addItem(new Princess(map, actorTable));
 
-        College constantine = new College(map, actorTable, pathfinding, new Texture("img/constantine.png"), "Constantine", 100, 3, 1500, new Pair<>(2590, 642), 4);
-        constantine.setPosition(2704, 463);
-        constantine.addItem(new Cannon(10, 10, 2, 250, map, actorTable));
-        College alcuin = new College(map, actorTable, pathfinding, new Texture("img/alcuin.png"), "Alcuin", 100, 3, 1500, new Pair<>(2674, 2497), 5);
-        alcuin.setPosition(2744, 2711);
-        alcuin.addItem(new Cannon(10, 10, 2, 250, map, actorTable));
+        new College(map, actorTable, pathfinding, new Texture("img/constantine.png"), "Constantine", 100, 3, 1500, new Pair<>(2590, 642), 4).setPosition(2704, 463);
+        new College(map, actorTable, pathfinding, new Texture("img/alcuin.png"), "Alcuin", 100, 3, 1500, new Pair<>(2674, 2497), 5).setPosition(2744, 2711);
 
 
         // Treasure chests
@@ -169,6 +167,10 @@ public class Play implements Screen {
             font.draw(batch, "Get Key", stage.getWidth() / 100 * 89, stage.getHeight() / 100 * 81);
         } else if (hasKey && gotChest) {
             font.draw(batch, "Get Chest", stage.getWidth() / 100 * 89, stage.getHeight() / 100 * 81);
+        }
+
+        if (halifax_defeated && constantine_defeated && alcuin_defeated && gotChest && hasKey) {
+            game.setScreen(new WinMenu(game));
         }
 
         batch.end();

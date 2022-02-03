@@ -6,11 +6,12 @@ import com.eng.game.entities.Entity;
 import com.eng.game.entities.Ship;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 
 public class Alliance {
     public static Alliance NEUTRAL = new Alliance("Neutral", null, new Texture("img/ship.png"));
     private final String name;
-    private final ArrayList<GameActor> alliedActors = new ArrayList<>();
+    private final HashSet<GameActor> alliedActors = new HashSet<>();
     private final Texture shipTexture;
     private Entity leader;
 
@@ -60,7 +61,7 @@ public class Alliance {
         return ships;
     }
 
-    public ArrayList<GameActor> getAllies() {
+    public HashSet<GameActor> getAllies() {
         return alliedActors;
     }
 

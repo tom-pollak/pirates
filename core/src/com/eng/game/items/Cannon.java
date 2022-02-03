@@ -6,8 +6,6 @@ import com.eng.game.entities.CannonBall;
 import com.eng.game.logic.ActorTable;
 import com.eng.game.map.BackgroundTiledMap;
 
-import static com.eng.game.screens.Play.player;
-
 public class Cannon extends Item {
     private final float damage;
     private final int range;
@@ -44,8 +42,7 @@ public class Cannon extends Item {
             CannonBall cannonBall = new CannonBall(map, actorTable, cannonBallVector, damage, range * map.getTileWidth(), new Vector2(getOriginX(), getOriginY()), alliance);
             actorTable.addActor(cannonBall);
             timeSinceLastFire = 0;
-        } else
-            System.out.println("Cannon is on cooldown");
+        }
     }
 
     public float getDamage() {
