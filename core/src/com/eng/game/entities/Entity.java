@@ -25,7 +25,7 @@ public abstract class Entity extends GameActor {
     public float health;
     public int coins = 0;
     Integer movementRange = null;
-    private Item weapon = null;
+    private Cannon weapon = null;
     private int itemIndex = 0;
 
     public Entity(BackgroundTiledMap map, ActorTable actorTable, Texture texture, int maxHealth, int holdingCapacity) {
@@ -109,7 +109,7 @@ public abstract class Entity extends GameActor {
             System.out.println("No item to pick up");
             return false;
         }
-        if (getHeldItem() != null) {
+        if (getHeldItem() != null && !(item instanceof Coin)) {
             drop();
         }
         System.out.println("Picked up " + item);
@@ -252,7 +252,7 @@ public abstract class Entity extends GameActor {
      */
     public Integer getFiringRange() {
         if (getWeapon() == null) return 0;
-        return ((Cannon) getWeapon()).getRange();
+        return getWeapon().getRange();
     }
 
     /**
@@ -288,11 +288,11 @@ public abstract class Entity extends GameActor {
         coins += amount;
     }
 
-    public Item getWeapon() {
+    public Cannon getWeapon() {
         return weapon;
     }
 
-    public void setWeapon(Item weapon) {
+    public void setWeapon(Cannon weapon) {
         weapon.onPickup(getAlliance());
         this.weapon = weapon;
     }

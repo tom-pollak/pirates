@@ -21,5 +21,6 @@ public class Coin extends Item {
     @Override
     public void onPickup(Alliance alliance) {
         if (alliance.isAlly(actorTable.getPlayer())) actorTable.getPlayer().addCoins(amount);
+        super.onPickup(alliance);
     }
 }

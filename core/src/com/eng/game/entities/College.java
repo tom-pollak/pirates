@@ -28,7 +28,7 @@ public class College extends Entity {
         this.spawnPoint = spawnPoint;
         this.maxShips = maxShips;
         this.pathfinding = pathfinding;
-        setWeapon(new Cannon(10, 18, 0.4f, 600, map, actorTable));
+        setWeapon(new Cannon(10, 18, 2, 600, map, actorTable));
         actorTable.addActor(this);
     }
 
@@ -38,7 +38,7 @@ public class College extends Entity {
         generateShips();
         if (getWeapon() != null) {
             Pair<Ship, Float> target = actorTable.getClosestEnemyShip(this);
-            if (target != null) {
+            if (target != null && target.snd < getWeapon().getRange()) {
                 getWeapon().use(target.fst.getX(), target.fst.getY());
             }
         }
@@ -81,7 +81,7 @@ public class College extends Entity {
         setPosition(spawnPoint.fst, spawnPoint.snd);
         dropAll();
         setPosition(position.x, position.y);
-        setTexture(new Texture("img/college.gif"));
+        setTexture(new Texture("img/france.png"));
         for (Ship ship : getAlliance().getShips()) {
             ship.setTexture(new Texture("img/ship.png"));
         }
