@@ -85,7 +85,7 @@ public class Play implements Screen {
         Gdx.input.setInputProcessor(player.input);
 
         // Put cannon in front of player
-        Cannon cannon = new Cannon(10, 18, 0.5f, 600, map, actorTable);
+        Cannon cannon = new Cannon(40, 18, 0.5f, 600, map, actorTable);
         cannon.setPosition(698, 2500);
 
         // Player college
