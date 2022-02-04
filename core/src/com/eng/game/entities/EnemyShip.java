@@ -15,7 +15,7 @@ public class EnemyShip extends Ship {
 
     public EnemyShip(BackgroundTiledMap map, ActorTable actorTable, Pathfinding pathfinding, Texture shipTexture) {
         // TODO: add enemy ship texture based on alliance
-        super(map, actorTable, shipTexture, 20, 3, 600);
+        super(map, actorTable, shipTexture, 50, 3, 600);
         this.pathfinding = pathfinding;
         setWeapon(new Cannon(10, 10, 2, 250, map, actorTable));
     }
