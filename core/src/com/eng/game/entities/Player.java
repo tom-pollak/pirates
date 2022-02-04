@@ -122,11 +122,16 @@ public class Player extends Ship {
         @Override
         public boolean touchDown(int x, int y, int pointer, int button) {
             Vector3 v = new Vector3(x, y, 0);
-            Vector3 position = getStage().getCamera().unproject(v);
-            if (button == Input.Buttons.LEFT) {
-                useItem(position.x, position.y);
+            try {
+                Vector3 position = getStage().getCamera().unproject(v);
+                if (button == Input.Buttons.LEFT) {
+                    useItem(position.x, position.y);
+                }
+                return true;
+
+            } catch (Exception e) {
+                return false;
             }
-            return true;
         }
     };
 
